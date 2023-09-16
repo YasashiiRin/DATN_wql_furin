@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/style.css' %}">
+    {% comment %} <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> {% endcomment %}
+    <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
+    <script src="{% static 'JS/style.js' %}"></script>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/logo5.ico' %}"
+    />
+    <title>Furin</title>
+  </head>
+  <body>
+    <header class="bg-dark">
+      <div class="container">
+        <nav>
+          <div>
+            <img class="logo_img" style="width:50px; height:50px;" src="{% static 'images/logo_light.png' %}"></img>
+            <a href="#" class="logo">Furin</a>
+            <ul class="nav-links">
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <ul id="nav-links" class="nav-links">
+              <li><a href="#">Facebook</a></li>
+              <li><a href="#">Google</a></li>
+              <li><a href="#">Log in</a></li> 
+              <li><a href="{% url 'redirectRegister'%}" class="nav__cta">Sign up</a></li>
+            </ul>
+          </div>
+          <div class="hamburger">
+            <span class="hamburger-bar"></span
+            ><span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <section id="main__cta">
+      <div class="container">
+        <div class="split">
+          <div class="main__cta__rectangle bg-light">
+            <div class="split main__cta__options">
+              <div class="main__cta__card tab-item active">
+                <div class="main__cta__icon">
+                  <i class="fa-solid fa-bus" style="font-size:26px;"></i>
+                </div>
+                Driver
+              </div>
+              <div class="main__cta__card">
+                <img
+                />
+              </div>
+              <div class="main__cta__card tab-item">
+                <i class="fa-solid fa-user" style="font-size:26px;"></i>
+                Book a Car
+              </div>
+              <div class="line"></div>
+            </div>
+            <div class="main__cta__text active">
+              <h1> Đăng ký với Hành khách</h1>
+              <p class="sous-titre">
+                Chúng tôi sẳn sàng để đi cùng bạn
+              </p>
+              <a href="{% url 'redirectRegister'%}" class="btn">Sign up</a>
+              <a href="#" class="text-cta" 
+              >
+            </div>
+            <div class="main__cta__text text_cta_nhaxe">
+              <h1>Đăng ký nhà xe du lịch</h1>
+              <p class="sous-titre">
+                Chúng tôi giúp bạn quản lý tốt mọi thứ  
+              </p>
+              <a href="{% url 'redirectRegister'%}" class="btn">Sign up</a>
+              <a href="#" class="text-cta" 
+              >
+            </div>
+          </div>
+          {% comment %} ----------------------------- {% endcomment %}
+        </div>
+      </div>
+    </section>
+
+    <section id="business-header">
+      <div class="container">
+        <div class="business-header__text">
+          <h3>Furin bên bạn trong những chuyến đi</h3>
+          <p>
+           Tôi tìm thấy mình trong những chuyến đi,
+           cảm giác đó không thể nào thay thế được bởi những thứ khác.
+           Lý do chính kéo tôi vào cuộc hành trình , chỉ đơn giản là những
+           khung hình trong đôi mắt mình thay đổi khi những con đường lướt qua
+          </p>
+          {% comment %} <a href="#" class="btn">Bắt đầu đặt</a> {% endcomment %}
+        </div>
+      </div>
+    </section>
+
+    <section data-aos="zoom-in" id="engagements__section" class="bg-light">
+      <div class="container">
+        <h3>Tập trung vào sự an toàn mọi lúc mọi nơi</h3>
+        <div class="split">
+          <div class="engagements__section__flex">
+            <img
+              src="{%static 'images/logo_light.png'%}"
+              alt=""
+            />
+            <h4>Cam kết của chúng tôi đối với sự an toàn của bạn</h4>
+            <p class="sous-titre">
+              abc
+            </p>
+            <a href="#" class="text-cta"
+              >Khám phá điều lệ </a
+            >
+            <a href="#" class="text-cta"
+              >xem thêm tính năng bảo mật</a
+            >
+          </div>
+          <div class="engagements__section__flex">
+            <img
+              src=""
+              alt=""
+            />
+            <h4>Họt động rộng trong hầu hết thành phố</h4>
+            <p class="sous-titre">
+             với độ phủ rôộng  bạn có thể đi mọi nơi
+            </p>
+            <a href="#" class="text-cta" title="Afficher toutes les villes"
+              >hiển thị tất cả thành phố</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-aos="fade-up" id="infos__section" class="bg-light">
+      <div class="container">
+        <div class="split">
+          <div class="infos__section__card">
+            <img
+              src="https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,w_24,h_24/v1542256135/assets/dd/c53d7b-8921-4dc7-93f4-45fb59f4ffb9/original/person-multiple-outlined.svg"
+              alt=""
+            />
+            <p class="titre">ý tưởng của chúng tôi </p>
+            <p class="sous-titre">
+              tôi sẻ cho bạn biết nguồn động lực và ý tưởng để chúng tôi làm ra website này
+            </p>
+            <a href="#" class="text-cta">Tìm hiểu thêm</a>
+          </div>
+          <div class="infos__section__card">
+            <img
+              src="https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,w_24,h_24/v1542254244/assets/eb/68c631-5041-4eeb-9114-80048a326782/original/document-outlined.svg"
+              alt=""
+            />
+            <p class="titre">Trang xã hội của chúng tôi </p>
+            <p class="sous-titre">
+              Nơi chúng tôi chia sẻ những thông tin về bản thân và những câu chuyện về những chuyến đi của chúng tôi
+            </p>
+            <a href="#" class="text-cta">Tìm hiểu thêm</a>
+          </div>
+          <div class="infos__section__card">
+            <img
+              src="https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,w_24,h_24/v1542255370/assets/64/58118a-0ece-4f80-93ee-8041b53593d5/original/home-outlined.svg"
+              alt=""
+            />
+            <p class="titre">Ý tưởng phát triển </p>
+            <p class="sous-titre">
+              Chúng tôi sẻ cho bạn biết dự định của bản thân ý tưởng phát triển trong tương lai.
+            </p>
+            <a href="#" class="text-cta">Tìm hiểu thêm</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-dark">
+      <div class="container">
+        <nav>
+          <div><a href="#" class="logo">Furin</a></div>
+          <div>
+            <a href="#">Sẳn sàng đồng hành cùng bạn trong mọi chuyến đi</a>
+          </div>
+        </nav>
+      </div>
+    </footer>
+    <script src="{% static 'JS/book.js' %}"></script>
+    <script>
+      AOS.init();
+    </script>
+  </body>
+</html>

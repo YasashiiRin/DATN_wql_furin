@@ -1,0 +1,159 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/Login.css' %}">
+    <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
+    <title>Furin</title>
+</head>
+
+<body>
+    <div class="gird container">
+        <div class="container-forms">
+            <div class="container-Underform">
+                <div class="form-info">
+                    <div class="tableform">
+                        <div class="tableformcell">
+                            <p>have an account?</p>
+                            <div class="btn">
+                                Log in
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-info">
+                    <div class="tableform">
+                        <div class="tableformcell">
+                            <p>don't have an account?</p>
+                            <div class="btn signup">
+                                SignUp
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-FormIn">
+
+                <div class="form-item loginform">
+                    <form action="" method="POST" class="form" id="form2">
+                        <div class="tableform">
+                            <div class="tableformcell">
+                                <div class="form-group">
+                                    <label for="email1" class="form-label">Email</label>
+                                    <input id="email1" name="email" type="text" placeholder="VD: 123/abc@gmail.com"
+                                        class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password1" class="form-label">Mật khẩu</label>
+                                    <input id="password1" name="password" type="password" placeholder="Nhập mật khẩu"
+                                        class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <button type="submit" class="btn form-submit">
+                                    Log in
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-item regisform active">
+                    <form action="{% url 'register' %}" method="POST" class="form" id="form1">
+                        {% csrf_token %}
+                        <div class="tableform">
+                            <div class="tableformcell">
+                                <div class="form-group">
+                                    <label for="fullname" class="form-label">Tên đầy đủ</label>
+                                    <input id="fullname" name="fullname" type="text" placeholder="VD:Nguyen Tuan "
+                                        class="">
+                                    <div class="span"></div>
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input id="email" name="email" type="text" placeholder="VD: 123/abc@gmail.com"
+                                        class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="form-label">Mật khẩu</label>
+                                    <input id="password" name="password" type="password" placeholder="Nhập mật khẩu"
+                                        class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password_confirmation" class="form-label">Nhập lại mật khẩu </label>
+                                    <input id="password_confirmation" name="password_confirmation"
+                                        placeholder="Nhập lại mật khẩu" type="password" class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <button type="submit" class="btn form-submit">
+                                    Sign up
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+    <div class="backhome">
+        <a href="{% url 'back_home' %}"><i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size:30px"></i></a>
+    </div>
+    <script src="{% static 'JS/style.js' %}"></script>
+    <script src="{% static 'JS/validator.js' %}"></script>
+    <script>
+        console.log(checkform)
+        validator({
+            form: '#form1',
+            formGroup: '.form-group',
+            errSelector: '.form-message',
+            rules: [
+                validator.isRequired('#fullname', 'vui long nhap ten day du'),
+                validator.isRequired('#email'),
+                validator.isEmail('#email'),
+                validator.minlength('#password', 6),
+                validator.isRequired('#password_confirmation'),
+                validator.isconfirmvalue('#password_confirmation', function () {
+                    return document.querySelector('#form1 #password').value;
+                }, 'mat khau nhap lai khong chinh xac')
+
+            ],
+            {% comment %} onsubmit: function (data) {
+                console.log(data);
+            } {% endcomment %}
+
+        })
+        validator({
+            form: '#form2',
+            formGroup: '.form-group',
+            errSelector: '.form-message',
+            rules: [
+                validator.isRequired('#email1'),
+                validator.isEmail('#email1'),
+                validator.isRequired('#password1'),
+            ],
+            {% comment %} onsubmit: function (data) {
+                console.log(data);
+            } {% endcomment %}
+
+        })
+    </script>
+</body>
+
+</html>
