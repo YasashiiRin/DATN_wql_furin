@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -67,7 +67,10 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_USERNAME = False
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-ACCOUNT_EMAIL_CONFIRMATION_SIGNUP_MESSAGE = 'LoginApp/verifyEmail.html'
+ACCOUNT_EMAIL_TEMPLATES = {
+    'email/confirmation_signup_message': 'LoginApp/templates/LoginApp/verifyEmail.html',
+}
+
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

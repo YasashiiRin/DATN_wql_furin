@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,7 @@
     <title> Xác thực tài khoản </title>
 </head>
 <body>
-
+     
 <tbody>
     <tr>
         <td class="mceBlockContainer" align="center" valign="top" style="padding: 12px 0px;">
@@ -24,7 +25,7 @@
             <div>
                 <div contenteditable="true" translate="no" tabindex="-1" class="ProseMirror" style="line-height:1.5">
                      <div class="header-conten" style="text-align: center;">
-                       <h1><span style="font-size: 30px;">Hi !</span></h1>
+                       <h1><span style="font-size: 30px;">Hi {{ name_user }} !</span></h1>
                        <p><span style="color:#505050;"><span style="text-decoration:none;">
                        <span style="font-size: 22px;">Thanks for signing up with FurinHome</span>
                      </div>
@@ -44,8 +45,14 @@
 </tr>
 
 <tr>
-    <td><button style="width:120px;height:40px;border-radius:28px;margin-left:44%;background-color:#000;margin-top:18px;margin-bottom:10px;"><a href="#" style="text-decoration:none;color:#fff;">Xác Thực</a></button></td></tr><tr>
-
+    <td><button style="width:120px;
+        height:40px;
+        border-radius:28px;
+        margin-left:44%;
+        background-color:#000;
+        margin-top:18px;
+        margin-bottom:10px;">
+        <a href="{{activation_url}}" style="text-decoration:none;color:#fff;">Confirm</a></button></td></tr><tr>
   </tr>
 </tbody">
 
