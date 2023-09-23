@@ -99,10 +99,10 @@
   header nav a {
     font-weight: 500;
     padding: 0.75rem 1rem;
-    border-radius: 30px;
+    /* border-radius: 30px; */
     transition: all 300ms ease;
   }
-  header nav a:hover {
+  .nav__hover:hover {
     border-radius: 30px;
     background: #333;
   }
@@ -119,17 +119,90 @@
   .logo {
     font-size: 1.5rem;
   }
-  
-  .nav__cta {
+  .nav__cta__info{
     background: var(--clr-neutral-100);
     color: var(--clr-neutral-900);
     border-radius: 30px;
     padding: 0.75rem 1rem;
   }
-  .nav__cta:hover {
-    background: var(--clr-neutral-100);
+.nav__cta__info--has-menu:hover .nav__cta__menu {
+  display: block;
+}
+  .nav__mores{
+    margin-left: 8px;
+    margin-right: 5px;
   }
-  
+  /* .nav__cta:hover {
+    background: var(--clr-neutral-100);
+  } */
+   /* menu user */
+   .nav__cta__menu{
+    display: none;
+    position: absolute;
+    top: 92px;
+    right:0;
+    width: 300px;
+    background-color: rgba(60, 60, 60, 60%);
+    z-index: 99;
+    border-radius: 2px;
+    transform-origin: 60% top;
+    animation: navMenuFunction ease-in 0.26s;
+    /* border: 1px solid #fff; */
+
+   }
+   .nav__cta__menu::before{
+    content: "";
+    display: block;
+    position: absolute;
+    width: 300px;
+    height: 30px;
+    right: 0;
+    top: -18px;
+
+   }
+   @keyframes navMenuFunction{
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+   }
+.nav__cta__list{
+ padding-left: 0;
+}
+.nav__cta__item:hover .nav__cta__link{
+  background-color: rgba(59, 60, 92, 0.5);
+}
+.nav__cta__item:hover .nav__cta__functionname{
+  color: #fff;
+}
+.nav__cta__link{
+  display:flex;
+  width: 130px;
+  align-items: center;
+  margin: auto;
+  background-color: #fbe3da;
+  border-bottom: 1px solid #d3d3d3;
+  border-radius: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.nav__cta__function{
+  margin-left: 8px;
+}
+.nav__cta__functionname{
+  color: #232323;
+  font-size: 14px;
+}
+.nav__noLogin{
+  background: var(--clr-neutral-100);
+  color: var(--clr-neutral-900);
+  border-radius: 30px;
+  padding: 0.75rem 1rem;
+}
   .hamburger {
     cursor: pointer;
     display: none;
@@ -184,7 +257,7 @@
   section#main__cta {
     padding-block: 4rem;
   
-    background-image: url("../images/bg7.webp");
+    background-image: url("../images/bg10.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -314,7 +387,7 @@
   /* BUSINESS HEADER */
   
   section#business-header {
-    background-image: url("../images/bgw2_2.jpg");
+    background-image: url("../images/bg12.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -331,11 +404,47 @@
     font-size: 2.5rem;
   }
   .business-header__text p {
+    /* width: 150px; */
+    padding-left: 581px;
     font-size: 1.1rem;
-    font-weight: 400;
+    font-weight: 500;
     padding-bottom: 1rem;
   }
-  
+  .business-header__text.resetcolor{
+    color:#0c0c0c;
+  }
+  .business-header__text.resetcolor h3{
+    color: #ff2f00;
+  }
+  .engagements__section__flex img{
+    height: 260px
+  }
+  .engagements__section__flex.Titlecolor1 h4{
+    color: #8b133b;
+  }
+  .engagements__section__flex.Titlecolor2 h4{
+    color: #a94b6a;
+  }
+  .engagements__section__flex.Titlecolor2 p{
+    padding-top: 9px;
+  }
+  .engagements__section__flex.Titlecolor1 p{
+    padding-top: 9px;
+  }
+  .Home__conten__footer{
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .sous-titre__home__conten{
+    width: 100%;
+    height: 160px;
+  }
+  .text-cta.footer{
+    margin-bottom: 6px;
+  }
+  .split.home__conten{
+    border-left: 2px dotted #191919;
+  }
   /* engagements SECTION */
   
   section#engagements__section {
@@ -344,7 +453,7 @@
   
   #engagements__section h3 {
     padding-bottom: 3rem;
-    font-size: 2.5rem;
+    font-size: 1.8rem;
   }
   #engagements__section h4 {
     font-weight: 500;
@@ -352,7 +461,6 @@
   }
   
   .engagements__section__flex {
-    display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;

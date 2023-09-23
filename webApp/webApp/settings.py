@@ -50,12 +50,13 @@ INSTALLED_APPS = [
 
 ]
 AUTHENTICATION_BACKENDS = (
-    # ...
-    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'LoginApp.backends.custom_auth.OwnerCarBackend',
 )
 
 AUTHENTICATION_CLASSES = (
     # ...
+    'LoginApp.backends.custom_auth.OwnerCarBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
@@ -86,13 +87,16 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'LoginApp.middleware.custom_auth_middleware.CustomAuthMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
      # ... 
-    'allauth.account.middleware.AccountMiddleware',  
+    'allauth.account.middleware.AccountMiddleware',
     # ...
 ]
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_NAME = 'sessionid'
 
 ROOT_URLCONF = 'webApp.urls'
 
@@ -123,7 +127,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django_furin_travel',  # Tên cơ sở dữ liệu của bạn
         'USER': 'root',  # Tên người dùng MySQL của bạn
-        'PASSWORD':'',  # Mật khẩu của người dùng MySQL của bạn
+        'PASSWORD':'8080',  # Mật khẩu của người dùng MySQL của bạn
         'HOST': 'localhost',  # Địa chỉ máy chủ MySQL
         'PORT': '3306',  # Cổng MySQL (mặc định là 3306)
     }

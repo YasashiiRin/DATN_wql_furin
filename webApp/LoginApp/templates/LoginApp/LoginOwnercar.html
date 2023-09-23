@@ -47,7 +47,7 @@
             <div class="container-FormIn">
 
                 <div class="form-item loginform">
-                    <form action="{% url 'handleLogin' %}" method="POST" class="form" id="form2">
+                    <form action="{% url 'handelLogin_ownercar' %}" method="POST" class="form" id="form2">
                         {% csrf_token %}
                         <div class="tableform">
                             <div class="tableformcell">
@@ -73,7 +73,7 @@
                     </form>
                 </div>
                 <div class="form-item regisform active">
-                    <form action="{% url 'register' %}" method="POST" class="form" id="form1">
+                    <form action="{% url 'handleRegis_ownercar' %}" method="POST" class="form" id="form1">
                         {% csrf_token %}
                         <div class="tableform">
                             <div class="tableformcell">
@@ -183,7 +183,26 @@ else if (notification==='signup'){
         duration: 8000
 
     })  
-}    
+}  
+else if(notification==='noverifi'){
+    toast({
+        title: "Sign up failed",
+        content: "Email not verifi",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+}
+else if(notification==='faildpass'){
+    toast({
+        title: "Sign up failed",
+        content: "password is incorrect",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+}  
+  
   
 
         {% comment %} Handel toast {% endcomment %}

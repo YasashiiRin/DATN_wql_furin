@@ -25,16 +25,54 @@
             <img class="logo_img" style="width:50px; height:50px;" src="{% static 'images/logo_light.png' %}"></img>
             <a href="#" class="logo">Furin</a>
             <ul class="nav-links">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Contact</a></li>
+              <li><a class="nav__hover" href="#">About Us</a></li>
+              <li><a class="nav__hover" href="#">Contact</a></li>
             </ul>
           </div>
           <div>
             <ul id="nav-links" class="nav-links">
-              <li><a href="#">Facebook</a></li>
-              <li><a href="#">Google</a></li>
-              <li><a href="#">Log in</a></li> 
-              <li><a href="{% url 'redirectRegister'%}" class="nav__cta">Sign up</a></li>
+              <li><a class="nav__hover" href="https://www.facebook.com/ran432001/">Facebook</a></li>
+              {%if request.owner or user.is_authenticated %}
+              <li>
+                <div class="nav__cta__info--has-menu">
+                  <div class="nav__cta__info">
+                    <p class="nav__cta">{{loginname}}</p>
+                    <p class="nav__mores"><i class="fa-solid fa-caret-down" style="color: #ff4405;"></i></p>
+                  </div>
+                  <div class="nav__cta__menu">
+                    <ul class="nav__cta__list">
+                      <li class="nav__cta__item">
+                        <a href="{% url 'handle_logout' %}" class="nav__cta__link">
+                          <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
+                          <div class="nav__cta__function">
+                              <span class="nav__cta__functionname">Logout</span>
+                          </div>
+                        </a>
+                      </li>
+                      <li class="nav__cta__item">
+                        <a href="" class="nav__cta__link">
+                          <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
+                          <div class="nav__cta__function">
+                              <span class="nav__cta__functionname">function </span>
+                          </div>
+                        </a>
+                      </li>
+                      <li class="nav__cta__item">
+                        <a href="" class="nav__cta__link">
+                          <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
+                          <div class="nav__cta__function">
+                              <span class="nav__cta__functionname">function</span>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+              {% else %}
+              <li><a class="nav__hover" href="{% url 'redirectRegister'%}">Log in</a></li> 
+              <li><a class="nav__noLogin" href="{% url 'redirectRegister'%}" class="nav__cta">Sign up</a></li>
+              {% endif %}
             </ul>
           </div>
           <div class="hamburger">
@@ -81,7 +119,7 @@
               <p class="sous-titre">
                 Chúng tôi giúp bạn quản lý tốt mọi thứ  
               </p>
-              <a href="{% url 'redirectRegister'%}" class="btn">Sign up</a>
+              <a href="{% url 'controller_redirect_regisOwnercar'%}" class="btn">Sign up</a>
               <a href="#" class="text-cta" 
               >
             </div>
@@ -93,7 +131,7 @@
 
     <section id="business-header">
       <div class="container">
-        <div class="business-header__text">
+        <div class="business-header__text resetcolor">
           <h3>Furin bên bạn trong những chuyến đi</h3>
           <p>
            Tôi tìm thấy mình trong những chuyến đi,
@@ -108,36 +146,56 @@
 
     <section data-aos="zoom-in" id="engagements__section" class="bg-light">
       <div class="container">
-        <h3>Tập trung vào sự an toàn mọi lúc mọi nơi</h3>
-        <div class="split">
-          <div class="engagements__section__flex">
+        <h3><i class="fa-solid fa-circle-info" style="color: #fe4001;"></i> Tập trung vào sự an toàn mọi lúc mọi nơi</h3>
+        <div class="split home__conten">
+          
+          <div class="engagements__section__flex Titlecolor1">
             <img
-              src="{%static 'images/logo_light.png'%}"
+              src="{%static 'images/bg11.jpg'%}"
               alt=""
             />
             <h4>Cam kết của chúng tôi đối với sự an toàn của bạn</h4>
-            <p class="sous-titre">
-              abc
+            <p class="sous-titre__home__conten">
+              Yên thảo như bích ty,
+              Tần tang đê lục chi.
+              Đương quân hoài quy nhật,
+              Thị thiếp đoạn trường thì.
+              Xuân phong bất tương thức,
+              Hà sự nhập la vi?
             </p>
-            <a href="#" class="text-cta"
-              >Khám phá điều lệ </a
+            <div class="Home__conten__footer">
+              <a href="#" class="text-cta home__conten"
+              ><i class="fa-solid fa-book-open"></i> Khám phá điều lệ </a
             >
-            <a href="#" class="text-cta"
-              >xem thêm tính năng bảo mật</a
+            <a href="#" class="text-cta footer"
+              ><i class="fa-solid fa-angles-right"></i> xem thêm tính năng bảo mật</a
             >
+            </div>
           </div>
-          <div class="engagements__section__flex">
+          <div class="engagements__section__flex Titlecolor2">
             <img
-              src=""
+               src="{%static 'images/bg13.jpg'%}"
               alt=""
             />
-            <h4>Họt động rộng trong hầu hết thành phố</h4>
-            <p class="sous-titre">
-             với độ phủ rôộng  bạn có thể đi mọi nơi
+            <h4>Tầm phủ rộng trong khắp mọi thành phố</h4>
+            <p class="sous-titre__home__conten">
+              Yên Chi hoàng diệp lạc,
+              Thiếp vọng tự đăng đài.
+              Hải thượng bích vân đoạn,
+              Thiền Vu thu sắc lai.
+              Hồ binh sa tái hợp,
+              Hán sứ Ngọc Quan hồi.
+              Chinh khách vô quy nhật,
+              Không bi huệ thảo tồi.
             </p>
-            <a href="#" class="text-cta" title="Afficher toutes les villes"
-              >hiển thị tất cả thành phố</a
+            <div class="Home__conten__footer">
+              <a href="#" class="text-cta"
+              ><i class="fa-solid fa-book-open"></i> Khám phá điều lệ </a
             >
+            <a href="#" class="text-cta footer"
+              ><i class="fa-solid fa-angles-right"></i> xem thêm tính năng bảo mật</a
+            >
+            </div>
           </div>
         </div>
       </div>
