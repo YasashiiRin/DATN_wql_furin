@@ -1,5 +1,5 @@
 from django.contrib.sessions.models import Session
-from LoginApp.models import OwnerCar
+from LoginApp.models import Customer
 
 class CustomAuthMiddleware:
     def __init__(self, get_response):
@@ -8,13 +8,13 @@ class CustomAuthMiddleware:
     def __call__(self, request):
         if 'id' in request.session:
             id = request.session['id']
-            owner = OwnerCar.objects.get(pk=id)
-            print(owner)
-            request.owner = owner
-            print(request.owner)
+            customer = Customer.objects.get(pk=id)
+            print(customer)
+            request.customer = customer
+            print(request.customer)
         else:
             print("check middleware activate")
-            request.owner = None
+            request.customer = None
 
         response = self.get_response(request)
         return response

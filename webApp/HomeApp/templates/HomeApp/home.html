@@ -32,7 +32,7 @@
           <div>
             <ul id="nav-links" class="nav-links">
               <li><a class="nav__hover" href="https://www.facebook.com/ran432001/">Facebook</a></li>
-              {%if request.owner or user.is_authenticated %}
+              {%if request.customer or user.is_authenticated %}
               <li>
                 <div class="nav__cta__info--has-menu">
                   <div class="nav__cta__info">
@@ -93,33 +93,42 @@
                 <div class="main__cta__icon">
                   <i class="fa-solid fa-bus" style="font-size:26px;"></i>
                 </div>
-                Driver
-              </div>
-              <div class="main__cta__card">
-                <img
-                />
+                Book a car
               </div>
               <div class="main__cta__card tab-item">
                 <i class="fa-solid fa-user" style="font-size:26px;"></i>
-                Book a Car
+                Driver
+              </div>
+              <div class="main__cta__card tab-item">
+                <i class="fa-solid fa-user" style="font-size:26px;"></i>
+                CarOwner
               </div>
               <div class="line"></div>
             </div>
             <div class="main__cta__text active">
-              <h1> Đăng ký với Hành khách</h1>
+              <h1> Đăng nhập Nhà xe </h1>
               <p class="sous-titre">
-                Chúng tôi sẳn sàng để đi cùng bạn
+                Sẳn sàng để vào giao diện quản lý của bạn chưa 
               </p>
-              <a href="{% url 'redirectRegister'%}" class="btn">Sign up</a>
+              <a href="{% url 'redirectRegister' %}" class="btn">Sign up</a>
               <a href="#" class="text-cta" 
               >
             </div>
-            <div class="main__cta__text text_cta_nhaxe">
-              <h1>Đăng ký nhà xe du lịch</h1>
+            <div class="main__cta__text active">
+              <h1>Đăng ký Driver </h1>
               <p class="sous-titre">
-                Chúng tôi giúp bạn quản lý tốt mọi thứ  
+                Chúng tôi sẳn sàng để đi cùng bạn 
               </p>
-              <a href="{% url 'controller_redirect_regisOwnercar'%}" class="btn">Sign up</a>
+              <a href="#" class="btn">Sign up</a>
+              <a href="#" class="text-cta" 
+              >
+            </div>
+            <div class="main__cta__text ">
+              <h1>Đăng ký khách hàng </h1>
+              <p class="sous-titre">
+                Chúng tôi sẳn sàng để đi cùng bạn
+              </p>
+              <a href="{% url 'controller_redirect_regisCustomer' %}" class="btn">Sign up</a>
               <a href="#" class="text-cta" 
               >
             </div>

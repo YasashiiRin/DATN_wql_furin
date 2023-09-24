@@ -47,7 +47,7 @@
             <div class="container-FormIn">
 
                 <div class="form-item loginform">
-                    <form action="{% url 'handelLogin_ownercar' %}" method="POST" class="form" id="form2">
+                    <form action="{% url 'handelLogin_customer' %}" method="POST" class="form" id="form2">
                         {% csrf_token %}
                         <div class="tableform">
                             <div class="tableformcell">
@@ -73,7 +73,7 @@
                     </form>
                 </div>
                 <div class="form-item regisform active">
-                    <form action="{% url 'handleRegis_ownercar' %}" method="POST" class="form" id="form1">
+                    <form action="{% url 'handleRegis_customer' %}" method="POST" class="form" id="form1">
                         {% csrf_token %}
                         <div class="tableform">
                             <div class="tableformcell">

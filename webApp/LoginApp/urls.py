@@ -9,8 +9,8 @@ urlpatterns = [
     path('verifyEmail/', views.verifyEmail_view, name='verifyEmail'),
     path('activate/<str:uid>/<str:token>/', views.activate, name='activate'),
     path('handleLogin/',views.handelLogin,name='handleLogin'),
-    path('handleRegis_ownercar/',views.handleRegis_ownercar,name='handleRegis_ownercar'),
-    path('handelLogin_ownercar/',views.handelLogin_ownercar,name='handelLogin_ownercar'),
-    path('loginOwnercar_view/', views.loginOwnercar_view, name='loginOwnercar_view'), 
-    path('activateO/<str:uid>/<str:token>/', views.activate_Ownercar, name='activateO'),
+    path('handleRegis_customer/',views.handleRegis_customer,name='handleRegis_customer'),
+    path('handelLogin_customer/',views.handelLogin_customer,name='handelLogin_customer'),
+    path('loginCustomer_view/', views.loginCustomer_view, name='loginCustomer_view'), 
+    path('activateO/<str:uid>/<str:token>/', views.activate_Customer, name='activateO'),
 ]
