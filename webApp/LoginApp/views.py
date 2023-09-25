@@ -7,6 +7,8 @@ from django.contrib.auth.hashers import check_password
 from django.http import Http404
 from django.contrib.auth import authenticate,login
 from LoginApp.backends.custom_auth import CustomerBackend
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 import os
 from .models import CarOwner,Customer
 def login_view(request):
@@ -15,35 +17,41 @@ def loginCustomer_view(request):
     return render(request, 'LoginApp/LoginCustomer.html')
 def handleRegis(request):
     if request.method == 'POST':
-        username=request.POST['fullname']
         email=request.POST['email']
         password=request.POST['password']
-        hashed_password=make_password(password)
         token = get_random_string(32)
         if CarOwner.objects.filter(email=email).exists():
             return render(request, 'LoginApp/Login.html',{
                 'islogin':'signup'
             })
-        ca = CarOwner(username=username,email=email,password=hashed_password,token_carowner=token)
-        ca.save()
-        user_id = ca.id
-        user_name= ca.username
-        subject = 'Xác Thực Tài Khoản'
-        from_email='yoemfore@gmail.com'
-        message=''
-        contenHTML = render_to_string('LoginApp/verifyEmail.html', {
-            'name_user':user_name,
-            'activation_url': 'http://127.0.0.1:8000/activate/{}/{}'.format(user_id,token),
-        })
-        to_email = [email]
-        send_mail(subject,
-            message,
-            from_email,
-            to_email,
-            html_message=contenHTML,
+        ca=CarOwner.objects.get(email=email)
+        if ca.verify_carowner == True:
+            return render(request, 'LoginApp/Home.html',{
+                'islogin' : 'verifi_isexists'
+            })
+        if ca.check_password(password):
+            user_id = ca.id
+            user_name= ca.username
+            subject = 'Xác Thực Tài Khoản'
+            from_email='yoemfore@gmail.com'
+            message=''
+            contenHTML = render_to_string('LoginApp/verifyEmail.html', {
+                'name_user':user_name,
+                'activation_url': 'http://127.0.0.1:8000/activate/{}/{}'.format(user_id,token),
+            })
+            to_email = [email]
+            send_mail(subject,
+                message,
+                from_email,
+                to_email,
+                html_message=contenHTML,
             )
-        return render(request, 'LoginApp/notify_loading.html',{
-            'islogin':'faild'
+            return render(request, 'LoginApp/notify_loading.html',{
+                'islogin':'faild'
+            })
+        else :
+            return render(request, 'LoginApp/Login.html',{
+            'islogin': 'faild',
         })
     return render(request, 'LoginApp/verifyEmail.html')
 def back_home_view(request):
@@ -79,18 +87,14 @@ def activate_Customer(request,uid,token):
         raise Http404      
 def handelLogin(request):
    if request.method == 'POST':
-        email_user=request.POST['email']
+        username=request.POST['username']
         password_user=request.POST['password']
         try :
-            user=CarOwner.objects.get(email=email_user)
+            user=CarOwner.objects.get(username=username)
             if user.check_password(password_user):
-                if user.verify_user:
-                    login(request,user,backend='django.contrib.auth.backends.ModelBackend')
-                    return redirect('home')
-                else :
-                    return render(request, 'LoginApp/Login.html',{
-                    'islogin': 'faild',
-                 })  
+                login(request,user,backend='django.contrib.auth.backends.ModelBackend')
+                admin_url = reverse('admin:index')
+                return HttpResponseRedirect(admin_url)
             else :
                  return render(request, 'LoginApp/Login.html',{
                 'islogin': 'faild',

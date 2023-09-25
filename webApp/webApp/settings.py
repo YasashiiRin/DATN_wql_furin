@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'LoginApp',
     'HomeApp',
-    'UserManagerment',
+    'CarownerApp',
 
     # ...
     'allauth',
@@ -173,3 +173,5 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'LoginApp.CarOwner'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+VEHICLE_MEDIA_URL = '/media/vehicle_img/'
