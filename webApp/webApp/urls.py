@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('LoginApp.urls')), # Include ứng dụng LoginApp
     path('', include('HomeApp.urls')), # Include ứng dụng HomeApp
+    path('', include('DriverApp.urls')), # Include)
     path('accounts/', include('allauth.urls')), # Include của xác thực email
     
 ]

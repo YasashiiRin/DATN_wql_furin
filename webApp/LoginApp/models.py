@@ -24,3 +24,6 @@ class Customer(models.Model):
     token_customer = models.CharField(max_length=255, null=True, blank=True)
     class Meta:
         db_table = 'customer'
+    def __str__(self):
+        return self.name_customer
+

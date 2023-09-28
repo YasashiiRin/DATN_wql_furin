@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'LoginApp',
     'HomeApp',
     'CarownerApp',
+    'DriverApp',
 
     # ...
     'allauth',
@@ -88,6 +89,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'LoginApp.middleware.custom_auth_middleware.CustomAuthMiddleware',
+    # 'DriverApp.middleware.custom_auth_middleware.CustomDriverAuthMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -127,7 +129,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django_furin_travel',  # Tên cơ sở dữ liệu của bạn
         'USER': 'root',  # Tên người dùng MySQL của bạn
-        'PASSWORD':'8080',  # Mật khẩu của người dùng MySQL của bạn
+        'PASSWORD':'',  # Mật khẩu của người dùng MySQL của bạn
         'HOST': 'localhost',  # Địa chỉ máy chủ MySQL
         'PORT': '3306',  # Cổng MySQL (mặc định là 3306)
     }

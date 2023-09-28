@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
 from LoginApp.models import CarOwner
+from LoginApp.models import Customer
 
 class Driver(models.Model):
     carowner =models.ForeignKey(CarOwner,on_delete=models.CASCADE,null=True)
@@ -20,12 +21,14 @@ class Driver(models.Model):
 class Vehicle(models.Model):
     driver =models.OneToOneField(Driver, on_delete=models.CASCADE,null=True)
     name_vehicle = models.CharField(max_length=255)
+    name_driver = models.CharField(max_length=255,null=True)
+    email_driver =models.EmailField(null=True)
     img_vehicle =models.ImageField(upload_to='vehicle_img/')
     description = models.CharField(max_length=255)
     slot_vehicle= models.IntegerField()
     type_vehicle=models.CharField(max_length=255)
     def __str__(self):
-        return str(self.id)
+        return str(self.email_driver)
     class Meta:
         db_table = 'vehicle'
 class Schedules(models.Model):
@@ -37,4 +40,20 @@ class Schedules(models.Model):
     end_date_time = models.DateTimeField(null=True)    
     class Meta:
         db_table = 'shedules'    
-    
+class Orders(models.Model):
+    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    name_customer_order = models.CharField(max_length=255, null=True)
+    name_driver_order = models.CharField(max_length=255, null=True)
+    name_schedule_order = models.CharField(max_length=255, null=True)
+    name_vehicle_order = models.CharField(max_length=255, null=True)
+    name_carowner_order = models.CharField(max_length=255, null=True)
+    carowner_id = models.IntegerField(null=True)
+    quantity_slot = models.IntegerField(null=True)
+    pickup_location= models.CharField(max_length=255,null=True)
+    dropoff_location= models.CharField(max_length=255, null=True)
+    pickup_datetime= models.DateTimeField(null=True)
+    dropoff_datetime= models.DateTimeField(null=True)
+    state_order = models.BooleanField(default=False)
+    class Meta:
+        db_table= 'orders'
