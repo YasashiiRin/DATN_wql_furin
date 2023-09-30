@@ -7,18 +7,26 @@ class CustomAuthMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-            if 'id' in request.session:
-                id = request.session['id']
-                try:
-                    driver = Driver.objects.get(pk=id)
-                    request.driver = driver
-                except Driver.DoesNotExist:
-                    try:
-                        customer = Customer.objects.get(pk=id)
-                        request.customer = customer
-                    except Customer.DoesNotExist:
-                        pass
-            else:
-                print("check middleware activate")
+            if 'info_login' in request.session:
+                 info = request.session['info_login']       
+                 user_type = info['user_type']   
+                 id = info['id']
+                 print("session_id",id)
+                 print("session_user_type :", user_type)
+                 if user_type == 'customer':
+                      try:
+                           customer = Customer.objects.get(pk=id)
+                           request.customer = customer
+                           print("check user login :", customer.name_customer)
+                      except Customer.DoesNotExist:
+                           pass
+                 elif user_type == 'driver':
+                      try:
+                           driver = Driver.objects.get(pk=id)
+                           request.driver = driver
+                      except Driver.DoesNotExist:
+                           pass               
+                         
+                                                                                                                                                                                                
             response = self.get_response(request)
             return response

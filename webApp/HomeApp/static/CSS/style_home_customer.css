@@ -254,15 +254,45 @@
       margin: 1rem 0;
     }
   }
-  section#main__cta{
+  section#main__cta_customer{
     padding-block: 4rem;
   
     background-image: url("../images/bg10.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    height: 600px;
+    height: 938px;
     border-bottom: 2px solid rgb(198, 198, 198);
+  }
+  .block_book_car{
+    width: 400px;
+    margin-right: 5px;
+  }
+  .block_history_book_car{
+    width: 500px;
+  }
+  .group_input{
+    margin: 8px;
+  }
+  #pickup__location{
+    width: 260px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid rgb(174, 174, 174);
+  }
+  .bt_search{
+    width: 85px;
+    height: 35px;
+    border: 1px solid rgb(160, 160, 160);
+    border-radius: 16px;
+    margin: 46px 0 20px 182px;
+  }
+  .bt_book_car{
+    width: 75px;
+    height: 30px;
+    border-radius: 14px;
+    background-color: #ff6b4b;
+    border: 1.5px solid rgb(255 150 105);
   }
   .main__cta__rectangle_form2{
     flex-direction: column;

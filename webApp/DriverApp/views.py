@@ -26,7 +26,7 @@ def handelLogin_driver(request):
                     print("xác thực thành công")
                     print("xác thực thành công")
                     user.backend = 'LoginApp.backends.custom_auth.CustomerBackend'
-                    CustomerBackend.custom_login(request,user)
+                    CustomerBackend.custom_login(request,user,'driver')
                     return redirect('driver')  
                 else :
                     return render(request, 'DriverApp/driver_login.html',{

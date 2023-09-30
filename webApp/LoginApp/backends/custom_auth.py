@@ -18,7 +18,10 @@ class CustomerBackend(ModelBackend):
 
         return None 
 
-    def custom_login(request, user):
-        request.session['id'] = user.id
+    def custom_login(request, user, user_type):
+        request.session['info_login'] = {
+            'id' : user.id,
+            'user_type' : user_type
+        }
         print("check id :", user.id)
         return user

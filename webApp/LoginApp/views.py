@@ -146,8 +146,8 @@ def handelLogin_customer(request):
                 if user.verify_customer:
                     print("xác thực thành công")
                     user.backend = 'LoginApp.backends.custom_auth.CustomerBackend'
-                    CustomerBackend.custom_login(request,user)
-                    return redirect('home')   
+                    CustomerBackend.custom_login(request,user,'customer')
+                    return redirect('home_customer_view')   
                 else :
                     return render(request, 'LoginApp/LoginCustomer.html',{
                         'islogin': 'noverifi',
