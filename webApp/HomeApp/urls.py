@@ -9,5 +9,6 @@ urlpatterns = [
     path('handle_logout',views.handle_logout,name='handle_logout'),
     path('controller_redirect_regisCustomer',views.controller_redirect_regisCustomer, name='controller_redirect_regisCustomer'),
     path('driver_login_view/',views.driver_login_view,name='driver_login_view'),
-    path('book_vehicle/<int:vehicle_id>/<int:customer_id>/',views.handle_book_vehicle,name='handle_book_vehicle')
+    path('book_vehicle/<int:schedule_id>/<int:customer_id>/<int:slot>/',views.handle_book_vehicle,name='handle_book_vehicle'),
+    path('search_customer/',views.search_customer, name='search_customer'),
 ]

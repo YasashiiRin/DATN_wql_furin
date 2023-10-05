@@ -132,6 +132,19 @@
     margin-left: 8px;
     margin-right: 5px;
   }
+  .block__schedules-list{
+    padding: 40px;
+    -webkit-box-shadow: 1px 1px 5px 0 #455c71;
+    -moz-box-shadow: 1px 1px 5px 0 #455c71;
+    box-shadow: 1px 1px 5px 0 #455c71;
+    min-height: 350px;
+    height: 100%;
+    width: 1088px;
+    max-height: 468px;
+  }
+  .margin_block{
+    
+  }
   /* .nav__cta:hover {
     background: var(--clr-neutral-100);
   } */

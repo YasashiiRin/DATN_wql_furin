@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from .models import Driver, Vehicle,Schedules, Orders
 from django import forms
 from django.forms.widgets import HiddenInput
+from datetime import timedelta
 
 
 
@@ -17,12 +18,7 @@ class VehicleInline(admin.TabularInline):
     model = Vehicle
     extra = 0
 
-class SchedulesInline(admin.TabularInline):
-    model= Schedules
-    extra =0 
-class OrdersInline(admin.TabularInline):
-    model = Orders
-    extra = 0   
+ 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('name_customer', 'email_customer', 'password_customer','address_customer','phone_customer','last_login','verify_customer')
     def save_model(self, request, obj, form, change):
@@ -77,7 +73,12 @@ class DriverAdmin(admin.ModelAdmin):
         return form
 # -----------------------------
 
-
+class SchedulesInline(admin.TabularInline):
+    model= Schedules
+    extra =0 
+class OrdersInline(admin.TabularInline):
+    model = Orders
+    extra = 0  
 class VehicleAdminForm(forms.ModelForm):
     class Meta:
         model = Vehicle
@@ -105,10 +106,10 @@ class VehicleAdminForm(forms.ModelForm):
         if commit:
             vehicle.save()
 
-        return vehicle         
+        return vehicle             
 class VehicleAdmin(admin.ModelAdmin):
     list_display = ('driver', 'name_vehicle','name_driver','email_driver','img_vehicle','description','slot_vehicle','type_vehicle')
-    inlines =[SchedulesInline,OrdersInline]
+    # inlines =[SchedulesInline,OrdersInline]
     form = VehicleAdminForm
     def get_queryset(self, request):
         qs = super(VehicleAdmin, self).get_queryset(request)
@@ -119,12 +120,102 @@ class VehicleAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         form.user = request.user
         return form
+    
+class ScheduleAdminForm(forms.ModelForm):    
+    class Meta:
+        model = Schedules
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+        self.fields['slot_vehicle'].widget = forms.widgets.HiddenInput()
+        self.fields['slot_vehicle'].required = False
+        if  self.user and not self.instance.vehicle:
+            carowner = self.user
+            self.fields['vehicle'].queryset = Vehicle.objects.filter(driver__carowner = carowner)
+        else:
+            print("chưa thay đổi queryset của vehicle")  
+    # def save(self, commit=True):
+    #     selected_vehicle = self.cleaned_data.get('vehicle')
+    #     name_schedule = self.cleaned_data.get('name_schedule')
+    #     start_location = self.cleaned_data.get('start_location')
+    #     end_location = self.cleaned_data.get('end_location')
+    #     start_time = self.cleaned_data.get('start_time')
+    #     end_time = self.cleaned_data.get('end_time')
+    #     number_of_days = self.cleaned_data.get('number_of_days')
+    #     start_date = self.cleaned_data.get('start_date')
+    #     print("start_day :", start_date)
+    #     print("number_of_day :" , number_of_days)
+    #     schedules = []
+    #     if selected_vehicle:
+    #         vehicle_info = Vehicle.objects.get(pk=selected_vehicle.pk)
+    #         print("slot :", vehicle_info.slot_vehicle)
+    #         for i in range(number_of_days):
+    #             new_schedule = Schedules(
+    #                 vehicle = selected_vehicle,
+    #                 name_schedule = name_schedule,
+    #                 slot_vehicle=vehicle_info.slot_vehicle,
+    #                 start_location = start_location,
+    #                 end_location = end_location,
+    #                 start_time = start_time,
+    #                 end_time = end_time,
+    #                 day_schedule = start_date + timedelta(days=i), 
+    #                 start_date=start_date + timedelta(days=i),  
+    #             )
+    #             schedules.append(new_schedule)
+    #         if commit:
+    #             Schedules.objects.bulk_create(schedules)
+    #     return super().save(commit=commit)
+    
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','name_schedule','start_location','end_location','start_date_time','end_date_time')
-
+    list_display = ('vehicle','name_schedule','slot_vehicle','start_location','end_location','start_time','end_time','day_schedule')
+    form = ScheduleAdminForm
+    def get_queryset(self, request):
+        qs = super(ScheduleAdmin, self).get_queryset(request)
+        if not request.user.is_superuser:
+            qs = qs.filter(vehicle__driver__carowner=request.user)
+        return qs 
+    def save_model(self, request, obj, form, change):
+        selected_vehicle = form.cleaned_data['vehicle']
+        number_of_days = form.cleaned_data['number_of_days']
+        start_date = form.cleaned_data['start_date']
+        selected_vehicle = form.cleaned_data['vehicle']
+        name_schedule = form.cleaned_data['name_schedule']
+        start_location = form.cleaned_data['start_location']
+        end_location = form.cleaned_data['end_location']
+        start_time = form.cleaned_data['start_time']
+        end_time = form.cleaned_data['end_time']
+        number_of_days = form.cleaned_data['number_of_days']
+        start_date = form.cleaned_data['start_date']
+        print("start_day :", start_date)
+        print("number_of_day :" , number_of_days)
+        vehicle_info = Vehicle.objects.get(pk=selected_vehicle.pk)
+        for i in range(number_of_days):
+            new_schedule = Schedules(
+                vehicle = selected_vehicle,
+                name_schedule = name_schedule,
+                slot_vehicle=vehicle_info.slot_vehicle,
+                start_location = start_location,
+                end_location = end_location,
+                start_time = start_time,
+                end_time = end_time,
+                day_schedule = start_date + timedelta(days=i), 
+                start_date=start_date + timedelta(days=i),  
+            )
+            new_schedule.save()
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.user = request.user
+        return form
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','name_customer_order','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','quantity_slot','pickup_location','dropoff_location','pickup_datetime','dropoff_datetime','state_order')
+    list_display = ('vehicle','name_customer_order','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','quantity_slot','pickup_location','dropoff_location','start_date_time','dropoff_datetime','state_order')
 
+    def get_queryset(self, request):
+        qs = super(OrdersAdmin, self).get_queryset(request)
+        if not request.user.is_superuser:
+            qs = qs.filter(vehicle__driver__carowner=request.user)
+        return qs  
 
 admin.site.register(CarOwner, CarOwnerAdmin)
 admin.site.register(Customer, CustomerAdmin)

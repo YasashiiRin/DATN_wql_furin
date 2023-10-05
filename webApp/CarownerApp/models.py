@@ -34,10 +34,14 @@ class Vehicle(models.Model):
 class Schedules(models.Model):
     vehicle= models.ForeignKey(Vehicle,on_delete=models.CASCADE, null=True)
     name_schedule= models.CharField(max_length=255,null=True)
+    slot_vehicle = models.IntegerField(null=True)
     start_location = models.CharField(max_length=255,null=True)
     end_location = models.CharField(max_length=255,null=True)
-    start_date_time = models.DateTimeField(null=True)
-    end_date_time = models.DateTimeField(null=True)    
+    start_time = models.TimeField(null=True)
+    end_time = models.TimeField(null=True)  
+    day_schedule = models.DateField(null=True)
+    start_date = models.DateField(null=True)
+    number_of_days = models.PositiveIntegerField(default=1) 
     class Meta:
         db_table = 'shedules'    
 class Orders(models.Model):
@@ -52,8 +56,9 @@ class Orders(models.Model):
     quantity_slot = models.IntegerField(null=True)
     pickup_location= models.CharField(max_length=255,null=True)
     dropoff_location= models.CharField(max_length=255, null=True)
-    pickup_datetime= models.DateTimeField(null=True)
-    dropoff_datetime= models.DateTimeField(null=True)
+    start_date_time= models.TimeField(null=True)
+    dropoff_datetime= models.TimeField(null=True)
     state_order = models.BooleanField(default=False)
+    day_schedule = models.DateField(null=True)
     class Meta:
         db_table= 'orders'

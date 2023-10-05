@@ -132,6 +132,66 @@
     margin-left: 8px;
     margin-right: 5px;
   }
+  .tm-notification-items{
+
+  }
+  .block__content__history{
+    margin: 10px;
+  }
+  .block_info_img{
+    width: 63px;
+    height: 63px;
+  }
+  .block_info_history{
+    display: flex;
+    margin: 8px;
+  }
+  .content_history_book p{
+    font-size: 13px;
+  }
+  .content_history_book a{
+    font-size: 13px;
+  }
+  .nav__cta__info--has-menu--book_car:hover .nav__cta__menu_history_book{
+    display: block;
+
+  }
+  .tm-history-items{
+    
+  }
+  .nav__cta__info--has-menu--book_car::after{
+    content: "";
+    display: block;
+    position: absolute;
+    width: 365px;
+    height: 50px;
+    right: 247px;
+    top: 57px;
+  }
+  .nav__cta__menu_history_book{
+    display: none;
+    position: absolute;
+    top: 99px;
+    right:247px;
+    width: auto;
+    max-height: 217px;
+    background-color: rgba(60, 60, 60, 60%);
+    z-index: 99;
+    border-radius: 2px;
+    transform-origin: 60% top;
+    box-shadow: 1px 1px 5px 0 #4d6d89;
+    animation: navMenuFunction ease-in 0.26s;
+    overflow-y: scroll;
+  }
+  .nav__cta__menu_history_book::before{
+    content: "";
+    display: block;
+    position: absolute;
+    width: 365px;
+    height: 50px;
+    right: 0;
+    top: -43px;
+  }
   /* .nav__cta:hover {
     background: var(--clr-neutral-100);
   } */
@@ -157,7 +217,8 @@
     width: 300px;
     height: 30px;
     right: 0;
-    top: -18px;
+    top: -23px;
+    /* background-color: #32c2ff; */
 
    }
    @keyframes navMenuFunction{
@@ -254,6 +315,9 @@
       margin: 1rem 0;
     }
   }
+  .input-group-addon{
+    position: relative;
+  }
   section#main__cta_customer{
     padding-block: 4rem;
   
@@ -261,31 +325,171 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    height: 938px;
+    height: 1030px;
     border-bottom: 2px solid rgb(198, 198, 198);
   }
-  .block_book_car{
+  .tm-bg-primary-dark-block_book_car{
     width: 400px;
-    margin-right: 5px;
+    margin-top: 32px;
+    background-color: #435c70;
+    padding: 40px;
+    -webkit-box-shadow: 1px 1px 5px 0 #455c71;
+    -moz-box-shadow: 1px 1px 5px 0 #455c71;
+    box-shadow: 1px 1px 5px 0 #455c71;
+    min-height: 120px;
+    height: 30%;
+    max-height: 468px;
   }
+
   .block_history_book_car{
-    width: 500px;
+    margin-left: 11px;
   }
   .group_input{
     margin: 8px;
   }
-  #pickup__location{
+  .container::before{
+    
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    background-color: rgba(27, 27, 27, 65%);
+    display: none;
+  }
+  .container.show::before{
+    display: block;
+  }
+  /* --------------------invoice--------------------------- */
+  .invoice_block_book{
+    display: none;
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    right: 33%;
+    top:55px;
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  .nav_invoice{
+    padding:15px;
+    display: flex;
+    width: 100%;
+    height: 80px;
+    border-radius: 8px 8px 0 0;
+    background-color: rgb(236, 236, 236);
+    justify-content: space-between;
+    align-items: center;
+  }
+  .invoice_logo{
+    display: flex;
+    align-items: center;
+  }
+  .invoice_logo a {
+    color: rgb(0, 0, 0);
+    font-weight: 500;
+  }
+  .incoive_logo_img{
+
+  }
+  .span_iconoutbook{
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+    color: rgb(255, 39, 39);
+  }
+  .invoice_conten_right a {
+    color: rgb(0, 0, 0);
+    font-weight: 500;
+  }
+  .invoice_container{
+    width: 100%;
+    height: 70%;
+  }
+  .invoice_container_conten{
+    width: 100%;
+    height: auto;
+    margin-left: 18px;
+  }
+  .invoice_container_title{
+    padding: 18px;
+    margin-top: 10px;
+  }
+  .invoice_container_title p{
+    font-size: 18px;
+    font-weight: 600;
+    color:#2d2156;
+  }
+  .invoice_info_book-title{
+    margin-right: 10px;
+  }
+  .invoice_info_book{
+    display: flex;
+    margin: 19px;
+    font-size: 15px;
+    font-weight: 550;
+    padding: 6px;
+    color: #5e5e5e;
+    border-bottom: 1px solid #f84d2e;
+    border-left: 1px solid #f84d2e;
+  }
+  .invoice_info_book p{
+    font-size: 12px;
+  }
+  .invoice_footer{
+  }
+  .invoice_bt{
+    width: 98px;
+    height: 35px;
+    right: 20%;
+    border-radius: 13px;
+    border: none;
+    margin-left: 70%;
+    margin-top: 3%;
+    border: 1.8px solid #ff5009;
+  }
+  .input_book_car{
+    position: relative;
+  }
+  .group_bt{
+
+    top: 15%;
+    right: 13px; 
+    transform: translateY(-50%);
+    pointer-events: none; 
+    z-index: 99;
+  }
+  .input_book_car label{
+    font-size: 15px;
+    font-weight: 600;
+    color: #f6f6f6;
+  }
+  .container_customer input{
+    display: block;
+    outline: 1px solid #32c2ff;
+    padding-left: 10px;
     width: 260px;
     height: 36px;
     border-radius: 10px;
-    border: 1px solid rgb(174, 174, 174);
+    color: #3b3b3b;
+    transition: all 0.3s;
+    margin: 0 auto -1px;
+    border: none;
+  }
+  #pickup__location{
+   
   }
   .bt_search{
+    top: -125%;
+    right: 13px;
+    position: absolute;
     width: 85px;
     height: 35px;
-    border: 1px solid rgb(160, 160, 160);
+    border: none;
     border-radius: 16px;
     margin: 46px 0 20px 182px;
+    background: none;
   }
   .bt_book_car{
     width: 75px;

@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 import os
 from .models import CarOwner,Customer
+from CarownerApp.models import Driver
 def login_view(request):
     return render(request, 'LoginApp/login.html')
 def loginCustomer_view(request):
@@ -20,16 +21,14 @@ def handleRegis(request):
         email=request.POST['email']
         password=request.POST['password']
         token = get_random_string(32)
-        if CarOwner.objects.filter(email=email).exists():
-            return render(request, 'LoginApp/Login.html',{
-                'islogin':'signup'
-            })
         ca=CarOwner.objects.get(email=email)
         if ca.verify_carowner == True:
             return render(request, 'LoginApp/Home.html',{
                 'islogin' : 'verifi_isexists'
             })
         if ca.check_password(password):
+            ca.token_carowner = token
+            ca.save()
             user_id = ca.id
             user_name= ca.username
             subject = 'Xác Thực Tài Khoản'
@@ -84,7 +83,18 @@ def activate_Customer(request,uid,token):
         cm.save()
         return render(request, 'LoginApp/verifyEmail_success.html')  # Hiển thị trang xác thực thành công
     else:
-        raise Http404      
+        raise Http404 
+def activate_driver(request,uid,token):
+    try:
+        dr = Driver.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Driver().DoesNotExist):
+        dr = None
+    if dr is not None and dr.token_driver == token:
+        dr.verify_driver = True
+        dr.save()
+        return render(request, 'LoginApp/verifyEmail_success.html')  # Hiển thị trang xác thực thành công
+    else:
+        raise Http404         
 def handelLogin(request):
    if request.method == 'POST':
         username=request.POST['username']

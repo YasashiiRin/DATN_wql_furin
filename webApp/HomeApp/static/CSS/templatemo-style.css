@@ -59,8 +59,12 @@ button:focus {
 .tm-mt-small {
   margin-top: 20px;
 }
+.block_info_schedules{
+  width: 1168px;
+  height: 468px;
+}
 .tm-block-col {
-  margin-bottom: 30px;
+  margin-bottom: 3px;
 }
 .tm-block {
   padding: 40px;
@@ -69,7 +73,7 @@ button:focus {
   box-shadow: 1px 1px 5px 0 #455c71;
   min-height: 350px;
   height: 100%;
-  max-height: 450px;
+  max-height: 468px;
 }
 .tm-block-avatar,
 .tm-block-settings {
@@ -173,10 +177,13 @@ button:focus {
 }
 .tm-gray-circle {
   width: 80px;
-  height: 80px;
+  height: 67px;
   background-color: #aaa;
   border-radius: 50%;
   margin-right: 15px;
+}
+.content_history_book{
+  margin-bottom: 5px;
 }
 .tm-notification-items {
   overflow-y: scroll;
@@ -188,6 +195,7 @@ button:focus {
   color: #fff;
   font-size: 95%;
   margin-bottom: 15px;
+  display: flex;
 }
 .tm-notification-item:last-child {
   margin-bottom: 0;
@@ -223,15 +231,15 @@ thead {
   border-radius: 50%;
   margin-top: -3px;
 }
-.moving {
+.complete {
   background-color: #9be64d;
   box-shadow: 0 0 8px #9be64d, inset 0 0 8px #9be64d;
 }
-.pending {
+.moving {
   background-color: #efc54b;
   box-shadow: 0 0 8px #efc54b, inset 0 0 8px #efc54b;
 }
-.cancelled {
+.waiting {
   background-color: #da534f;
   box-shadow: 0 0 8px #da534f, inset 0 0 8px #da534f;
 }

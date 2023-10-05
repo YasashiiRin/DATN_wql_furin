@@ -78,21 +78,35 @@
                         <div class="tableform">
                             <div class="tableformcell">
                                 <div class="form-group">
+                                    <input  id="fullname" name="fullname" type="hidden" placeholder="VD:Nguyen Tuan "
+                                        class="">
+                                    <div class="span"></div>
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+
+                                <div class="form-group">
                                     <label for="email" class="form-label">Email</label>
-                                    <input id="email" name="email" type="text" placeholder="VD: 123/abc@gmail.com"
+                                    <input id="email" name="email" type="text" placeholder=" Email :"
                                         class="">
                                     <div class="span"></div>
                                     <span class="form-message"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input id="password" name="password" type="password" placeholder="Nhập mật khẩu"
+                                    <label for="email" class="form-label">Password</label>
+                                    <input id="password" name="password" type="password" placeholder="Password"
                                         class="">
                                     <div class="span"></div>
                                     <span class="form-message"></span>
                                 </div>
+                                <div class="form-group">
+                                    <input id="password_confirmation" name="password_confirmation"
+                                        placeholder="repasss" type="hidden" class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
                                 <button type="submit" class="btn form-submit">
-                                    Confirm
+                                    Sign up
                                 </button>
                             </div>
                         </div>
@@ -118,14 +132,10 @@
             formGroup: '.form-group',
             errSelector: '.form-message',
             rules: [
-                validator.isRequired('#fullname', 'vui long nhap ten day du'),
+                
                 validator.isRequired('#email'),
                 validator.isEmail('#email'),
                 validator.minlength('#password', 6),
-                validator.isRequired('#password_confirmation'),
-                validator.isconfirmvalue('#password_confirmation', function () {
-                    return document.querySelector('#form1 #password').value;
-                }, 'mat khau nhap lai khong chinh xac')
 
             ],
             {% comment %} onsubmit: function (data) {

@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{% static 'CSS/bootstrap.min.css' %}">
     <!-- https://getbootstrap.com/ -->
     <link rel="stylesheet" href="{% static 'CSS/templatemo-style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'CSS/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/styleDriver.css' %}">
     <!--
 	Product Admin CSS Template
 	https://templatemo.com/tm-524-product-admin
@@ -88,9 +88,10 @@
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block">
                         <h2 class="tm-block-title">Latest Hits</h2>
-                        <canvas id="lineChart"></canvas>
+                        
                         <canvas id="barChart"></canvas>
-                        <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
+                        {% comment %} <canvas id="lineChart"></canvas>
+                        <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas> {% endcomment %}
                     </div>
                 </div>
                 {% comment %} Biểu đồ nằm đường thẳng  {% endcomment %}
@@ -139,28 +140,50 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">NAME CUSTOMER.</th>
-                                    <th scope="col">STATUS</th>
-                                    <th scope="col">NAME DRIVER</th>
+                                    <th scope="col">NAME CUSTOMER</th>
+                                    <th scope="col">SLOTS</th>
                                     <th scope="col">PICKUP_LOCATION</th>
                                     <th scope="col">DROPOFF_LOCATION</th>
-                                    <th scope="col">START DATE</th>
-                                    <th scope="col">END DATE</th>
+                                    <th scope="col">START TIME</th>
+                                    <th scope="col">END TIME</th>
+                                    <th scope="col">START DAY</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for order in driver_orders%}
                                 <tr>
                                     <th scope="row"><b>{{order.name_customer_order}}</b></th>
-                                    <td>
-                                        <div class="tm-status-circle moving">
-                                        </div>confirm
-                                    </td>
-                                    <td><b>{{order.name_driver_order}}</b></td>
+                                    <td><b>{{order.quantity_slot}}</b></td>
                                     <td><b>{{order.pickup_location}}</b></td>
                                     <td><b>{{order.dropoff_location}}</b></td>
-                                    <td>{{order.pickup_datetime}}</td>
+                                    <td>{{order.start_date_time}}</td>
                                     <td>{{order.dropoff_datetime}}</td>
+                                    <td><b>{{order.day_schedule}}</b></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">NAME SCHEDULE</th>
+                                    <th scope="col">SLOTS</th>
+                                    <th scope="col">START_DAY</th>
+                                    <th scope="col">START_TIME</th>
+                                    <th scope="col">START LOCATION</th>
+                                    <th scope="col">END LOCATION</th>
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in all_schedules%}
+                                <tr>
+                                    <th scope="row"><b>{{order.name_schedule}}</b></th>
+                                    <td><b>{{order.slot_vehicle}}</b></td>
+                                    <td><b>{{order.start_date}}</b></td>
+                                    <td><b>{{order.start_time}}</b></td>
+                                    <td><b>{{order.start_location}}</b></td>
+                                    <td><b>{{order.end_location}}</b></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -189,31 +212,104 @@
     <!-- http://www.chartjs.org/docs/latest/ -->
     <script src="js/bootstrap.min.js"></script>
     <!-- https://getbootstrap.com/ -->
-    <script src="{% static 'JS/tooplate-scripts.js' %}"></script>
+    {% comment %} <script src="{% static 'JS/tooplate-scripts.js' %}"></script> {% endcomment %}
     <script>
-        Chart.defaults.global.defaultFontColor = 'white';
-        let ctxLine,
+        const width_threshold = 480;
+        var schedule_dates = [
+                {% for schedule in all_schedules %}
+                     "{{ schedule.start_date }}",
+                {% endfor %}
+        ];
+        var listday = schedule_dates;
+        console.log(listday);
+        var schedule_slots = [
+                {% for schedule in all_schedules %}
+                     "{{ schedule.slot_vehicle }}",
+                {% endfor %}
+        ];
+        var listslots = schedule_slots;
+        var schedule_slots_int = listslots.map(function (slot_str) {
+            return parseInt(slot_str); // Sử dụng parseInt để chuyển đổi
+          });
+            Chart.defaults.global.defaultFontColor = 'white';
+            schedule_slots_int.push(0);
+            var days = listday;
+            var hits = schedule_slots_int;
+            var testhits =schedule_slots_int;
+            console.log(hits);
+            console.log(testhits);
+            let
             ctxBar,
-            ctxPie,
-            optionsLine,
             optionsBar,
-            optionsPie,
-            configLine,
             configBar,
-            configPie,
-            lineChart;
-        barChart, pieChart;
-        // DOM is ready
-        $(function () {
-            drawLineChart(); // Line Chart
-            {% comment %} drawBarChart(); 
-            drawPieChart();  {% endcomment %}
-
-            $(window).resize(function () {
-                updateLineChart();
-                {% comment %} updateBarChart();                 {% endcomment %}
+            barChart;
+            $(function () {
+                drawBarChart();
+                $(window).resize(function () {
+                    updateBarChart();
+                });
             });
-        })
+        
+            function drawBarChart() {
+                if ($("#barChart").length) {
+                    ctxBar = document.getElementById("barChart").getContext("2d");
+        
+                    optionsBar = {
+                        responsive: true,
+                        scales: {
+                            yAxes: [
+                                {
+                
+                                    ticks: {
+                                        beginAtZero: false,
+                                        precision: 0,
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: "Hits"
+                                    }
+                                }
+                            ]
+                        }
+                    };
+        
+                    optionsBar.maintainAspectRatio =
+                        $(window).width() < width_threshold ? false : true;
+        
+                    configBar = {
+                        type: "horizontalBar",
+                        data: {
+                            labels: days,
+                            datasets: [
+                                {
+                                    label: "Sơ đồ số lượng chỗ của lịch trình theo ngày",
+                                    data: hits,
+                                    backgroundColor: [
+                                        "#F7604D",
+                                        "#4ED6B8",
+                                        "#A8D582",
+                                        "#D7D768",
+                                        "#9D66CC",
+                                        "#DB9C3F",
+                                        "#3889FC"
+                                    ],
+                                    borderWidth: 0
+                                }
+                            ]
+                        },
+                        options: optionsBar
+                    };
+        
+                    barChart = new Chart(ctxBar, configBar);
+                }
+            }
+            function updateBarChart() {
+                if (barChart) {
+                  barChart.options = optionsBar;
+                  barChart.update();
+                }
+              }
+        
     </script>
 </body>
 
