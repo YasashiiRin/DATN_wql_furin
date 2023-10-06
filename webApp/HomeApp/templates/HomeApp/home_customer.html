@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{% static 'CSS/fontawesome.min.css' %}">
     {% comment %} <link rel="stylesheet" href="{% static 'CSS/bootstrap.min.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'CSS/templatemo-style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_customer_form.css' %}">
     <link
       rel="icon"
       type="image/x-icon"
@@ -30,14 +31,29 @@
             <a href="#" class="logo">Furin</a>
             <ul class="nav-links">
               <li><a class="nav__hover" href="#">
-              </a></li>
-              <li><a class="nav__hover" href="#">Contact</a></li>
+                  </a>
+              </li>
             </ul>
+          </div>
+          <div class="block_search_form">
+            <div class="tm-bg-primary-dark-block_book_car">
+              {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
+              <form method="GET" action="{% url 'search_customer' %}" class="search-form">
+                <div class="input_book_car">
+                    {{ my_filter_form.as_p }}
+                    <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                      color: #101648;"></i></button>
+                </div>
+                <div class="group_button_search_book">
+                  
+                </div>
+              </form>
+            </div>
           </div>
           <div>
             <ul id="nav-links" class="nav-links">
               <li>
-                <div class="nav__cta__info--has-menu--book_car">
+                <div class=" nav__cta__info--has-menu--book_car">
                   {% if not order%}
                   <div class="nav_cta_history">
                     <a class="nav__hover" href="#">History book</a>
@@ -54,17 +70,18 @@
                             {% for order in my_orders%}
                               <li>
                                 <div class="block_info_history">
-                                  <div class="block_info_img"><img src="{% static 'images/img1.png '%}" alt="Avatar Image" class="rounded-circle"></div>
+                                  {% comment %} <div class="block_info_img">Ngày đi : {{order.day_schedule}}</div> {% endcomment %}
                                   <div class="block__content__history">
                                       <div class="content_history_book">
-                                        <p class="mb-2"><b>Name-Schedule : {{order.name_schedule_order}}</b>
+                                        <p class="mb-2"><b> Name-Schedule : {{order.name_schedule_order}}</b>
                                       </div>
                                       <div class ="content_history_book">
-                                          <a href="#" class="tm-notification-link"> Số chỗ :{{order.quantity_slot}}</a></p>
+                                          <p href="#" class="tm-notification-link"> Số chỗ : {{order.quantity_slot}}</p>
                                       </div>
                                       <div class= "content_history_book">
-                                        <span class="tm-small tm-text-color-secondary">{{order.pickup_datetime}}</span>
+                                        <span class="tm-small tm-text-color-secondary"> Ngày đi : {{order.day_schedule}}</span>
                                       </div>
+                        
                                   </div>
                               </div>
                               </li>
@@ -85,26 +102,18 @@
                   <div class="nav__cta__menu">
                     <ul class="nav__cta__list">
                       <li class="nav__cta__item">
+                        <a href="{% url 'view_profile_customer' %}" class="nav__cta__link">
+                          <i class="fa-regular fa-user" style="color: #ff4000;"></i>
+                          <div class="nav__cta__function">
+                              <span class="nav__cta__functionname">Profile </span>
+                          </div>
+                        </a>
+                      </li>
+                      <li class="nav__cta__item">
                         <a href="{% url 'handle_logout' %}" class="nav__cta__link">
                           <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
                           <div class="nav__cta__function">
                               <span class="nav__cta__functionname">Logout</span>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="nav__cta__item">
-                        <a href="" class="nav__cta__link">
-                          <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
-                          <div class="nav__cta__function">
-                              <span class="nav__cta__functionname">function </span>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="nav__cta__item">
-                        <a href="" class="nav__cta__link">
-                          <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
-                          <div class="nav__cta__function">
-                              <span class="nav__cta__functionname">function</span>
                           </div>
                         </a>
                       </li>
@@ -134,8 +143,7 @@
           <div class="row tm-content-row">
             <div class="block_head_flex">
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                  <div class="tm-bg-primary-dark-block_book_car">
-                    {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
+                  {% comment %} <div class="tm-bg-primary-dark-block_book_car">
                     <form method="GET" action="{% url 'search_customer' %}" class="search-form">
                       <div class="input_book_car">
                           {{ my_filter_form.as_p }}
@@ -146,7 +154,7 @@
                         
                       </div>
                     </form>
-                  </div> 
+                  </div>  {% endcomment %}
                 </div >
             </div>
               <div class="col-12 tm-block-col block_info_schedules">
@@ -438,10 +446,13 @@
         <button class="invoice_bt">Confirm</button>
       </div>
     </div>
+    <div id="tagtoast">
+    </div>
     <script src="{% static 'JS/book.js' %}"></script>
+    <script src="{% static 'JS/toast_customer_form.js' %}"></script>
     <script>
-
       document.addEventListener("DOMContentLoaded", function () {
+        
           const input_quantity= document.querySelector('.input_quantity')
           const invoice = document.querySelector('.invoice_block_book')
           const container = document.querySelector('.container')
@@ -504,11 +515,25 @@
                   .then(data => {
                       
                       if (data.message) {
-                          alert(data.message); 
+                          const notifi_book = data.message;
+                          toast({
+                            title: "successfully",
+                            content: "Booked the car successfully",
+                            typeicon: "success",
+                            duration: 8000
+                    
+                        })  
                           container.classList.remove("show");
                           invoice.style.display ='none'
                       } else if (data.error) {
-                          alert(data.error); 
+                          const data_err = data.error;
+                          toast({
+                            title: "successfully",
+                            content: data_err,
+                            typeicon: "success",
+                            duration: 8000
+                    
+                        })
                       }
                   })
                   .catch(error => {
@@ -526,11 +551,39 @@
                   searchIcon.onclick=function(){
                       const searchForm = document.querySelector('.search-form');
                       searchForm.submit(); 
-                  }
-
+                  }  
               });
           });
       });
+      const notification = "{{notifi_search}}";
+          console.log("waiting notifi search ")
+          console.log(notification)
+                  if(notification==='search_success'){
+                    toast({
+                        title: "Found Results",
+                        content: "you just performed a search action",
+                        typeicon: "success",
+                        duration: 8000
+                
+                      })
+                  }
+                  else if (notification==='search_err'){
+                    toast({
+                        title: "Not Found",
+                        content: "The keyword you entered was not found, or you may have entered the wrong format of the keyword",
+                        typeicon: "error",
+                        duration: 8000
+                
+                    })  
+                }
+                const main = document.querySelector('#tagtoast');
+                const dltoast = document.querySelector('.toast-exit');
+                console.log(dltoast)
+                console.log(main)
+                dltoast.onclick = function(){
+                  console.log("remove toast")
+                  main.remove();
+              }          
   </script>
   
   </body>

@@ -31,6 +31,8 @@ def handle_logout(request):
     return render(request, 'HomeApp/home.html')
 def driver_login_view(request):
     return render(request,'DriverApp/driver_login.html')
+def view_profile_customer(request):
+    return render(request,'HomeApp/profile_customer.html')
 def handle_book_vehicle(request,schedule_id,customer_id,slot):
     try:
         schedule_id = schedule_id
@@ -117,13 +119,17 @@ def search_customer(request):
                 Q(start_date__icontains=search_query)   |
                 Q(start_time__icontains=search_query) 
             )
-            all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]          
-          
-            return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules,  'my_orders' : my_orders, })
+            all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]       
+            searchvalue = ''   
+            if not all_shedules :
+                searchvalue = 'search_err'
+            else:
+                searchvalue = 'search_success'
+            return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules,  'my_orders' : my_orders, 'notifi_search' : searchvalue})
 
         else:
              print("novalid")
 
-    return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': schedules,  'my_orders' : my_orders, })
+    return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': schedules,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
 
       

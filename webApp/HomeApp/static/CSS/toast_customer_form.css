@@ -8,7 +8,6 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    font-family: "Helvetica Neue";
     background-color: #f4f4f5;
 }
 
@@ -23,6 +22,7 @@ body>div {
 }
 
 .toast {
+    font-family: "Helvetica Neue";
     display: flex;
     align-items: center;
     background-color: #fff;

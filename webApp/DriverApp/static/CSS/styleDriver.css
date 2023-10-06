@@ -145,6 +145,9 @@
   .margin_block{
     
   }
+  .title_myschedules{
+    margin-top: 30px;
+  }
   /* .nav__cta:hover {
     background: var(--clr-neutral-100);
   } */

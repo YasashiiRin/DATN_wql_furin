@@ -116,7 +116,7 @@
                         <div class="tm-notification-items">
                             {% for order in driver_orders%}
                             <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{% static 'images/img1.png '%}" alt="Avatar Image" class="rounded-circle"></div>
+                                <div class="tm-gray-circle"><img src="{{order.vehicle.img_vehicle.url}}" alt="Avatar Image" class="rounded-circle"></div>
                                 <div class="media-body">
                                     <p class="mb-2"><b>{{order.name_customer_order}}</b> new notifi _book car <a href="#"
                                             class="tm-notification-link">-------------</a>------------</p>
@@ -163,6 +163,11 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+                        <h2 class="tm-block-title title_myschedules">My Schedules</h2>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -174,7 +179,7 @@
                                     <th scope="col">END LOCATION</th>
                                   
                                 </tr>
-                            </thead>
+                            </thead>      
                             <tbody>
                                 {% for order in all_schedules%}
                                 <tr>

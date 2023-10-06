@@ -27,5 +27,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')), # Include của xác thực email
     
 ]
+
 if settings.DEBUG:
-    urlpatterns += static(settings.VEHICLE_MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

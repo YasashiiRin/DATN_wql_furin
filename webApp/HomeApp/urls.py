@@ -11,4 +11,5 @@ urlpatterns = [
     path('driver_login_view/',views.driver_login_view,name='driver_login_view'),
     path('book_vehicle/<int:schedule_id>/<int:customer_id>/<int:slot>/',views.handle_book_vehicle,name='handle_book_vehicle'),
     path('search_customer/',views.search_customer, name='search_customer'),
+    path('view_profile_customer',views.view_profile_customer,name='view_profile_customer'),
 ]

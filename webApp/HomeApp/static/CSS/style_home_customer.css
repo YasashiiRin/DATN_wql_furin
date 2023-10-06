@@ -108,7 +108,11 @@
   }
   
   .nav-links,
-  header nav div:first-of-type {
+  header nav div{
+    display: flex;
+    align-items: center;
+  }
+  .nav_header_nav_links{
     display: flex;
     align-items: center;
   }
@@ -136,15 +140,20 @@
 
   }
   .block__content__history{
+    display: block;
     margin: 10px;
+    border-bottom: 1px solid #32c2ff;
   }
   .block_info_img{
     width: 63px;
     height: 63px;
   }
   .block_info_history{
-    display: flex;
+    display: block;
     margin: 8px;
+  }
+  .content_history_book{
+    display: block;
   }
   .content_history_book p{
     font-size: 13px;
@@ -157,6 +166,7 @@
 
   }
   .tm-history-items{
+    display: block;
     
   }
   .nav__cta__info--has-menu--book_car::after{
@@ -199,7 +209,7 @@
    .nav__cta__menu{
     display: none;
     position: absolute;
-    top: 92px;
+    top: 99px;
     right:0;
     width: 300px;
     background-color: rgba(60, 60, 60, 60%);
@@ -215,9 +225,9 @@
     display: block;
     position: absolute;
     width: 300px;
-    height: 30px;
+    height: 44px;
     right: 0;
-    top: -23px;
+    top: -32px;
     /* background-color: #32c2ff; */
 
    }
@@ -319,29 +329,23 @@
     position: relative;
   }
   section#main__cta_customer{
-    padding-block: 4rem;
+    padding-block: 2rem;
   
     background-image: url("../images/bg10.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    height: 1030px;
-    border-bottom: 2px solid rgb(198, 198, 198);
+    height: 578px;
+    border-bottom: 2px solid #4996ff;
   }
   .tm-bg-primary-dark-block_book_car{
     width: 400px;
-    margin-top: 32px;
-    background-color: #435c70;
-    padding: 40px;
-    -webkit-box-shadow: 1px 1px 5px 0 #455c71;
-    -moz-box-shadow: 1px 1px 5px 0 #455c71;
-    box-shadow: 1px 1px 5px 0 #455c71;
-    min-height: 120px;
-    height: 30%;
-    max-height: 468px;
+    min-height: 14px;
+
   }
 
   .block_history_book_car{
+    display: block;
     margin-left: 11px;
   }
   .group_input{
@@ -452,6 +456,27 @@
   .input_book_car{
     position: relative;
   }
+  .block_input_search{
+    width: 200px;
+  }
+  .block_search_form{
+    margin-left: 0;
+    margin-right: 20%;
+  }
+  .custom-css-class{
+    outline: 1px solid #403755;
+    height: 33px;
+    width: 231px;
+    min-width: 220px;
+    min-height: 30px;
+    padding-left: 10px;
+    transition: all 0.3s;
+    border: none;
+    border-radius: 10px;
+    -webkit-box-shadow: 1px 1px 5px 0 #455c71;
+    -moz-box-shadow: 1px 1px 5px 0 #455c71;
+    box-shadow: 1px 1px 5px 0 #455c71;
+  }
   .group_bt{
 
     top: 15%;
@@ -481,8 +506,8 @@
    
   }
   .bt_search{
-    top: -125%;
-    right: 13px;
+    top: -133%;
+    right: -23px;
     position: absolute;
     width: 85px;
     height: 35px;
