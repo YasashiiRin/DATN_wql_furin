@@ -175,6 +175,21 @@ button:focus {
 .tm-col-small {
   width: 21.95%;
 }
+.nav_history{
+  padding: 0 4px;
+}
+.nav__cta__info--has-menu--book_car:hover{
+  border-radius: 30px;
+  background: #333;
+}
+.nav__cta__info--has-menu--book_car{
+  margin-right: 8px;
+}
+.nav_cta_history{
+  display: block;
+  display: flex;
+  margin: 1rem 1rem 1rem;
+}
 .tm-gray-circle {
   width: 80px;
   height: 67px;
@@ -205,6 +220,7 @@ button:focus {
 }
 .tm-text-color-secondary {
   color: #bdcbd8;
+  padding-left: 5px;
 }
 .tm-small {
   font-size: 90%;
@@ -231,7 +247,7 @@ thead {
   border-radius: 50%;
   margin-top: -3px;
 }
-.complete {
+.notfull {
   background-color: #9be64d;
   box-shadow: 0 0 8px #9be64d, inset 0 0 8px #9be64d;
 }
@@ -239,7 +255,7 @@ thead {
   background-color: #efc54b;
   box-shadow: 0 0 8px #efc54b, inset 0 0 8px #efc54b;
 }
-.waiting {
+.isfull {
   background-color: #da534f;
   box-shadow: 0 0 8px #da534f, inset 0 0 8px #da534f;
 }

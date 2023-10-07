@@ -61,5 +61,6 @@ class Orders(models.Model):
     dropoff_datetime= models.TimeField(null=True)
     state_order = models.BooleanField(default=False)
     day_schedule = models.DateField(null=True)
+    pickup_daytime = models.DateTimeField(null=True)
     class Meta:
         db_table= 'orders'

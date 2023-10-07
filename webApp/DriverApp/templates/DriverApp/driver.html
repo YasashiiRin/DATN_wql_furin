@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="{% static 'CSS/fontawesome.min.css' %}">
     <!-- https://fontawesome.com/ -->
     <link rel="stylesheet" href="{% static 'CSS/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/templatemo_driver.css' %}">
     <!-- https://getbootstrap.com/ -->
-    <link rel="stylesheet" href="{% static 'CSS/templatemo-style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/styleDriver.css' %}">
     <!--
 	Product Admin CSS Template
@@ -28,7 +28,7 @@
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="index.html">
-                    <h1 class="tm-site-title mb-0">Driver {{request.driver.name_driver}}</h1>
+                    <h1 class="tm-site-title mb-0">Driver</h1>
                 </a>
                 <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link d-block" href="{% url 'logout_driver' %}">
-                               <b>Logout</b>
+                               <b class="char_logout">Logout</b>
                             </a>
                         </li>
                     </ul>
@@ -79,7 +79,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <p class="text-white mt-5 mb-5">Welcome back, <b>Driver</b></p>
+                    <p class="block_welcome_driver">Welcome back , driver <b>{{request.driver.name_driver}}</b></p>
                 </div>
             </div>
             <!-- row -->
@@ -116,11 +116,23 @@
                         <div class="tm-notification-items">
                             {% for order in driver_orders%}
                             <div class="media tm-notification-item">
-                                <div class="tm-gray-circle"><img src="{{order.vehicle.img_vehicle.url}}" alt="Avatar Image" class="rounded-circle"></div>
+                                <div class="tab-item-r">
+                                    <div class="avatar">
+                                        <img src="{{order.vehicle.img_vehicle.url}}" alt="Avatar Image" class="rounded-circle" style="max-width: 100%;">
+                                    </div>
+                                </div>
+                                <div class="title_new">
+                                    <span class="char_new">New</span>
+                                </div>
                                 <div class="media-body">
-                                    <p class="mb-2"><b>{{order.name_customer_order}}</b> new notifi _book car <a href="#"
-                                            class="tm-notification-link">-------------</a>------------</p>
-                                    <span class="tm-small tm-text-color-secondary">{{order.pickup_datetime}}</span>
+                                    <div>
+                                        <p class="mb-2"><b>{{order.name_customer_order}}</b><a href="#"
+                                            class="tm-notification-link"></a></p>
+                                        <span class="tm-small tm-text-color-secondary">Số chỗ đặt : {{order.quantity_slot}}</span>   
+                                    </div>
+                                    <div>
+                                        <span class="tm-small tm-text-color-secondary">Thời gian đặt : {{order.pickup_daytime}}</span>
+                                    </div>
                                 </div>
                             </div>
                             {%endfor%}
@@ -219,6 +231,9 @@
     <!-- https://getbootstrap.com/ -->
     {% comment %} <script src="{% static 'JS/tooplate-scripts.js' %}"></script> {% endcomment %}
     <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
         const width_threshold = 480;
         var schedule_dates = [
                 {% for schedule in all_schedules %}
@@ -314,7 +329,18 @@
                   barChart.update();
                 }
               }
+            const blockScroll = document.querySelector('.tm-notification-items')
+            const arrayScroll = document.querySelectorAll('.tm-notification-item')
+            console.log(arrayScroll)
+            blockScroll.scrollTop = blockScroll.scrollHeight;
+            const len = arrayScroll.length
+            arrayScroll[len - 2].classList.remove('title_new_active')
+            arrayScroll[len - 1].classList.add('title_new_active')
+
+      
+      
         
+     });    
     </script>
 </body>
 

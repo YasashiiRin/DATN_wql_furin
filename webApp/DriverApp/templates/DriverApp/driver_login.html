@@ -132,14 +132,10 @@
             formGroup: '.form-group',
             errSelector: '.form-message',
             rules: [
-                validator.isRequired('#fullname', 'vui long nhap ten day du'),
                 validator.isRequired('#email'),
                 validator.isEmail('#email'),
                 validator.minlength('#password', 6),
-                validator.isRequired('#password_confirmation'),
-                validator.isconfirmvalue('#password_confirmation', function () {
-                    return document.querySelector('#form1 #password').value;
-                }, 'mat khau nhap lai khong chinh xac')
+                validator.isRequired('#password')
 
             ],
             {% comment %} onsubmit: function (data) {
@@ -199,7 +195,16 @@ else if(notification==='faildpass'){
         duration: 8000
 
     }) 
-}  
+}
+else if(notification==='isNoneAccount'){
+    toast({
+        title: "account does not have sufficient permissions",
+        content: "The account does not have sufficient permissions to perform this action",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+}   
   
   
 

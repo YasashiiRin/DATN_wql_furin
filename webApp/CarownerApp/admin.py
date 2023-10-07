@@ -180,30 +180,69 @@ class ScheduleAdmin(admin.ModelAdmin):
         selected_vehicle = form.cleaned_data['vehicle']
         number_of_days = form.cleaned_data['number_of_days']
         start_date = form.cleaned_data['start_date']
-        selected_vehicle = form.cleaned_data['vehicle']
         name_schedule = form.cleaned_data['name_schedule']
         start_location = form.cleaned_data['start_location']
         end_location = form.cleaned_data['end_location']
         start_time = form.cleaned_data['start_time']
         end_time = form.cleaned_data['end_time']
-        number_of_days = form.cleaned_data['number_of_days']
-        start_date = form.cleaned_data['start_date']
-        print("start_day :", start_date)
-        print("number_of_day :" , number_of_days)
+
         vehicle_info = Vehicle.objects.get(pk=selected_vehicle.pk)
-        for i in range(number_of_days):
-            new_schedule = Schedules(
-                vehicle = selected_vehicle,
-                name_schedule = name_schedule,
-                slot_vehicle=vehicle_info.slot_vehicle,
-                start_location = start_location,
-                end_location = end_location,
-                start_time = start_time,
-                end_time = end_time,
-                day_schedule = start_date + timedelta(days=i), 
-                start_date=start_date + timedelta(days=i),  
-            )
-            new_schedule.save()
+
+        try:
+            existing_schedule = Schedules.objects.get(id = obj.id)
+            print("existing_schedule :",existing_schedule.id)
+        except Schedules.DoesNotExist:
+            for i in range(number_of_days):
+                new_schedule = Schedules(
+                    vehicle=selected_vehicle,
+                    name_schedule=name_schedule,
+                    slot_vehicle=vehicle_info.slot_vehicle,
+                    start_location=start_location,
+                    end_location=end_location,
+                    start_time=start_time,
+                    end_time=end_time,
+                    day_schedule=start_date + timedelta(days=i),
+                    start_date=start_date + timedelta(days=i),
+                )
+                new_schedule.save()
+        else:       
+            existing_schedule.name_schedule = name_schedule
+            existing_schedule.slot_vehicle = vehicle_info.slot_vehicle
+            existing_schedule.start_location = start_location
+            existing_schedule.end_location = end_location
+            existing_schedule.start_time = start_time
+            existing_schedule.end_time = end_time
+            existing_schedule.save()
+
+
+    # def save_model(self, request, obj, form, change):
+    #     selected_vehicle = form.cleaned_data['vehicle']
+    #     number_of_days = form.cleaned_data['number_of_days']
+    #     start_date = form.cleaned_data['start_date']
+    #     selected_vehicle = form.cleaned_data['vehicle']
+    #     name_schedule = form.cleaned_data['name_schedule']
+    #     start_location = form.cleaned_data['start_location']
+    #     end_location = form.cleaned_data['end_location']
+    #     start_time = form.cleaned_data['start_time']
+    #     end_time = form.cleaned_data['end_time']
+    #     number_of_days = form.cleaned_data['number_of_days']
+    #     start_date = form.cleaned_data['start_date']
+    #     print("start_day :", start_date)
+    #     print("number_of_day :" , number_of_days)
+    #     vehicle_info = Vehicle.objects.get(pk=selected_vehicle.pk)
+    #     for i in range(number_of_days):
+    #         new_schedule = Schedules(
+    #             vehicle = selected_vehicle,
+    #             name_schedule = name_schedule,
+    #             slot_vehicle=vehicle_info.slot_vehicle,
+    #             start_location = start_location,
+    #             end_location = end_location,
+    #             start_time = start_time,
+    #             end_time = end_time,
+    #             day_schedule = start_date + timedelta(days=i), 
+    #             start_date=start_date + timedelta(days=i),  
+    #         )
+    #         new_schedule.save()
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         form.user = request.user

@@ -8,6 +8,7 @@ from LoginApp.models import Customer
 from django.utils import timezone
 from .forms import YourFilterForm
 from django.db.models import Q
+from datetime import datetime
 def homeview(request):
     
     return render(request, 'HomeApp/home.html')
@@ -35,6 +36,7 @@ def view_profile_customer(request):
     return render(request,'HomeApp/profile_customer.html')
 def handle_book_vehicle(request,schedule_id,customer_id,slot):
     try:
+        current_datetime = datetime.now()
         schedule_id = schedule_id
         customer_id = customer_id
         slot = slot
@@ -62,12 +64,12 @@ def handle_book_vehicle(request,schedule_id,customer_id,slot):
         if slot_t >= 0:
             schedule.slot_vehicle = slot_t
             schedule.save()
-            od = Orders(customer=customer,vehicle= vehicle,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day )
+            od = Orders(customer=customer,vehicle= vehicle,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime =current_datetime )
             od.save()
             return JsonResponse({'message': 'Đặt xe thành công'})
 
         else:
-            return JsonResponse({'message': 'không đủ chỗ '})
+            return JsonResponse({'error': 'không đủ chỗ '})
     except Vehicle.DoesNotExist or Customer.DoesNotExist:
         return JsonResponse({'error': 'Có lỗi xảy ra vui lòng liên hệ với quản trị viên'}, status=404)
     except Exception as e:
@@ -80,7 +82,7 @@ def search_customer(request):
     schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
     my_filter_form = YourFilterForm()
     if request.method == 'GET':
-        my_filter_form = YourFilterForm(request.GET)  # Khởi tạo form với dữ liệu GET
+        my_filter_form = YourFilterForm(request.GET)
         if my_filter_form.is_valid():
             print("isvalid")
             search_query = my_filter_form.cleaned_data.get('search_query', '')
@@ -110,14 +112,40 @@ def search_customer(request):
             # if search_name_driver:
             #     query |= Q(vehicle__driver__name_driver=search_name_driver)      
 
-            # filtered_schedules = Schedules.objects.filter(query)     
-            filtered_schedules = Schedules.objects.filter(
+            # filtered_schedules = Schedules.objects.filter(query) 
+            time_years = search_query.split('-')
+            time_parts = search_query.split(':')
+            if search_query.isdigit():
+                print("is integer")
+                filtered_schedules = Schedules.objects.filter(
+                    Q(slot_vehicle= int(search_query)) # Tìm kiếm theo năm
+                )       
+            elif len(time_parts) >=2 :
+                print(time_parts)
+                try:
+                    hour = int(time_parts[0])
+                    minute = int(time_parts[1])
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(start_time__hour =hour, start_time__minute =minute)
+                    )
+                except ValueError:
+                    pass
+            elif len(time_years) >=2 :
+                print(time_years)
+                try:
+                    month = int(time_years[0])
+                    day = int(time_years[1])
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(start_date__month = month, start_date__day = day)
+                    )
+                except ValueError:
+                    pass    
+            else:
+                filtered_schedules = Schedules.objects.filter(
                 Q(vehicle__driver__carowner__username__icontains=search_query) |
-                Q(slot_vehicle__icontains=search_query) |
                 Q(start_location__icontains=search_query) |
                 Q(end_location__icontains=search_query) |
-                Q(start_date__icontains=search_query)   |
-                Q(start_time__icontains=search_query) 
+                Q(vehicle__type_vehicle__icontains=search_query)
             )
             all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]       
             searchvalue = ''   

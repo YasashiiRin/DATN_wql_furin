@@ -58,7 +58,12 @@ def handle_verifi_driver(request):
         print("email_driver_get :", email)
         print("pass_driver_get :", password)
         token = get_random_string(32)
-        dr=Driver.objects.get(email_driver=email)
+        try:
+            dr=Driver.objects.get(email_driver=email)
+        except Driver.DoesNotExist:
+            return render(request, 'DriverApp/driver_login.html',{
+                'islogin' : 'isNoneAccount'
+            })    
         if dr.verify_driver == True:
             return render(request, 'DriverApp/driver_login.html',{
                 'islogin' : 'verifi_isexists'
