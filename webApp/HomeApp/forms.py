@@ -8,3 +8,5 @@ class YourFilterForm(forms.Form):
     # search_end_location = forms.CharField(required=False)
     # # search_start_time = forms.TimeField(required=False, label='Search Start Time')
     # search_name_driver = forms.TimeField(required=False)
+class ImageUploadForm(forms.Form):
+    image_upload = forms.ImageField(required=True)

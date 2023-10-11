@@ -1,39 +1,101 @@
+import os
 from django.http import HttpResponseRedirect
 from django.shortcuts import render , redirect
 from django.contrib.auth import logout
 from CarownerApp.models import Driver,Schedules,Vehicle,Orders
 from django.db.models import Prefetch
+
+import shutil
+from django.conf import settings
+
+import json
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+
 from LoginApp.models import Customer
 from django.utils import timezone
 from .forms import YourFilterForm
+from .forms import ImageUploadForm
 from django.db.models import Q
 from datetime import datetime
+from CarownerApp.models import CustomSession
+from django.contrib.sessions.models import Session
 def homeview(request):
     
     return render(request, 'HomeApp/home.html')
 def home_customer_view(request):
-    current_date = timezone.now().date()
-    my_filter_form = YourFilterForm()
-    my_orders = Orders.objects.filter(customer = request.customer.id).all()
-    filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
-    all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]
-    return render(request, 'HomeApp/home_customer.html', {
-        'schedules': all_shedules,
-        'my_orders' : my_orders,
-        'my_filter_form' : my_filter_form,
-    })
+    if 'customer_sessionid' in request.session:
+        print("has session customer.....")
+        customerid = request.customer.id
+        current_date = timezone.now().date()
+        my_filter_form = YourFilterForm()
+        my_orders = Orders.objects.filter(customer = customerid).all()
+        filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
+        all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]
+        return render(request, 'HomeApp/home_customer.html', {
+            'schedules': all_shedules,
+            'my_orders' : my_orders,
+            'my_filter_form' : my_filter_form,
+        })
+    else:
+        return render(request, 'HomeApp/home.html')
 def controller_redirect_register(request):
     return redirect('login')
 def controller_redirect_regisCustomer(request):
     return redirect('loginCustomer_view')
+
+
 def handle_logout(request):
-    logout(request)
+    session_key = request.session.get(settings.CUSTOMER_SESSION_COOKIE_NAME)
+    if session_key:
+        try:
+            custom_session = CustomSession.objects.get(session_key=session_key)
+            custom_session.delete()
+            del request.session[settings.CUSTOMER_SESSION_COOKIE_NAME]
+            print("delete_Session for customer......")
+        except CustomSession.DoesNotExist:
+            pass
     return render(request, 'HomeApp/home.html')
+
+def custom_logout(request):
+    # session_key_to_delete = request.session.session_key
+    # Session.objects.filter(session_key=session_key_to_delete).delete() 
+    # if 'customer_sessionid' in request.session:
+    #     print("tồn tại customer")
+    #     request.session[settings.CUSTOMER_SESSION_COOKIE_NAME] = {
+    #             'id_customer': request.customer.id,
+    #     }
+    # if 'driver_sessionid' in request.session:
+    #     print("tồn tại driver")
+    #     request.session[settings.DRIVER_SESSION_COOKIE_NAME] = {
+    #             'id_driver': request.driver.id,
+    #     } 
+    return render(request, 'HomeApp/home.html')
+
 def driver_login_view(request):
     return render(request,'DriverApp/driver_login.html')
+
+
 def view_profile_customer(request):
-    return render(request,'HomeApp/profile_customer.html')
+    
+    id_customer = request.customer.id
+    my_filter_form = ImageUploadForm()
+    my_profile = Customer.objects.get(pk=id_customer)
+    return render(request,'HomeApp/profile_customer.html',{
+        'myinfo': my_profile,
+        'customer_id' : id_customer,
+        'form_upload' : my_filter_form,
+    })
+def view_editprofile(request):
+    id_customer = request.customer.id
+    my_filter_form = ImageUploadForm()
+    my_profile = Customer.objects.get(pk=id_customer)
+    return render(request,'HomeApp/edit_profile.html',{
+        'myinfo': my_profile,
+        'customer_id' : id_customer,
+        'form_upload' : my_filter_form,
+    })
 def handle_book_vehicle(request,schedule_id,customer_id,slot):
     try:
         current_datetime = datetime.now()
@@ -77,8 +139,9 @@ def handle_book_vehicle(request,schedule_id,customer_id,slot):
     
 
 def search_customer(request):
+    id_customer = request.customer.id
     current_date = timezone.now().date()
-    my_orders = Orders.objects.filter(customer = request.customer.id).all()
+    my_orders = Orders.objects.filter(customer = id_customer).all()
     schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
     my_filter_form = YourFilterForm()
     if request.method == 'GET':
@@ -160,4 +223,45 @@ def search_customer(request):
 
     return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': schedules,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
 
-      
+def upload_images(request,customerid) :
+    id_customer = request.customer.id
+    my_profile = Customer.objects.get(pk=id_customer)
+    if request.method == 'POST':
+        print(request.POST)  # In ra nội dung của request.POST
+        print(request.FILES)  # In ra nội dung của request.FILES
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_image = form.cleaned_data['image_upload']
+            print("check img :",uploaded_image)
+            c = Customer.objects.get(pk=customerid)
+            c.img_customer = uploaded_image
+            c.save()
+        else:
+            print(form.errors)
+            return JsonResponse({'error': 'không đủ chỗ '})
+    else:
+        form = ImageUploadForm()
+    return render(request, 'HomeApp/edit_profile.html', {'form_upload': form, 'myinfo' : my_profile})
+def save_edit_info(request):
+    id_customer = request.customer.id
+    my_profile = Customer.objects.get(pk=id_customer)
+    form = ImageUploadForm()
+    if request.method =='POST' :
+        try:
+            data = json.loads(request.body) 
+            # Xử lý dữ liệu ở đây
+            received_name = data.get('name')
+            received_email = data.get('email')
+            received_phone = data.get('phone')
+            received_address = data.get('address')
+            c = Customer.objects.get(pk=id_customer)
+            c.name_customer = received_name
+            c.address_customer = received_address
+            c.phone_customer = received_phone
+            c.save()
+            return JsonResponse({'message': 'Dữ liệu đã được lưu thành công'})
+        except Customer.DoesNotExist:
+            return JsonResponse({'error': 'Customer dost not exits'})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
+    return render(request, 'HomeApp/edit_profile.html', {'form_upload': form, 'myinfo' : my_profile})      

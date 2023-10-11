@@ -12,7 +12,10 @@ html {
 }
 body {
   font-family: Roboto, Helvetica, Arial, sans-serif;
-  background-color: #4e657a;
+  /* background-color: #4e657a; */
+  background: url('../images/bg6.jpg') 50% fixed;
+  background-size: cover;
+  overflow: hidden;
   overflow-x: hidden;
 }
 a {
@@ -42,13 +45,13 @@ button:focus {
 .block_welcome_driver{
   margin-top: 1rem;
   margin-bottom: 1rem;
-  color: #fff;
+  color: #495e75;
 }
 .char_logout{
   font-size: 16px;
 }
 .navbar {
-  height: 88px;
+  height: 80px;
   background-color: #567086;
   padding: 0;
 }
@@ -137,7 +140,7 @@ button:focus {
 }
 .navbar-nav .active > .nav-link,
 .navbar-nav .nav-link.active {
-  background-color: #f5a623;
+  background-color: #6ddbffd6;
   color: #fff;
 }
 .navbar-nav .nav-link.active i {
@@ -195,19 +198,19 @@ button:focus {
 .avatar::after{
   -webkit-animation: clipMe 10s linear infinite;
   animation: clipMe 8s linear infinite;
-  border: rgb(0 188 255) solid 8px;
+  border: rgb(255 217 237 / 96%) solid 52px;
   border-radius: 9999px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   content: ' ';
-  height: 110px;
-  left: -37%;
-  opacity: 0.6;
+  height: 105px;
+  left: -22.4px;
+  opacity: 0.9;
   position: absolute;
-  top: -36.5%;
+  top: -22px;
   -webkit-transform: scale(0.714);
   transform: scale(0.714);
-  width: 110px;
+  width: 105px;
 
 }
 .avatar::before{
@@ -232,9 +235,9 @@ button:focus {
 }
 .title_new span{
   display: none;
-  color: #ff6721;
+  color: #69f0f4;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
 }
 .title_new_active .title_new span{
   display: block;

@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
 from LoginApp.models import CarOwner
 from LoginApp.models import Customer
+from django.db.models import JSONField
 
 class Driver(models.Model):
     carowner =models.ForeignKey(CarOwner,on_delete=models.CASCADE,null=True)
@@ -64,3 +65,11 @@ class Orders(models.Model):
     pickup_daytime = models.DateTimeField(null=True)
     class Meta:
         db_table= 'orders'
+
+class CustomSession(models.Model):
+    session_key = models.CharField(max_length=40, primary_key=True)
+    session_data = models.TextField(null=True)
+    expire_date = models.DateTimeField(null=True)
+
+    class Meta:
+        db_table = 'custom_session'

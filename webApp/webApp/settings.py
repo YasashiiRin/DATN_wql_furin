@@ -98,7 +98,13 @@ MIDDLEWARE = [
     # ...
 ]
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_NAME = 'sessionid'
+USER_SESSION_COOKIE_NAME = 'sessionid'
+
+SESSION_ENGINE_CUSTOMER = "django.contrib.sessions.backends.cache"
+CUSTOMER_SESSION_COOKIE_NAME = 'customer_sessionid'
+
+SESSION_ENGINE_DRIVER = "django.contrib.sessions.backends.cache"
+DRIVER_SESSION_COOKIE_NAME = 'driver_sessionid'
 
 ROOT_URLCONF = 'webApp.urls'
 
@@ -179,9 +185,10 @@ AUTH_USER_MODEL = 'LoginApp.CarOwner'
 
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, 'webApp/static'),
 ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 

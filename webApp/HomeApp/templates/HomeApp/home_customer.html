@@ -29,11 +29,6 @@
           <div>
             <img class="logo_img" style="width:50px; height:50px;" src="{% static 'images/logo_light.png' %}"></img>
             <a href="#" class="logo">Furin</a>
-            <ul class="nav-links">
-              <li><a class="nav__hover" href="#">
-                  </a>
-              </li>
-            </ul>
           </div>
           <div class="block_search_form">
             <div class="tm-bg-primary-dark-block_book_car">
@@ -42,7 +37,7 @@
                 <div class="input_book_car">
                     {{ my_filter_form.as_p }}
                     <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
-                      color: #101648;"></i></button>
+                      color: #ff8276;"></i></button>
                 </div>
                 <div class="group_button_search_book">
                   
@@ -148,7 +143,6 @@
         </nav>
       </div>
     </header>
-    {% if request.customer %}
     <section id="main__cta_customer">
       <div class="container">
         <div class="container_customer">
@@ -176,11 +170,12 @@
                       <table class="table">
                           <thead>
                               <tr>
-                                  <th scope="col">NAME CarOwner</th>
+                                  <th scope="col">NAME CAROWNER</th>
                                   <th scope="col">STATUS_SLOTS</th>
                                   <th scope="col">NAME DRIVER</th>
                                   <th scope="col">TYPE_VEHICLE</th>
                                   <th scope="col">QUANTITY_SLOT</th>
+                                  <th scope="col">Image</th>
                                   <th scope="col">PICKUP_LOCATION</th>
                                   <th scope="col">DROPOFF_LOCATION</th>
                                   <th scope="col">START_TIME</th>
@@ -203,6 +198,7 @@
                                   <td><b>{{schedule.vehicle.name_driver}}</b></td>
                                   <td><b>{{schedule.vehicle.type_vehicle}}</b></td>
                                   <td><b>{{schedule.slot_vehicle}}</b></td>
+                                  <td><img class="list_img_vehicle" data-img-vehilce="{{ schedule.vehicle.img_vehicle.url }}" src="{{schedule.vehicle.img_vehicle.url}}"></td>
                                   <td><b>{{schedule.start_location}}</b></td>
                                   <td><b>{{schedule.end_location}}</b></td>
                                   <td>{{schedule.start_time}}</td>
@@ -212,7 +208,7 @@
                                      data-customer-id="{{ request.customer.id }}"
                                      data-carownername ="{{schedule.vehicle.driver.carowner.username}}"
                                      data-drivername ="{{schedule.vehicle.name_driver}}"
-                                     data-vehiclename ="{{schedule.vehicle.name_vehicle}}"
+                                     data-vehicletype ="{{schedule.vehicle.type_vehicle}}"
                                      data-startlocation ="{{schedule.start_location}}"
                                      data-endlocation ="{{schedule.end_location}}"
                                      data-quantityslot ="{{schedule.vehicle.slot_vehicle}}"
@@ -228,61 +224,6 @@
       </div>
       </div>
     </section>
-    {% else %}
-    <section id="main__cta">
-      <div class="container">
-        <div class="split">
-          <div class="main__cta__rectangle bg-light">
-            <div class="split main__cta__options">
-              <div class="main__cta__card tab-item active">
-                <div class="main__cta__icon">
-                  <i class="fa-solid fa-bus" style="font-size:26px;"></i>
-                </div>
-                Book a car
-              </div>
-              <div class="main__cta__card tab-item">
-                <i class="fa-regular fa-user" style="font-size:26px;"></i>
-                Driver
-              </div>
-              <div class="main__cta__card tab-item">
-                <i class="fa-solid fa-user" style="font-size:26px;"></i>
-                CarOwner
-              </div>
-              <div class="line"></div>
-            </div>
-            <div class="main__cta__text active">
-              <h1> Đăng nhập Nhà xe </h1>
-              <p class="sous-titre">
-                Sẳn sàng để vào giao diện quản lý của bạn chưa 
-              </p>
-              <a href="{% url 'redirectRegister' %}" class="btn">Sign up</a>
-              <a href="#" class="text-cta" 
-              >
-            </div>
-            <div class="main__cta__text active">
-              <h1>Đăng ký Driver </h1>
-              <p class="sous-titre">
-                Chúng tôi sẳn sàng để đi cùng bạn 
-              </p>
-              <a href="{% url 'driver_login_view' %}" class="btn">Sign up</a>
-              <a href="#" class="text-cta" 
-              >
-            </div>
-            <div class="main__cta__text ">
-              <h1>Đăng ký khách hàng </h1>
-              <p class="sous-titre">
-                Chúng tôi sẳn sàng để đi cùng bạn
-              </p>
-              <a href="{% url 'controller_redirect_regisCustomer' %}" class="btn">Sign up</a>
-              <a href="#" class="text-cta" 
-              >
-            </div>
-          </div>
-          {% comment %} ----------------------------- {% endcomment %}
-        </div>
-      </div>
-    </section>
-    {% endif %}
     <section id="business-header">
       <div class="container">
         <div class="business-header__text resetcolor">
@@ -405,6 +346,10 @@
         </nav>
       </div>
     </footer>
+    <div class ="display_img_click">
+          <img class="display_img_item">
+          <span class="display_img_button_exit">✘</span>
+    </div>
     <div class="invoice_block_book">
       <div class="nav_invoice">
         <div class="invoice_logo">
@@ -432,7 +377,7 @@
             <div class="invoice_info_book-title">
               <p>Vehicle: </p>
             </div>
-            <p class="vehiclename">none</p>
+            <p class="vehicletype">none</p>
           </div>
           <div class="invoice_info_book">
             <div class="invoice_info_book-title">
@@ -478,19 +423,37 @@
           const bookButtons = document.querySelectorAll(".bt_book_car");
           const carownername = document.querySelector('.carownername')
           const drivername = document.querySelector('.drivername')
-          const vehiclename = document.querySelector('.vehiclename')
+          const vehicletype = document.querySelector('.vehicletype')
           const startlocation = document.querySelector('.startlocation')
           const endlocation = document.querySelector('.endlocation')
           const button_confirm = document.querySelector('.invoice_bt')
           const startday = document.querySelector('.startday')
           console.log(bookButtons)
+          list_img_vehicle = document.querySelectorAll('.list_img_vehicle')
+          console.log("list img",list_img_vehicle)
+          list_img_vehicle.forEach(imglist => {
+            imglist.addEventListener("click", function () {
+              const display_img_click = document.querySelector('.display_img_click')
+              const img_get = this.getAttribute('data-img-vehilce')
+              const img_item = document.querySelector('.display_img_item')
+              const img_bt_exit = document.querySelector('.display_img_button_exit')
+              console.log("get_img :",img_get)
+              display_img_click.style.display = 'block'
+              img_item.src = img_get;
+
+              img_bt_exit.onclick= function(){
+                display_img_click.style.display = 'none'
+              }
+              
+            })
+          })
           bookButtons.forEach(button => {
               button.addEventListener("click", function () {
                   const scheduleId = this.dataset.scheduleId;
                   const customerId = this.dataset.customerId;
                   const carownername_get = this.getAttribute('data-carownername')
                   const drivername_get = this.getAttribute('data-drivername')
-                  const vehiclename_get = this.getAttribute('data-vehiclename')
+                  const vehicletype_get = this.getAttribute('data-vehicletype')
                   const startlocation_get = this.getAttribute('data-startlocation')
                   const endlocation_get = this.getAttribute('data-endlocation')
              
@@ -501,7 +464,7 @@
                   console.log(customerId)
                   console.log(carownername_get)
                   console.log(drivername_get)
-                  console.log(vehiclename_get)
+                  console.log(vehicle_gettype)
                   console.log(startlocation_get)
                   console.log(endlocation_get)
                   console.log(container)
@@ -511,7 +474,7 @@
 
                   carownername.innerHTML=carownername_get
                   drivername.innerHTML=drivername_get
-                  vehiclename.innerHTML=vehiclename_get
+                  vehicletype.innerHTML=vehicletype_get
                   startlocation.innerHTML=startlocation_get
                   endlocation.innerHTML=endlocation_get
                   startday.innerHTML =startday_get
@@ -557,7 +520,7 @@
                   .catch(error => {
                       console.error("Đã xảy ra lỗi:", error);
                   }); 
-                  } 
+                } 
                   
                   const searchIcon = document.querySelector('.search-icon');
                   const spanIconoutbook = document.querySelector('.span_iconoutbook');
@@ -612,6 +575,15 @@
                 
                     })  
                 }
+                else if (notification==='sessionfail'){
+                  toast({
+                      title: "Session Failed",
+                      content: "waiting or refresh page",
+                      typeicon: "error",
+                      duration: 8000
+              
+                  })  
+              }
                 const main = document.querySelector('#tagtoast');
                 const dltoast = document.querySelector('.toast-exit');
                 console.log(dltoast)

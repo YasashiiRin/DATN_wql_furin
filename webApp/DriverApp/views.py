@@ -6,9 +6,10 @@ from CarownerApp.models import Driver
 from django.contrib.auth import login,logout
 from django.contrib.auth.hashers import check_password
 from LoginApp.backends.custom_auth import CustomerBackend
-from CarownerApp.models import Driver,Orders,Schedules,Vehicle
+from CarownerApp.models import Driver,Orders,Schedules,Vehicle,CustomSession
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.conf import settings
 from django.utils.crypto import get_random_string
 
 
@@ -96,5 +97,13 @@ def handle_verifi_driver(request):
         })
     return render(request, 'DriverApp/driver_login.html')        
 def logout_driver(request):
-    logout(request)
+    session_key = request.session[settings.DRIVER_SESSION_COOKIE_NAME]
+    if session_key:
+        try:
+            custom_session = CustomSession.objects.get(session_key=session_key)
+            custom_session.delete()
+            del request.session[settings.DRIVER_SESSION_COOKIE_NAME]
+            print("delete_Session for driver......")
+        except CustomSession.DoesNotExist:
+            pass
     return render(request, 'DriverApp/driver_login.html')

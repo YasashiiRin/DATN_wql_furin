@@ -1,3 +1,3 @@
-from django.shortcuts import render
+from django.contrib.auth.views import LogoutView
+from django.shortcuts import redirect, render
 
-# Create your views here.

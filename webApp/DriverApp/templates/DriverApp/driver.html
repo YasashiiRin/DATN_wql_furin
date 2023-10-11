@@ -54,9 +54,9 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-cog"></i>
-                                <span>
+                                {% comment %} <span>
                                     Settings <i class="fas fa-angle-down"></i>
-                                </span>
+                                </span> {% endcomment %}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="#">Profile</a>
@@ -83,11 +83,10 @@
                 </div>
             </div>
             <!-- row -->
-            {% comment %} Biểu đồ gợn sóng {% endcomment %}
             <div class="row tm-content-row">
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block">
-                        <h2 class="tm-block-title">Latest Hits</h2>
+                        <h2 class="tm-block-title">Map slots</h2>
                         
                         <canvas id="barChart"></canvas>
                         {% comment %} <canvas id="lineChart"></canvas>
@@ -118,7 +117,7 @@
                             <div class="media tm-notification-item">
                                 <div class="tab-item-r">
                                     <div class="avatar">
-                                        <img src="{{order.vehicle.img_vehicle.url}}" alt="Avatar Image" class="rounded-circle" style="max-width: 100%;">
+                                        <img src="{{order.customer.img_customer.url}}" alt="Avatar Image" class="rounded-circle" style="max-width: 100%;">
                                     </div>
                                 </div>
                                 <div class="title_new">
@@ -179,7 +178,7 @@
                 </div>
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                        <h2 class="tm-block-title title_myschedules">My Schedules</h2>
+                        <h2 class="tm-block-title title_myschedules">My Schedules for the following days</h2>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -286,7 +285,7 @@
                                     },
                                     scaleLabel: {
                                         display: true,
-                                        labelString: "Hits"
+                                        labelString: "Schedules - days"
                                     }
                                 }
                             ]
@@ -334,7 +333,6 @@
             console.log(arrayScroll)
             blockScroll.scrollTop = blockScroll.scrollHeight;
             const len = arrayScroll.length
-            arrayScroll[len - 2].classList.remove('title_new_active')
             arrayScroll[len - 1].classList.add('title_new_active')
 
       

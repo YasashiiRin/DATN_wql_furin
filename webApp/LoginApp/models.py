@@ -18,6 +18,7 @@ class Customer(models.Model):
     password_customer = models.CharField(max_length=255)
     address_customer = models.CharField(max_length=100, null=True)
     phone_customer = models.IntegerField(null=True)
+    img_customer =models.ImageField(null=True)
     last_login = models.DateTimeField(null=True, blank=True)
     is_authenticated=models.BooleanField(default=False)
     verify_customer = models.BooleanField(default=False)

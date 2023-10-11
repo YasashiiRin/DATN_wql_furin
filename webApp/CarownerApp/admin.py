@@ -1,15 +1,28 @@
 from django.contrib import admin
 from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.db.models import Max
 from LoginApp.models import CarOwner,Customer
 from django.contrib.auth.hashers import make_password
 from .models import Driver, Vehicle,Schedules, Orders
 from django import forms
 from django.forms.widgets import HiddenInput
 from datetime import timedelta
+from django.db.models import F
+from django.utils.translation import gettext as _
+from django.utils.safestring import mark_safe
+from django.contrib.admin import AdminSite
+from django.urls import reverse_lazy
+from django.urls import reverse
+from django.utils.html import format_html
 
 
+def login_success(request):
+    session_key = request.session.session_key
+    print(session_key)
 
 # -------------Custom Admin site----------
+
 # --------------------------------------------    
 class DriverInline(admin.TabularInline):  
     model = Driver
@@ -28,6 +41,13 @@ class CustomerAdmin(admin.ModelAdmin):
 class CarOwnerAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'phone_carowner','address_carowner')
     inlines = [DriverInline]
+    actions = ['custom_logout']
+
+    def custom_logout(self, request, queryset):
+        if 'customer_sessionid' in request.session:
+            print("isexists sessionid")
+            del request.session['sessionid']
+    custom_logout.short_description = "Custom Logout"
     def save_model(self, request, obj, form, change):
         if 'password' in form.changed_data:
             obj.password = make_password(obj.password)
@@ -58,11 +78,16 @@ class DriverAdmin(admin.ModelAdmin):
     list_display = ('carowner','name_driver', 'email_driver', 'password_driver', 'address_driver', 'phone_driver', 'verify_driver','token_driver','comfirm_account')
     inlines = [VehicleInline]
     form = DriverAdminForm
+    class Media:
+        js = ('JS/custom_admin.js',)
+    
     def save_model(self, request, obj, form, change):
         if 'password_driver' in form.changed_data:
             obj.password_driver = make_password(obj.password_driver)
         super().save_model(request, obj, form, change)
     def get_queryset(self, request):
+        request.session['user_id'] = request.user.id
+        
         qs = super(DriverAdmin, self).get_queryset(request)
         if not request.user.is_superuser:
             qs = qs.filter(carowner=request.user)
@@ -91,7 +116,7 @@ class VehicleAdminForm(forms.ModelForm):
         self.fields['name_driver'].required = False
         self.fields['email_driver'].widget = forms.widgets.HiddenInput()
         self.fields['email_driver'].required = False
-        if  self.user and not self.instance.driver:
+        if  self.user and not self.instance.driver and not self.user.is_superuser :
             carowner = self.user
             self.fields['driver'].queryset = Driver.objects.filter(carowner=carowner)
         else:
@@ -131,51 +156,53 @@ class ScheduleAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['slot_vehicle'].widget = forms.widgets.HiddenInput()
         self.fields['slot_vehicle'].required = False
-        if  self.user and not self.instance.vehicle:
+        if  self.user and not self.instance.vehicle and not self.user.is_superuser:
             carowner = self.user
             self.fields['vehicle'].queryset = Vehicle.objects.filter(driver__carowner = carowner)
         else:
             print("chưa thay đổi queryset của vehicle")  
-    # def save(self, commit=True):
-    #     selected_vehicle = self.cleaned_data.get('vehicle')
-    #     name_schedule = self.cleaned_data.get('name_schedule')
-    #     start_location = self.cleaned_data.get('start_location')
-    #     end_location = self.cleaned_data.get('end_location')
-    #     start_time = self.cleaned_data.get('start_time')
-    #     end_time = self.cleaned_data.get('end_time')
-    #     number_of_days = self.cleaned_data.get('number_of_days')
-    #     start_date = self.cleaned_data.get('start_date')
-    #     print("start_day :", start_date)
-    #     print("number_of_day :" , number_of_days)
-    #     schedules = []
-    #     if selected_vehicle:
-    #         vehicle_info = Vehicle.objects.get(pk=selected_vehicle.pk)
-    #         print("slot :", vehicle_info.slot_vehicle)
-    #         for i in range(number_of_days):
-    #             new_schedule = Schedules(
-    #                 vehicle = selected_vehicle,
-    #                 name_schedule = name_schedule,
-    #                 slot_vehicle=vehicle_info.slot_vehicle,
-    #                 start_location = start_location,
-    #                 end_location = end_location,
-    #                 start_time = start_time,
-    #                 end_time = end_time,
-    #                 day_schedule = start_date + timedelta(days=i), 
-    #                 start_date=start_date + timedelta(days=i),  
-    #             )
-    #             schedules.append(new_schedule)
-    #         if commit:
-    #             Schedules.objects.bulk_create(schedules)
-    #     return super().save(commit=commit)
-    
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','name_schedule','slot_vehicle','start_location','end_location','start_time','end_time','day_schedule')
+    list_display = ('vehicle','name_schedule','slot_vehicle','start_location','end_location','start_time','end_time','start_date')
     form = ScheduleAdminForm
+    search_fields = ('name_schedule','start_date')
+    actions = ["filter_schedules_with_max_start_day"]
+    class Media:
+        css = {
+            'all': ('CSS/custom_admin.css',),
+        }
+
     def get_queryset(self, request):
         qs = super(ScheduleAdmin, self).get_queryset(request)
+        print("qs :", qs)
         if not request.user.is_superuser:
             qs = qs.filter(vehicle__driver__carowner=request.user)
         return qs 
+    
+    def filter_schedules_with_max_start_day(self, request, queryset):
+        carowner = request.user
+        if carowner.is_superuser:
+            max_start_dates = Schedules.objects.filter().values('vehicle__id').annotate(max_start_date=Max('start_date'))
+        else:
+            max_start_dates = Schedules.objects.filter(vehicle__driver__carowner = carowner ).values('vehicle__id').annotate(max_start_date=Max('start_date'))
+        max_start_schedules = []
+        for item in max_start_dates:
+            vehicle_id = item['vehicle__id']
+            max_start_date = item['max_start_date']
+
+            schedule = Schedules.objects.filter(vehicle__id=vehicle_id, start_date=max_start_date).first()
+            print("list1 ",schedule.id)
+            if schedule:
+                max_start_schedules.append(schedule)
+        messages_list = []        
+        for schedule in max_start_schedules:
+            messages_item = f'<div class="info1">Vehicle : {schedule.vehicle.email_driver}</div>   <div class="info2">Max start_day : {schedule.start_date}</div>'
+            messages_list.append(mark_safe(messages_item))
+            # print(f"Vehicle ID: {schedule.vehicle.email_driver}, Max Start Day: {schedule.start_date}")
+        for message in messages_list:
+            messages.success(request, message)
+    filter_schedules_with_max_start_day.short_description = _("Filter Schedules with Max Start Day")
+
+
     def save_model(self, request, obj, form, change):
         selected_vehicle = form.cleaned_data['vehicle']
         number_of_days = form.cleaned_data['number_of_days']
@@ -205,48 +232,42 @@ class ScheduleAdmin(admin.ModelAdmin):
                     start_date=start_date + timedelta(days=i),
                 )
                 new_schedule.save()
-        else:       
-            existing_schedule.name_schedule = name_schedule
-            existing_schedule.slot_vehicle = vehicle_info.slot_vehicle
-            existing_schedule.start_location = start_location
-            existing_schedule.end_location = end_location
-            existing_schedule.start_time = start_time
-            existing_schedule.end_time = end_time
-            existing_schedule.save()
+        else:
+            if number_of_days == 0:      
+                existing_schedule.name_schedule = name_schedule
+                existing_schedule.slot_vehicle = vehicle_info.slot_vehicle
+                existing_schedule.start_location = start_location
+                existing_schedule.end_location = end_location
+                existing_schedule.start_time = start_time
+                existing_schedule.end_time = end_time
+                existing_schedule.save()
+            elif number_of_days >=1 :  
+                for i in range(number_of_days):
+                    new_schedule = Schedules(
+                        vehicle=selected_vehicle,
+                        name_schedule=name_schedule,
+                        slot_vehicle=vehicle_info.slot_vehicle,
+                        start_location=start_location,
+                        end_location=end_location,
+                        start_time=start_time,
+                        end_time=end_time,
+                        day_schedule=start_date + timedelta(days=i),
+                        start_date=start_date + timedelta(days=i),
+                    )
+                    new_schedule.save() 
 
-
-    # def save_model(self, request, obj, form, change):
-    #     selected_vehicle = form.cleaned_data['vehicle']
-    #     number_of_days = form.cleaned_data['number_of_days']
-    #     start_date = form.cleaned_data['start_date']
-    #     selected_vehicle = form.cleaned_data['vehicle']
-    #     name_schedule = form.cleaned_data['name_schedule']
-    #     start_location = form.cleaned_data['start_location']
-    #     end_location = form.cleaned_data['end_location']
-    #     start_time = form.cleaned_data['start_time']
-    #     end_time = form.cleaned_data['end_time']
-    #     number_of_days = form.cleaned_data['number_of_days']
-    #     start_date = form.cleaned_data['start_date']
-    #     print("start_day :", start_date)
-    #     print("number_of_day :" , number_of_days)
-    #     vehicle_info = Vehicle.objects.get(pk=selected_vehicle.pk)
-    #     for i in range(number_of_days):
-    #         new_schedule = Schedules(
-    #             vehicle = selected_vehicle,
-    #             name_schedule = name_schedule,
-    #             slot_vehicle=vehicle_info.slot_vehicle,
-    #             start_location = start_location,
-    #             end_location = end_location,
-    #             start_time = start_time,
-    #             end_time = end_time,
-    #             day_schedule = start_date + timedelta(days=i), 
-    #             start_date=start_date + timedelta(days=i),  
-    #         )
-    #         new_schedule.save()
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         form.user = request.user
         return form
+
+    def sort_by_start_day_descending(self, request, queryset):
+        print("start sort ")
+        queryset = queryset.order_by('-start_day')
+        
+        self.message_user(request, f'Sorted by start_day descending')
+        return queryset
+    sort_by_start_day_descending.short_description = 'Sort by Start Day'
 class OrdersAdmin(admin.ModelAdmin):
     list_display = ('vehicle','name_customer_order','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','quantity_slot','pickup_location','dropoff_location','start_date_time','dropoff_datetime','state_order')
 
