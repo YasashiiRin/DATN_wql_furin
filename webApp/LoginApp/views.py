@@ -37,7 +37,7 @@ def handleRegis(request):
             user_id = ca.id
             user_name= ca.username
             subject = 'Xác Thực Tài Khoản'
-            from_email='yoemfore@gmail.com'
+            from_email='furin.nvt@gmail.com'
             message=''
             contenHTML = render_to_string('LoginApp/verifyEmail.html', {
                 'name_user':user_name,
@@ -134,7 +134,7 @@ def handleRegis_customer(request):
         cm_id = cm.id
         cm_name= cm.name_customer
         subject = 'Xác Thực Tài Khoản'
-        from_email='yoemfore@gmail.com'
+        from_email='furin.nvt@gmail.com'
         message=''
         contenHTML = render_to_string('LoginApp/verifyEmail.html', {
             'name_user':cm_name,

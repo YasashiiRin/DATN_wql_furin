@@ -75,7 +75,7 @@ def handle_verifi_driver(request):
             user_id = dr.id
             user_name= dr.name_driver
             subject = 'Xác Thực Tài Khoản'
-            from_email='yoemfore@gmail.com'
+            from_email='furin.nvt@gmail.com'
             message=''
             contenHTML = render_to_string('LoginApp/verifyEmail.html', {
                 'name_user':user_name,
