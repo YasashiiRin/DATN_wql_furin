@@ -135,6 +135,7 @@
                 
                 validator.isRequired('#email'),
                 validator.isEmail('#email'),
+                validator.isRequired('#password'),
                 validator.minlength('#password', 6),
 
             ],
@@ -150,6 +151,8 @@
             rules: [
                 validator.isRequired('#username'),
                 validator.isRequired('#password1'),
+                validator.minlength('#password1', 6),
+                
             ],
             {% comment %} onsubmit: function (data) {
                 console.log(data);
@@ -177,7 +180,15 @@ else if (notification==='verifi_isexists'){
 
     })  
 } 
+else if(notification==='isNoneAccount'){
+    toast({
+        title: "account does not have sufficient permissions",
+        content: "The account does not have sufficient permissions to perform this action",
+        typeicon: "error",
+        duration: 8000
 
+    }) 
+}  
   
 
         {% comment %} Handel toast {% endcomment %}

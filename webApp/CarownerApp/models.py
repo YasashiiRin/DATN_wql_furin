@@ -49,6 +49,7 @@ class Schedules(models.Model):
 class Orders(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    schedule = models.ForeignKey(Schedules, on_delete=models.CASCADE,null=True)
     name_customer_order = models.CharField(max_length=255, null=True)
     name_driver_order = models.CharField(max_length=255, null=True)
     name_schedule_order = models.CharField(max_length=255, null=True)

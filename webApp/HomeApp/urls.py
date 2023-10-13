@@ -9,7 +9,11 @@ urlpatterns = [
     path('handle_logout',views.handle_logout,name='handle_logout'),
     path('controller_redirect_regisCustomer',views.controller_redirect_regisCustomer, name='controller_redirect_regisCustomer'),
     path('driver_login_view/',views.driver_login_view,name='driver_login_view'),
+
     path('book_vehicle/<int:schedule_id>/<int:customer_id>/<int:slot>/',views.handle_book_vehicle,name='handle_book_vehicle'),
+
+    path('handle_cancel_order/<int:idorder>/',views.handle_cancel_order,name='handle_cancel_order'),
+    
     path('search_customer/',views.search_customer, name='search_customer'),
     path('view_profile_customer',views.view_profile_customer,name='view_profile_customer'),
     path('view_editprofile',views.view_editprofile,name='view_editprofile'),

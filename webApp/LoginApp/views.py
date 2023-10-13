@@ -21,9 +21,14 @@ def handleRegis(request):
         email=request.POST['email']
         password=request.POST['password']
         token = get_random_string(32)
-        ca=CarOwner.objects.get(email=email)
+        try :
+            ca=CarOwner.objects.get(email=email)
+        except CarOwner.DoesNotExist:
+            return render(request, 'LoginApp/login.html',{
+                'islogin' : 'isNoneAccount'
+            }) 
         if ca.verify_carowner == True:
-            return render(request, 'LoginApp/Home.html',{
+            return render(request, 'LoginApp/login.html',{
                 'islogin' : 'verifi_isexists'
             })
         if ca.check_password(password):

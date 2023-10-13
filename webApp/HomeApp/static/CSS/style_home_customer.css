@@ -150,11 +150,28 @@
     width: 63px;
     height: 63px;
   }
-  .block_info_history{
+  .active_info_history .block_destroy_order{
     display: block;
-    margin: 8px;
-    border: 1px solid #32c2ff;
   }
+  .block_info_history{
+    display: flex;
+    margin: 8px;
+    justify-content: space-between;
+    border: 2px solid #32c2ffde;
+    border-radius: 4px;
+  }
+  .bt_destroy_book{
+    font-weight: 600;
+    border-radius: 11px;
+    width: 76px;
+    color: #fff;
+    height: 31px;
+    background: #ffbc80d6;
+    border: 1px solid #ff6442;
+  }
+  /* .block_destroy_order{
+    display: block;
+  } */
   .content_history_book{
     display: flex;
   }

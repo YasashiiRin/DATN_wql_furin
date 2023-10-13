@@ -75,11 +75,14 @@ class DriverAdminForm(forms.ModelForm):
         return super().save(commit)  
         
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ('carowner','name_driver', 'email_driver', 'password_driver', 'address_driver', 'phone_driver', 'verify_driver','token_driver','comfirm_account')
+    list_display = ('carowner','name_driver', 'email_driver', 'address_driver', 'phone_driver', 'verify_driver','token_driver','comfirm_account')
     inlines = [VehicleInline]
+    search_fields = ('name_driver','phone_driver','email_driver')
     form = DriverAdminForm
     class Media:
-        js = ('JS/custom_admin.js',)
+        css = {
+            'all': ('CSS/custom_admin.css',),
+        }
     
     def save_model(self, request, obj, form, change):
         if 'password_driver' in form.changed_data:
@@ -135,6 +138,11 @@ class VehicleAdminForm(forms.ModelForm):
 class VehicleAdmin(admin.ModelAdmin):
     list_display = ('driver', 'name_vehicle','name_driver','email_driver','img_vehicle','description','slot_vehicle','type_vehicle')
     # inlines =[SchedulesInline,OrdersInline]
+    search_fields = ('name_vehicle','name_driver','slot_vehicle')
+    class Media:
+        css = {
+            'all': ('CSS/custom_admin.css',),
+        }
     form = VehicleAdminForm
     def get_queryset(self, request):
         qs = super(VehicleAdmin, self).get_queryset(request)
@@ -269,8 +277,12 @@ class ScheduleAdmin(admin.ModelAdmin):
         return queryset
     sort_by_start_day_descending.short_description = 'Sort by Start Day'
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','name_customer_order','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','quantity_slot','pickup_location','dropoff_location','start_date_time','dropoff_datetime','state_order')
-
+    list_display = ('vehicle','name_customer_order','pickup_daytime','quantity_slot','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','pickup_location','dropoff_location','start_date_time','dropoff_datetime')
+    search_fields = ('name_customer_order','name_driver_order','name_schedule_order','quantity_slot','pickup_daytime')
+    class Media:
+        css = {
+            'all': ('CSS/custom_admin.css',),
+        }
     def get_queryset(self, request):
         qs = super(OrdersAdmin, self).get_queryset(request)
         if not request.user.is_superuser:

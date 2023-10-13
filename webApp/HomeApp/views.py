@@ -29,6 +29,7 @@ def home_customer_view(request):
         print("has session customer.....")
         customerid = request.customer.id
         current_date = timezone.now().date()
+        print("current_date:....................... ",current_date)
         my_filter_form = YourFilterForm()
         my_orders = Orders.objects.filter(customer = customerid).all()
         filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
@@ -37,6 +38,7 @@ def home_customer_view(request):
             'schedules': all_shedules,
             'my_orders' : my_orders,
             'my_filter_form' : my_filter_form,
+            'current_date' : current_date,
         })
     else:
         return render(request, 'HomeApp/home.html')
@@ -81,20 +83,24 @@ def view_profile_customer(request):
     
     id_customer = request.customer.id
     my_filter_form = ImageUploadForm()
+    img_customer = request.customer.img_customer
     my_profile = Customer.objects.get(pk=id_customer)
     return render(request,'HomeApp/profile_customer.html',{
         'myinfo': my_profile,
         'customer_id' : id_customer,
         'form_upload' : my_filter_form,
+        'img_customer' : img_customer
     })
 def view_editprofile(request):
     id_customer = request.customer.id
     my_filter_form = ImageUploadForm()
     my_profile = Customer.objects.get(pk=id_customer)
+    img_customer = request.customer.img_customer
     return render(request,'HomeApp/edit_profile.html',{
         'myinfo': my_profile,
         'customer_id' : id_customer,
         'form_upload' : my_filter_form,
+        'img_customer' : img_customer,
     })
 def handle_book_vehicle(request,schedule_id,customer_id,slot):
     try:
@@ -126,7 +132,7 @@ def handle_book_vehicle(request,schedule_id,customer_id,slot):
         if slot_t >= 0:
             schedule.slot_vehicle = slot_t
             schedule.save()
-            od = Orders(customer=customer,vehicle= vehicle,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime =current_datetime )
+            od = Orders(customer=customer,vehicle= vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime =current_datetime )
             od.save()
             return JsonResponse({'message': 'Đặt xe thành công'})
 
@@ -136,8 +142,28 @@ def handle_book_vehicle(request,schedule_id,customer_id,slot):
         return JsonResponse({'error': 'Có lỗi xảy ra vui lòng liên hệ với quản trị viên'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500) 
-    
 
+def handle_cancel_order(request,idorder):
+    print("start handle cancel order................................................")
+    try:
+        print("id order :", idorder)
+        order = Orders.objects.get(pk=idorder)
+        print("")
+        schedule = order.schedule
+        if schedule:
+            slots_order = order.quantity_slot
+            slots_schedule = schedule.slot_vehicle
+            total_slot = slots_schedule + slots_order
+            order.delete()
+            schedule.slot_vehicle = total_slot
+            schedule.save()
+            return JsonResponse({'message': 'Cancel order Successfull.......'})
+        else:
+            return JsonResponse({'errorr': 'Cancel order failed.......'})
+    except Orders.DoesNotExist:
+        return JsonResponse({'error': 'Có lỗi xảy ra vui lòng liên hệ với quản trị viên'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500) 
 def search_customer(request):
     id_customer = request.customer.id
     current_date = timezone.now().date()

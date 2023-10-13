@@ -134,8 +134,9 @@
             rules: [
                 validator.isRequired('#email'),
                 validator.isEmail('#email'),
+                validator.isRequired('#password'),
                 validator.minlength('#password', 6),
-                validator.isRequired('#password')
+                
 
             ],
             {% comment %} onsubmit: function (data) {
@@ -151,6 +152,8 @@
                 validator.isRequired('#email1'),
                 validator.isEmail('#email1'),
                 validator.isRequired('#password1'),
+                validator.minlength('#password1',6),
+                
             ],
             {% comment %} onsubmit: function (data) {
                 console.log(data);

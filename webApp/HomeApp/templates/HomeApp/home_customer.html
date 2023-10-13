@@ -89,11 +89,16 @@
                                       <div class= "content_history_book">
                                         <span class="tm-small tm-text-color-secondary"> Thời gian đặt : {{order.pickup_daytime}}</span>
                                       </div>
-                        
+                               
+                                  </div>
+                                  <div class="block_destroy_order">
+                                      <button class="bt_destroy_book" data-schedule-date="{{ order.day_schedule }}" data-order-id ="{{order.id}}"> Hủy</button>
                                   </div>
                               </div>
+                             
                               </li>
                             {%endfor%}
+
                           </ul>  
                         </div>
                     </div>
@@ -429,6 +434,12 @@
           const button_confirm = document.querySelector('.invoice_bt')
           const startday = document.querySelector('.startday')
           console.log(bookButtons)
+
+
+
+          {% comment %} -------------------View img-------------------------------------- {% endcomment %}
+
+
           list_img_vehicle = document.querySelectorAll('.list_img_vehicle')
           console.log("list img",list_img_vehicle)
           list_img_vehicle.forEach(imglist => {
@@ -447,6 +458,12 @@
               
             })
           })
+
+
+
+          {% comment %} -----------------------Book----------------------- {% endcomment %}
+
+
           bookButtons.forEach(button => {
               button.addEventListener("click", function () {
                   const scheduleId = this.dataset.scheduleId;
@@ -485,7 +502,7 @@
                 console.log(button_confirm)
                 button_confirm.onclick= function (){
                     const slot = input_quantity.value
-                    console.log(slot)
+                    console.log("slot :",slot)
                   fetch(`/book_vehicle/${scheduleId}/${customerId}/${slot}/`, {
                       method: "POST",
                       headers: {
@@ -509,7 +526,7 @@
                       } else if (data.error) {
                           const data_err = data.error;
                           toast({
-                            title: "successfully",
+                            title: "Error",
                             content: data_err,
                             typeicon: "error",
                             duration: 8000
@@ -535,6 +552,12 @@
                   }  
               });
           });
+
+
+
+          {% comment %} --------------Scroll height and Add item New order ------------------------ {% endcomment %}
+
+
           const hoverScroll = document.querySelector('.nav__cta__info--has-menu--book_car')
           const blockScroll = document.querySelector('.nav__cta__menu_history_book')
           const arrayScroll = document.querySelectorAll('.block__content__history')
@@ -542,6 +565,7 @@
           const len = arrayScroll.length
           console.log(arrayScroll[len - 1])
           arrayScroll[len - 1].classList.add('title_new_active')
+
           hoverScroll.addEventListener('mouseenter',function(){
             blockScroll.style.display = 'block';
             setTimeout(function() {
@@ -551,9 +575,61 @@
           hoverScroll.addEventListener('mouseleave',function(){
             blockScroll.style.display = 'none';
           })
+
+
+          {% comment %} ------------------------------Cancel order------------------- {% endcomment %} 
+
+            var currenday = new Date("{{ current_date }}")
+            var elements = document.querySelectorAll('.bt_destroy_book');
+              elements.forEach(function (element) {
+                var scheduleDate = new Date(element.getAttribute('data-schedule-date'));
+                console.log("currenday: ", currenday);
+                console.log("scheduleDate: ", scheduleDate);
+                if (currenday > scheduleDate) {
+                  element.style.display = 'none';
+                }
+                element.addEventListener("click", function () {
+                    const idorder = this.getAttribute('data-order-id')
+                    console.log("id_order: ",idorder)
+                    fetch(`/handle_cancel_order/${idorder}/`,{
+                      method: "POST",
+                      headers:{
+                        "X-CSRFToken": "{{ csrf_token }}",
+                      },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                      
+                      if (data.message) {
+                          const notifi_book = data.message;
+                          toast({
+                            title: "successfully",
+                            content: "Booked the car successfully",
+                            typeicon: "success",
+                            duration: 8000
+                    
+                        })  
+                          container.classList.remove("show");
+                          invoice.style.display ='none'
+                      } else if (data.error) {
+                          const data_err = data.error;
+                          toast({
+                            title: "Error",
+                            content: data_err,
+                            typeicon: "error",
+                            duration: 8000
+                    
+                        })
+                      }
+                  })
+                  .catch(error => {
+                      console.error("Đã xảy ra lỗi:", error);
+                  }); 
+                });
+              });
+            
       });
 
-      
       const notification = "{{notifi_search}}";
           console.log("waiting notifi search ")
           console.log(notification)
@@ -584,6 +660,7 @@
               
                   })  
               }
+              
                 const main = document.querySelector('#tagtoast');
                 const dltoast = document.querySelector('.toast-exit');
                 console.log(dltoast)

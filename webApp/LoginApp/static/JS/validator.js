@@ -128,7 +128,7 @@ validator.isRequired = function (selector, message) {
     return {
         selector: selector,
         test: function (value) {
-            return value ? undefined : message || 'vui long nhap truong nay'
+            return value ? undefined : message || 'Is required'
         }
     }
 }
@@ -137,11 +137,11 @@ validator.isEmail = function (selector) {
         selector: selector,
         test: function (inputText) {
             if (inputText == '') {
-                return inputText.trim() ? undefined : 'vui long nhap truong nay';
+                return inputText.trim() ? undefined : 'Is required';
 
             } else {
                 var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-                return regex.test(inputText) ? undefined : 'email khong hop le';
+                return regex.test(inputText) ? undefined : 'Invalid email';
             }
 
         }
@@ -151,7 +151,7 @@ validator.minlength = function (selector, min) {
     return {
         selector: selector,
         test: function (inputText) {
-            return inputText.length >= min ? undefined : `vui longf nhap toi thieu ${min} ky tu `
+            return inputText.length >= min ? undefined : `Please enter a minimum of ${min} characters `
         }
     }
 }
@@ -159,7 +159,7 @@ validator.isconfirmvalue = function (selector, callback, message) {
     return {
         selector: selector,
         test: function (value) {
-            return value === callback() ? undefined : message || 'password khong giong';
+            return value === callback() ? undefined : message || 'Password incorrect';
         }
     }
 }
