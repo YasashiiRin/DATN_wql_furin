@@ -110,14 +110,18 @@
                     </div>
                 </div> {% endcomment %}
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
+                    <div class="tm-bg-primary-dark tm-block-notification tm-block-taller tm-block-overflow">
                         <h2 class="tm-block-title">Notification List</h2>
                         <div class="tm-notification-items">
                             {% for order in driver_orders%}
                             <div class="media tm-notification-item">
                                 <div class="tab-item-r">
                                     <div class="avatar">
+                                    {%if order.customer.img_customer == ''%}
+                                        <img src="/media/no_avatar.png" alt="Avatar Image" class="rounded-circle" style="max-width: 100%;">
+                                    {%else%}
                                         <img src="{{order.customer.img_customer.url}}" alt="Avatar Image" class="rounded-circle" style="max-width: 100%;">
+                                    {%endif%}    
                                     </div>
                                 </div>
                                 <div class="title_new">
@@ -125,9 +129,9 @@
                                 </div>
                                 <div class="media-body">
                                     <div>
-                                        <p class="mb-2"><b>{{order.name_customer_order}}</b><a href="#"
+                                        <p class="pd-title"><b>{{order.name_customer_order}}</b><a href="#"
                                             class="tm-notification-link"></a></p>
-                                        <span class="tm-small tm-text-color-secondary">Số chỗ đặt : {{order.quantity_slot}}</span>   
+                                        <span class="tm-small tm-text-color-secondary">slots : {{order.quantity_slot}} - Start day : {{order.day_schedule}}</span>   
                                     </div>
                                     <div>
                                         <span class="tm-small tm-text-color-secondary">Thời gian đặt : {{order.pickup_daytime}}</span>
@@ -152,11 +156,11 @@
                             <thead>
                                 <tr>
                                     <th scope="col">NAME CUSTOMER</th>
+                                    <th scope="col">NAME SCHEDULE</th>
                                     <th scope="col">SLOTS</th>
                                     <th scope="col">PICKUP_LOCATION</th>
                                     <th scope="col">DROPOFF_LOCATION</th>
-                                    <th scope="col">START TIME</th>
-                                    <th scope="col">END TIME</th>
+                                    <th scope="col">START TIME</th>                      
                                     <th scope="col">START DAY</th>
                                 </tr>
                             </thead>
@@ -164,11 +168,11 @@
                                 {% for order in driver_orders%}
                                 <tr>
                                     <th scope="row"><b>{{order.name_customer_order}}</b></th>
+                                    <th scope="row"><b>{{order.name_schedule_order}}</b></th>
                                     <td><b>{{order.quantity_slot}}</b></td>
                                     <td><b>{{order.pickup_location}}</b></td>
                                     <td><b>{{order.dropoff_location}}</b></td>
                                     <td>{{order.start_date_time}}</td>
-                                    <td>{{order.dropoff_datetime}}</td>
                                     <td><b>{{order.day_schedule}}</b></td>
                                 </tr>
                                 {% endfor %}
@@ -182,6 +186,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th scope="col">SCHEDULE_ROUTE</th>
                                     <th scope="col">NAME SCHEDULE</th>
                                     <th scope="col">SLOTS</th>
                                     <th scope="col">START_DAY</th>
@@ -194,6 +199,7 @@
                             <tbody>
                                 {% for order in all_schedules%}
                                 <tr>
+                                    <th scope="row"><b>{{order.label_schedule}}</b></th>
                                     <th scope="row"><b>{{order.name_schedule}}</b></th>
                                     <td><b>{{order.slot_vehicle}}</b></td>
                                     <td><b>{{order.start_date}}</b></td>
@@ -234,27 +240,84 @@
         document.addEventListener("DOMContentLoaded", function () {
 
         const width_threshold = 480;
-        var schedule_dates = [
-                {% for schedule in all_schedules %}
-                     "{{ schedule.start_date }}",
-                {% endfor %}
-        ];
-        var listday = schedule_dates;
-        console.log(listday);
-        var schedule_slots = [
-                {% for schedule in all_schedules %}
-                     "{{ schedule.slot_vehicle }}",
-                {% endfor %}
-        ];
-        var listslots = schedule_slots;
+        var schedule_lable1 = [
+            {% for schedule in all_schedules %}
+                {%if schedule.label_schedule == 1%}
+                "{{ schedule.start_date}}-{{schedule.name_schedule}}",
+                {%endif%}
+            {% endfor %}
+        ]
+        var schedule_lable2 =  [
+            {% for schedule in all_schedules %}
+                {%if schedule.label_schedule == 2%}
+                    "{{ schedule.start_date}}-{{schedule.name_schedule}}",
+                {%endif%}
+            {% endfor %}
+        ]
+        var combindarray_schedule_startday = schedule_lable1;
+        if(schedule_lable2){
+            console.log("is exists schedule lable 2")
+            combindarray_schedule_startday = schedule_lable1.concat(schedule_lable2);
+        }
+        console.log("schedule_lable1: ", schedule_lable1)
+        console.log("schedule_lable2: ", schedule_lable2)
+        console.log("combindarray_schedule_startday: ", combindarray_schedule_startday)
+
+        var location;
+            
+        {% comment %} lấy vị trí tác lịch trình hiển thị {% endcomment %}
+            var foundDuplicate = false;
+            var len_schedule_day = combindarray_schedule_startday.length;
+            for(i= 0 ; i < len_schedule_day ; i++){
+                 for(j= i+1 ; j< len_schedule_day ;j++){
+                    var tmp_i = combindarray_schedule_startday[i].split('-');
+                    var tmp_j = combindarray_schedule_startday[j].split('-');
+                    if(tmp_i[0]==tmp_j[0]){
+                        foundDuplicate = true;
+                        location = j;
+                        console.log("location: ",location)
+                        break;
+                    }    
+                }
+                if(foundDuplicate==true){
+                    break;
+                }
+            }
+        combindarray_schedule_startday.splice(location,0,' ')
+        console.log("len_schedule_day: ",len_schedule_day)
+        var listday = combindarray_schedule_startday;
+        console.log("List days: ",listday);
+
+        var schedule_lable1_slots = [
+            {% for schedule in all_schedules %}
+                {%if schedule.label_schedule == 1%}
+                    "{{ schedule.slot_vehicle}}",
+                {%endif%}
+            {% endfor %}
+        ]
+        var schedule_lable2_slots =  [
+            {% for schedule in all_schedules %}
+                {%if schedule.label_schedule == 2%}
+                    "{{ schedule.slot_vehicle}}",
+                {%endif%}
+            {% endfor %}
+        ]
+        var combindarray_slots = schedule_lable1_slots;
+        if(schedule_lable2_slots){
+            console.log("is exists schedule lable 2")
+            combindarray_slots = schedule_lable1_slots.concat(schedule_lable2_slots);
+        }
+        var listslots = combindarray_slots;
+        console.log("listslots: ",listslots);
         var schedule_slots_int = listslots.map(function (slot_str) {
-            return parseInt(slot_str); // Sử dụng parseInt để chuyển đổi
+            return parseInt(slot_str);
           });
-            Chart.defaults.global.defaultFontColor = 'white';
-            schedule_slots_int.push(0);
-            var days = listday;
-            var hits = schedule_slots_int;
-            var testhits =schedule_slots_int;
+        Chart.defaults.global.defaultFontColor = 'white';
+        schedule_slots_int.splice(location,0,0);
+        schedule_slots_int.push(0);
+        var days = listday;
+        var hits = schedule_slots_int;
+        var testhits =schedule_slots_int;
             console.log(hits);
             console.log(testhits);
             let
@@ -262,6 +325,35 @@
             optionsBar,
             configBar,
             barChart;
+            function calculateChartHeight() {
+                const numberOfBars = hits.length;
+                console.log("length numberOfBars: ",numberOfBars)
+                console.log("typeof numberOfBars: ",typeof(numberOfBars))
+                var maxBarHeight = 20;
+                var marginBottom = 20;
+                if(numberOfBars <= 7 ){
+                    console.log("his array <= 5")
+                    maxBarHeight = 25;
+                    marginBottom = 25;
+                }else if(numberOfBars > 7 && numberOfBars <=12){
+                    console.log("his array > 5 && <= 10 ")
+                    maxBarHeight = 15;
+                    marginBottom = 15;
+                }else if(numberOfBars >12 && numberOfBars <=17){
+                    console.log("his array > 10 && <= 15 ")
+                    maxBarHeight = 12;
+                    marginBottom = 12;
+                }
+                else if(numberOfBars >17 && numberOfBars <=22){
+                    console.log("his array > 15 && <= 20 ")
+                    maxBarHeight = 10;
+                    marginBottom = 10;
+                }
+                console.log("maxBarHeight: ",maxBarHeight)
+                const chartHeight = (numberOfBars * maxBarHeight) + marginBottom;
+            
+                return chartHeight;
+            }
             $(function () {
                 drawBarChart();
                 $(window).resize(function () {
@@ -271,8 +363,11 @@
         
             function drawBarChart() {
                 if ($("#barChart").length) {
+                    {% comment %} const chartWidth = 400; {% endcomment %}
                     ctxBar = document.getElementById("barChart").getContext("2d");
-        
+                    const chartHeight = calculateChartHeight();
+                    document.getElementById("barChart").height = chartHeight;
+                    {% comment %} document.getElementById("barChart").width = chartWidth; {% endcomment %}
                     optionsBar = {
                         responsive: true,
                         scales: {
@@ -286,9 +381,19 @@
                                     scaleLabel: {
                                         display: true,
                                         labelString: "Schedules - days"
-                                    }
+                                    },
+                                
                                 }
-                            ]
+                            ],
+                            xAxes: [
+            {
+                ticks: {
+                    maxRotation: 45,
+                    minRotation: 0,
+                },
+                categoryPercentage: 0.3, // Ajust this value to control the margin between bars
+            }
+        ]
                         }
                     };
         
@@ -313,6 +418,18 @@
                                         "#3889FC",
                                         '#FF6699',
                                         '#66CC00',
+                                        '#CC99FF',
+
+                                        "#FFCC99",
+                                        "#FF6699",
+                                        "#66CC99",
+                                        "#00CCCC",
+                                        "#CC99FF",
+                                        "#FF3399",
+                                        "#CC00CC",
+                                        '#FF6699',
+                                        '#66CC00',
+                                        '#CC99FF',
                                         '#CC99FF',
                                     ],
                                     borderWidth: 0

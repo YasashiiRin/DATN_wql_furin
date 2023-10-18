@@ -7,4 +7,5 @@ urlpatterns = [
     path('handelLogin_driver/',views.handelLogin_driver, name='handelLogin_driver'),
     path('handle_verifi_driver/',views.handle_verifi_driver,name='handle_verifi_driver'),
     path('logout_driver',views.logout_driver,name='logout_driver'),
+    path('activateD/<str:uid>/<str:token>/',views.activate_driver, name='activateD'),
 ]

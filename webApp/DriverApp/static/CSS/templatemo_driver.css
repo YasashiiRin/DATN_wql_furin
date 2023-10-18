@@ -43,8 +43,8 @@ button:focus {
   color: #fff;
 }
 .block_welcome_driver{
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   color: #495e75;
 }
 .char_logout{
@@ -80,7 +80,16 @@ button:focus {
   box-shadow: 1px 1px 5px 0 #455c71;
   min-height: 350px;
   height: 100%;
-  max-height: 450px;
+  max-height: 573px;
+}
+.tm-block-notification{
+  padding: 40px;
+  -webkit-box-shadow: 1px 1px 5px 0 #455c71;
+  -moz-box-shadow: 1px 1px 5px 0 #455c71;
+  box-shadow: 1px 1px 5px 0 #455c71;
+  min-height: 350px;
+  height: 100%;
+  max-height: 480px;
 }
 .tm-block-avatar,
 .tm-block-settings {
@@ -772,4 +781,103 @@ input[type="checkbox"]:focus {
   #lineChart {
     max-height: 350px;
   }
+}
+p.pd-title{
+  margin-bottom: 0.18rem!important;
+}
+.notifi_sendemail{
+  display: none;
+  position: fixed;
+  background-color: #ffffff;
+  width: 600px;
+  height: 265px;
+  right: 27.2%;
+  top: 16%;
+  border-radius: 3px;
+  box-shadow: 1px 1px 5px 0 #3c0187;
+  z-index: 100;
+}
+.title_sendemail{
+  color: #5b5b5b;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin:30px;
+  font-family: cursive;
+}
+.nav_sendemail{
+  border-radius: 3px 3px 0 0;
+  width: 100%;
+  height: 60px;
+  background-color: #fffffff7;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 4px solid #ffcc7d;
+}
+.icon_success_sendemail{
+  font-size: 32px;
+  font-weight: 600;
+  color: #19ff00;
+  margin: 30px;
+}
+.body_sendemail{
+  width: 100%;
+  height: 100%;
+}
+.body_sendemail_title{
+  margin: 30px;
+}
+.body_sendemail_title span{
+font-size: 20px;
+font-weight: 600;
+color: #5b5b5b;
+font-family: cursive;
+}
+.body_sendemail_content{
+  margin-left: 30px;
+  margin-right: 30px;
+  height: 23%;
+}
+.body_sendemail_content span{
+  font-size: 14px;
+  font-family: cursive;
+  color:#323232;
+}
+.bt_sendemail{
+  align-items: center;
+  display: flex;
+  height: 22%;
+  justify-content: space-around;
+  border-top: 1px solid #d3d3d3;
+}
+.bt_route--footer{
+  width: 96px;
+  height: 37px;
+  border-radius: 8px;
+  background-color: #2f2b4b;
+  box-shadow: 1px 1px 5px 0 #4d6d89;
+  outline: 1px solid #ffa1a1;
+  border: none;
+}
+.bt_route--footer a{
+  font-weight: 600;
+  color: #fff;
+  font-size: 15px;
+  text-decoration: none;
+  text-decoration: none;
+}
+.container::before{
+  content: "";
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  right: 0;
+  top: 0;
+  background-color: rgba(27, 27, 27, 85%);
+  z-index: 99;
+  display: none;
+
+}
+.container.show::before{
+  display: block;
 }

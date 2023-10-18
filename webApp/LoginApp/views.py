@@ -50,8 +50,8 @@ def handleRegis(request):
                 to_email,
                 html_message=contenHTML,
             )
-            return render(request, 'LoginApp/notify_loading.html',{
-                'islogin':'faild'
+            return render(request, 'LoginApp/login.html',{
+                'islogin':'sendEmail'
             })
         else :
             return render(request, 'LoginApp/Login.html',{
@@ -74,7 +74,9 @@ def activate(request,uid,token):
     if ca is not None and ca.token_carowner == token:
         ca.verify_carowner = True
         ca.save()
-        return render(request, 'LoginApp/verifyEmail_success.html')  # Hiển thị trang xác thực thành công
+        return render(request, 'LoginApp/login.html',{
+            'islogin':'verifisuccess'
+        })
     else:
         raise Http404
 def activate_Customer(request,uid,token):
@@ -86,20 +88,22 @@ def activate_Customer(request,uid,token):
     if cm is not None and cm.token_customer == token:
         cm.verify_customer = True
         cm.save()
-        return render(request, 'LoginApp/verifyEmail_success.html')  # Hiển thị trang xác thực thành công
+        return render(request, 'LoginApp/LoginCustomer.html',{
+            'islogin':'verifisuccess'
+        })
     else:
         raise Http404 
-def activate_driver(request,uid,token):
-    try:
-        dr = Driver.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, Driver().DoesNotExist):
-        dr = None
-    if dr is not None and dr.token_driver == token:
-        dr.verify_driver = True
-        dr.save()
-        return render(request, 'LoginApp/verifyEmail_success.html')  # Hiển thị trang xác thực thành công
-    else:
-        raise Http404         
+# def activate_driver(request,uid,token):
+#     try:
+#         dr = Driver.objects.get(pk=uid)
+#     except (TypeError, ValueError, OverflowError, Driver().DoesNotExist):
+#         dr = None
+#     if dr is not None and dr.token_driver == token:
+#         dr.verify_driver = True
+#         dr.save()
+#         return render(request, 'LoginApp/verifyEmail_success.html')  # Hiển thị trang xác thực thành công
+#     else:
+#         raise Http404         
 def handelLogin(request):
    if request.method == 'POST':
         username=request.POST['username']
@@ -147,8 +151,8 @@ def handleRegis_customer(request):
             to_email,
             html_message=contenHTML,
             )
-        return render(request, 'LoginApp/notify_loading.html',{
-            'islogin':'faild'
+        return render(request, 'LoginApp/LoginCustomer.html',{
+            'islogin':'sendEmail'
         })
     return render(request, 'LoginApp/verifyEmail.html')        
 def handelLogin_customer(request):

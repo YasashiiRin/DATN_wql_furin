@@ -28,7 +28,8 @@ def home_customer_view(request):
     if 'customer_sessionid' in request.session:
         print("has session customer.....")
         customerid = request.customer.id
-        current_date = timezone.now().date()
+        # current_date = timezone.now().date()
+        current_date = timezone.localtime(timezone.now()).date()
         print("current_date:....................... ",current_date)
         my_filter_form = YourFilterForm()
         my_orders = Orders.objects.filter(customer = customerid).all()
@@ -49,15 +50,19 @@ def controller_redirect_regisCustomer(request):
 
 
 def handle_logout(request):
-    session_key = request.session.get(settings.CUSTOMER_SESSION_COOKIE_NAME)
-    if session_key:
-        try:
-            custom_session = CustomSession.objects.get(session_key=session_key)
-            custom_session.delete()
-            del request.session[settings.CUSTOMER_SESSION_COOKIE_NAME]
-            print("delete_Session for customer......")
-        except CustomSession.DoesNotExist:
-            pass
+    try:
+        session_key = request.session.get(settings.CUSTOMER_SESSION_COOKIE_NAME)
+        if session_key:
+            try:
+                custom_session = CustomSession.objects.get(session_key=session_key)
+                custom_session.delete()
+                del request.session[settings.CUSTOMER_SESSION_COOKIE_NAME]
+                print("delete_Session for customer......")
+            except CustomSession.DoesNotExist:
+                pass
+    except:
+        print("customer is logout...................")
+        pass        
     return render(request, 'HomeApp/home.html')
 
 def custom_logout(request):
@@ -96,6 +101,7 @@ def view_editprofile(request):
     my_filter_form = ImageUploadForm()
     my_profile = Customer.objects.get(pk=id_customer)
     img_customer = request.customer.img_customer
+    print("img_customer....................: ", img_customer)
     return render(request,'HomeApp/edit_profile.html',{
         'myinfo': my_profile,
         'customer_id' : id_customer,
@@ -157,9 +163,9 @@ def handle_cancel_order(request,idorder):
             order.delete()
             schedule.slot_vehicle = total_slot
             schedule.save()
-            return JsonResponse({'message': 'Cancel order Successfull.......'})
+            return JsonResponse({'notifiCancel': 'Cancel order Successfull.......'})
         else:
-            return JsonResponse({'errorr': 'Cancel order failed.......'})
+            return JsonResponse({'error_Cancel': 'Cancel order failed.......'})
     except Orders.DoesNotExist:
         return JsonResponse({'error': 'Có lỗi xảy ra vui lòng liên hệ với quản trị viên'}, status=404)
     except Exception as e:
@@ -249,12 +255,15 @@ def search_customer(request):
 
     return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': schedules,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
 
-def upload_images(request,customerid) :
+def upload_images(request,customerid):
+    my_filter_form = ImageUploadForm()
+    img_customer = request.customer.img_customer
+
     id_customer = request.customer.id
     my_profile = Customer.objects.get(pk=id_customer)
     if request.method == 'POST':
-        print(request.POST)  # In ra nội dung của request.POST
-        print(request.FILES)  # In ra nội dung của request.FILES
+        print(request.POST)  
+        print(request.FILES) 
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_image = form.cleaned_data['image_upload']
@@ -262,6 +271,12 @@ def upload_images(request,customerid) :
             c = Customer.objects.get(pk=customerid)
             c.img_customer = uploaded_image
             c.save()
+            return render(request,'HomeApp/edit_profile.html',{
+                'myinfo': my_profile,
+                'customer_id' : id_customer,
+                'form_upload' : my_filter_form,
+                'img_customer' : img_customer,
+            })
         else:
             print(form.errors)
             return JsonResponse({'error': 'không đủ chỗ '})

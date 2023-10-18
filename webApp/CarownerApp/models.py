@@ -44,6 +44,7 @@ class Schedules(models.Model):
     day_schedule = models.DateField(null=True)
     start_date = models.DateField(null=True)
     number_of_days = models.PositiveIntegerField(default=1) 
+    label_schedule = models.IntegerField(default=1)
     class Meta:
         db_table = 'shedules'    
 class Orders(models.Model):

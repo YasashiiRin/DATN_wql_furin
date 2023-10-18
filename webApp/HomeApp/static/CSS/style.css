@@ -37,7 +37,7 @@
   h2,
   h3,
   h4 {
-    color: #333;
+    /* color: #333; */
   }
   
   /*  UTILITY CLASSES */
@@ -81,6 +81,7 @@
     line-height: 1;
     transition: opacity 300ms ease;
     margin: 10px;
+    font-family: cursive;
   }
   .btn:hover {
     opacity: 0.8;
@@ -257,7 +258,7 @@
   section#main__cta{
     padding-block: 4rem;
   
-    background-image: url("../images/bg10.jpg");
+    background-image: url("../images/bg26.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -273,11 +274,12 @@
     flex-direction: column;
     position: absolute;
     left: 680px;
+    box-shadow: 1px 1px 5px 0 #1b1744;
   }
   .main__cta__options {
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
-    background: #dcdada;
+    padding: 6px;
+    border-bottom: 2px solid #c23564;
+    background: #fcfcfc;
   }
   .main__cta__card.active .line{
     position: absolute;
@@ -328,12 +330,14 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-align: center;
-    font-weight: 500;
+    font-weight: 600;
+    color: #353535;
+    font-family: cursive;
   }
   .main__cta__text{
-    background: linear-gradient(to left, rgb(255 152 136) 10%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(to left, rgb(255 169 136) 10%, rgba(0, 0, 0, 0) 100%);
     padding: 3rem;
     display: flex;
     flex-direction: column;
@@ -365,10 +369,13 @@
     font-weight: 700;
     line-height: 1.3;
     margin: 1px;
+    color: #2c2c2c;
+    font-family: cursive;
   }
   .sous-titre {
     opacity: 0.8;
     margin: 10px;
+    font-family: cursive;
   }
   .text-cta {
     opacity: 0.8;
@@ -387,10 +394,11 @@
   /* BUSINESS HEADER */
   
   section#business-header {
-    background-image: url("../images/bg12.jpg");
+    background-image: url("../images/bg24.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    opacity: 0.9;
   
     padding-block: 4rem;
   }
@@ -404,36 +412,45 @@
     font-size: 2.5rem;
   }
   .business-header__text p {
-    /* width: 150px; */
+    color: #fff;
     padding-left: 581px;
     font-size: 1.1rem;
-    font-weight: 500;
+    font-weight: 600;
     padding-bottom: 1rem;
+    font-family: cursive;
+    opacity: 100%;
   }
   .business-header__text.resetcolor{
     color:#0c0c0c;
   }
   .business-header__text.resetcolor h3{
-    color: #ff2f00;
+    color: #ffffff;
+    font-family: cursive;
   }
   .engagements__section__flex img{
-    height: 260px
+    height: 260px;
+    border-radius: 3px;
   }
   .engagements__section__flex.Titlecolor1 h4{
-    color: #8b133b;
+    color: #ffffff;;
   }
   .engagements__section__flex.Titlecolor2 h4{
-    color: #a94b6a;
+    color: #ffffff;
   }
   .engagements__section__flex.Titlecolor2 p{
     padding-top: 9px;
+    font-family: cursive;
+    color: #ffffff;
   }
   .engagements__section__flex.Titlecolor1 p{
     padding-top: 9px;
+    font-family: cursive;
+    color: #fff;
   }
   .Home__conten__footer{
     display: flex;
     flex-direction: column-reverse;
+    color: #fff;
   }
   .sous-titre__home__conten{
     width: 100%;
@@ -443,21 +460,26 @@
     margin-bottom: 6px;
   }
   .split.home__conten{
-    border-left: 2px dotted #191919;
+    /* border-left: 2px solid #f3f3f3; */
   }
   /* engagements SECTION */
   
   section#engagements__section {
-    padding-block: 4rem;
+    padding-block: 1rem;
+    background-color: #101339;;
   }
   
   #engagements__section h3 {
-    padding-bottom: 3rem;
+    color: #ffffff;
+    padding-left: 10px;
+    /* padding-bottom: 1rem; */
     font-size: 1.8rem;
+    font-family: cursive;
   }
   #engagements__section h4 {
-    font-weight: 500;
     font-size: 1.3rem;
+    font-family: cursive;
+    font-weight: 600;
   }
   
   .engagements__section__flex {
@@ -485,6 +507,15 @@
     padding-bottom: 1rem;
   }
   
+  .nav_container_title{
+   display: flex;
+   align-items: center;
+   margin-bottom: 16px;
+   
+  }
+  .block_h3_title{
+    align-items: center;
+  }
   /* APPLICATIONS SECTION */
   
   section#applications__section {

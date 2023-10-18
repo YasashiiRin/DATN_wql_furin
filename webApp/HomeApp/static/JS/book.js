@@ -19,7 +19,7 @@ const changaeContent ={
     // giao diện mặc định 
     clickTitle1: function (){
         form_text[0].onclick = function (){
-            containBg.style.backgroundImage= "url('/static/images/bg10.jpg')";
+            containBg.style.backgroundImage= "url('/static/images/bg26.jpg')";
             conten[0].classList.add("active");
             conten[1].classList.add("active");
             conten[2].classList.remove("active");
@@ -28,7 +28,7 @@ const changaeContent ={
     clickTitle2: function (){
         // giao diện chuyển đổi 
         form_text[1].onclick= function (){
-            containBg.style.backgroundImage = "url('/static/images/bg15.jpg')";
+            containBg.style.backgroundImage = "url('/static/images/bg25.jpg')";
             conten[0].classList.add("active");
             conten[1].classList.remove("active");
             conten[2].classList.add("active");
@@ -37,7 +37,7 @@ const changaeContent ={
     clickTitle3: function (){
         // giao diện chuyển đổi 
         form_text[2].onclick= function (){
-            containBg.style.backgroundImage = "url('/static/images/bg15.jpg')";
+            containBg.style.backgroundImage = "url('/static/images/bg23.jpg')";
             conten[0].classList.remove("active");
             conten[1].classList.add("active");
             conten[2].classList.add("active");

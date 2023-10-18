@@ -39,7 +39,7 @@ class CustomerAdmin(admin.ModelAdmin):
             obj.password_customer = make_password(obj.password_customer)
         super().save_model(request, obj, form, change)     
 class CarOwnerAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'phone_carowner','address_carowner')
+    list_display = ('username', 'email', 'phone_carowner','address_carowner','verify_carowner')
     inlines = [DriverInline]
     actions = ['custom_logout']
 
@@ -170,9 +170,9 @@ class ScheduleAdminForm(forms.ModelForm):
         else:
             print("chưa thay đổi queryset của vehicle")  
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','name_schedule','slot_vehicle','start_location','end_location','start_time','end_time','start_date')
+    list_display = ('vehicle','label_schedule','name_schedule','slot_vehicle','start_location','end_location','start_time','end_time','start_date')
     form = ScheduleAdminForm
-    search_fields = ('name_schedule','start_date')
+    search_fields = ('start_location','start_date')
     actions = ["filter_schedules_with_max_start_day"]
     class Media:
         css = {
@@ -189,21 +189,21 @@ class ScheduleAdmin(admin.ModelAdmin):
     def filter_schedules_with_max_start_day(self, request, queryset):
         carowner = request.user
         if carowner.is_superuser:
-            max_start_dates = Schedules.objects.filter().values('vehicle__id').annotate(max_start_date=Max('start_date'))
+            max_start_dates = Schedules.objects.filter().values('name_schedule').annotate(max_start_date=Max('start_date'))
         else:
-            max_start_dates = Schedules.objects.filter(vehicle__driver__carowner = carowner ).values('vehicle__id').annotate(max_start_date=Max('start_date'))
+            max_start_dates = Schedules.objects.filter(vehicle__driver__carowner = carowner ).values('name_schedule').annotate(max_start_date=Max('start_date'))
         max_start_schedules = []
         for item in max_start_dates:
-            vehicle_id = item['vehicle__id']
+            name_schedule = item['name_schedule']
             max_start_date = item['max_start_date']
 
-            schedule = Schedules.objects.filter(vehicle__id=vehicle_id, start_date=max_start_date).first()
+            schedule = Schedules.objects.filter(name_schedule=name_schedule, start_date=max_start_date).first()
             print("list1 ",schedule.id)
             if schedule:
                 max_start_schedules.append(schedule)
         messages_list = []        
         for schedule in max_start_schedules:
-            messages_item = f'<div class="info1">Vehicle : {schedule.vehicle.email_driver}</div>   <div class="info2">Max start_day : {schedule.start_date}</div>'
+            messages_item = f'<div class="info1">Name Schedule : {schedule.name_schedule} - Driver: {schedule.vehicle.driver}</div>   <div class="info2">Max start_day : {schedule.start_date}</div>'
             messages_list.append(mark_safe(messages_item))
             # print(f"Vehicle ID: {schedule.vehicle.email_driver}, Max Start Day: {schedule.start_date}")
         for message in messages_list:
@@ -213,6 +213,7 @@ class ScheduleAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         selected_vehicle = form.cleaned_data['vehicle']
+        label_schedule = form.cleaned_data['label_schedule']
         number_of_days = form.cleaned_data['number_of_days']
         start_date = form.cleaned_data['start_date']
         name_schedule = form.cleaned_data['name_schedule']
@@ -230,6 +231,7 @@ class ScheduleAdmin(admin.ModelAdmin):
             for i in range(number_of_days):
                 new_schedule = Schedules(
                     vehicle=selected_vehicle,
+                    label_schedule =label_schedule,
                     name_schedule=name_schedule,
                     slot_vehicle=vehicle_info.slot_vehicle,
                     start_location=start_location,
@@ -241,7 +243,8 @@ class ScheduleAdmin(admin.ModelAdmin):
                 )
                 new_schedule.save()
         else:
-            if number_of_days == 0:      
+            if number_of_days == 0:  
+                existing_schedule.label_schedule = label_schedule    
                 existing_schedule.name_schedule = name_schedule
                 existing_schedule.slot_vehicle = vehicle_info.slot_vehicle
                 existing_schedule.start_location = start_location
@@ -253,6 +256,7 @@ class ScheduleAdmin(admin.ModelAdmin):
                 for i in range(number_of_days):
                     new_schedule = Schedules(
                         vehicle=selected_vehicle,
+                        label_schedule = label_schedule,
                         name_schedule=name_schedule,
                         slot_vehicle=vehicle_info.slot_vehicle,
                         start_location=start_location,

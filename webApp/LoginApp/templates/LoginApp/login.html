@@ -117,6 +117,32 @@
             </div>
         </div>
     </div>
+    <div class="notifi_sendemail">
+        <div class="nav_sendemail">
+            <div class="title_sendemail">
+                <p>Sendemail</p>
+            </div>
+            <div class="icon_sendemail">
+                <div class="icon_success_sendemail"><img src="{%static 'images/icon_ss.png' %}"></div>
+            </div>
+        </div>
+        <div class="body_sendemail">
+            <div class="body_sendemail_title">
+                <span> Successfully sent authentication email <span>
+            </div>
+            <div class="body_sendemail_content">
+                <span>We have sent a verification email to the email you just registered with. Please check your email and verify<span>
+            </div>
+            <div class="bt_sendemail">
+                <div class="bt_route">
+                    <button class="bt_route--footer"><a href="https://mail.google.com/mail">Your Email</a></button>
+                </div>
+                <div class="bt_route">
+                    <button class="bt_route--footer"><a href="{% url 'home_customer_view' %}">Home</a></button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="tagtoast">
     </div>
     <div class="backhome">
@@ -188,7 +214,23 @@ else if(notification==='isNoneAccount'){
         duration: 8000
 
     }) 
-}  
+}
+else if(notification==='verifisuccess'){
+    toast({
+        title: "Authentication",
+        content: "Email authentication successful",
+        typeicon: "success",
+        duration: 8000
+
+    }) 
+}
+else if(notification==='sendEmail'){
+    console.log("send email success.................")
+    const blocksendemail = document.querySelector('.notifi_sendemail')
+    const container = document.querySelector('.container')
+    blocksendemail.style.display = 'block' 
+    container.classList.add('show')
+}    
   
 
         {% comment %} Handel toast {% endcomment %}

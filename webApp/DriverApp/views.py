@@ -14,17 +14,20 @@ from django.utils.crypto import get_random_string
 
 
 def driver(request):
-    current_date = timezone.now().date()
-    driver_id= request.driver.id
-    driver_orders = Orders.objects.filter(vehicle__driver_id = driver_id)
-    vehicle = Vehicle.objects.filter(driver=driver_id).all()
-    filtered_schedules = Schedules.objects.filter(vehicle__driver = driver_id).all()
-    all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]
-    context ={
-        'driver_orders': driver_orders,
-        'all_schedules' : list(all_shedules),
-    }
-    return render(request, 'DriverApp/driver.html',context)
+    if 'driver_sessionid' in request.session:
+        current_date = timezone.now().date()
+        driver_id= request.driver.id
+        driver_orders = Orders.objects.filter(vehicle__driver_id = driver_id)
+        vehicle = Vehicle.objects.filter(driver=driver_id).all()
+        filtered_schedules = Schedules.objects.filter(vehicle__driver = driver_id).all()
+        all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]
+        context ={
+            'driver_orders': driver_orders,
+            'all_schedules' : list(all_shedules),
+        }
+        return render(request, 'DriverApp/driver.html',context)
+    else:
+        return render(request, 'HomeApp/home.html')
 def driver_login(request):
     return render(request, 'DriverApp/driver_login.html')
 def handelLogin_driver(request):
@@ -88,22 +91,39 @@ def handle_verifi_driver(request):
                 to_email,
                 html_message=contenHTML,
             )
-            return render(request, 'LoginApp/notify_loading.html',{
-                'islogin':'faild'
+            return render(request, 'DriverApp/driver_login.html',{
+                'islogin':'sendEmail'
             })
         else :
             return render(request, 'DriverApp/driver_login.html',{
             'islogin': 'faild',
         })
-    return render(request, 'DriverApp/driver_login.html')        
+    return render(request, 'DriverApp/driver_login.html')
+def activate_driver(request,uid,token):
+    try:
+        dr = Driver.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Driver().DoesNotExist):
+        dr = None
+    if dr is not None and dr.token_driver == token:
+        dr.verify_driver = True
+        dr.save()
+        return render(request, 'DriverApp/driver_login.html',{
+            'islogin':'verifisuccess'
+        }) 
+    else:
+        raise Http404          
 def logout_driver(request):
-    session_key = request.session[settings.DRIVER_SESSION_COOKIE_NAME]
-    if session_key:
-        try:
-            custom_session = CustomSession.objects.get(session_key=session_key)
-            custom_session.delete()
-            del request.session[settings.DRIVER_SESSION_COOKIE_NAME]
-            print("delete_Session for driver......")
-        except CustomSession.DoesNotExist:
-            pass
+    try:
+        session_key = request.session[settings.DRIVER_SESSION_COOKIE_NAME] 
+        if session_key:
+            try:
+                custom_session = CustomSession.objects.get(session_key=session_key)
+                custom_session.delete()
+                del request.session[settings.DRIVER_SESSION_COOKIE_NAME]
+                print("delete_Session for driver......")
+            except CustomSession.DoesNotExist:
+                pass
+    except:
+        print(" Driver Logged out...............")   
+        pass     
     return render(request, 'DriverApp/driver_login.html')
