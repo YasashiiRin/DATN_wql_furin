@@ -30,11 +30,14 @@ def home_customer_view(request):
         customerid = request.customer.id
         # current_date = timezone.now().date()
         current_date = timezone.localtime(timezone.now()).date()
+        current_time = timezone.localtime(timezone.now()).time()
         print("current_date:....................... ",current_date)
         my_filter_form = YourFilterForm()
         my_orders = Orders.objects.filter(customer = customerid).all()
         filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
-        all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]
+        all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
+
+        print("current_time:....................... ",current_time)
         return render(request, 'HomeApp/home_customer.html', {
             'schedules': all_shedules,
             'my_orders' : my_orders,
@@ -171,10 +174,14 @@ def handle_cancel_order(request,idorder):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500) 
 def search_customer(request):
+
+    current_date = timezone.localtime(timezone.now()).date()
+    current_time = timezone.localtime(timezone.now()).time()
+
     id_customer = request.customer.id
-    current_date = timezone.now().date()
+
     my_orders = Orders.objects.filter(customer = id_customer).all()
-    schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
+
     my_filter_form = YourFilterForm()
     if request.method == 'GET':
         my_filter_form = YourFilterForm(request.GET)
@@ -242,7 +249,7 @@ def search_customer(request):
                 Q(end_location__icontains=search_query) |
                 Q(vehicle__type_vehicle__icontains=search_query)
             )
-            all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]       
+            all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
             searchvalue = ''   
             if not all_shedules :
                 searchvalue = 'search_err'

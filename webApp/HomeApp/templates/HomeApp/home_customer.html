@@ -180,9 +180,9 @@
                                   <th scope="col">NAME DRIVER</th>
                                   <th scope="col">TYPE_VEHICLE</th>
                                   <th scope="col">QUANTITY_SLOT</th>
-                                  <th scope="col">Image</th>
-                                  <th scope="col">PICKUP_LOCATION</th>
-                                  <th scope="col">DROPOFF_LOCATION</th>
+                                  <th scope="col">IMAGE</th>
+                                  <th scope="col">STARTING_LOCATION</th>
+                                  <th scope="col">ENDING_LOCATION</th>
                                   <th scope="col">START_TIME</th>
                                   <th scope="col">START_DAY</th>
                               </tr>
@@ -203,7 +203,7 @@
                                   <td><b>{{schedule.vehicle.name_driver}}</b></td>
                                   <td><b>{{schedule.vehicle.type_vehicle}}</b></td>
                                   <td><b>{{schedule.slot_vehicle}}</b></td>
-                                  <td><img class="list_img_vehicle" data-img-vehilce="{{ schedule.vehicle.img_vehicle.url }}" src="{{schedule.vehicle.img_vehicle.url}}"></td>
+                                  <td><img style="border-radius:3px;" class="list_img_vehicle" data-img-vehilce="{{ schedule.vehicle.img_vehicle.url }}" src="{{schedule.vehicle.img_vehicle.url}}"></td>
                                   <td><b>{{schedule.start_location}}</b></td>
                                   <td><b>{{schedule.end_location}}</b></td>
                                   <td>{{schedule.start_time}}</td>

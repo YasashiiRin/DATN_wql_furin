@@ -262,6 +262,8 @@ button:focus {
   color: #fff;
   font-size: 95%;
   margin-bottom: 15px;
+  box-shadow: 4px 1px 5px #2f2f2f;
+  border-radius: 3px;
 }
 .tm-notification-item:last-child {
   margin-bottom: 0;
@@ -271,7 +273,7 @@ button:focus {
 }
 .tm-text-color-secondary {
   /* color: #bdcbd8; */
-  color: #a9c4dc;
+  color: #b5d6f3;;
 }
 .tm-small {
   font-size: 90%;
@@ -880,4 +882,89 @@ font-family: cursive;
 }
 .container.show::before{
   display: block;
+}
+
+.container_order_info_customer{
+  display: none;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  right: 0;
+  transform-origin: 0 top;
+  background-color: #000000ab;
+  animation:hiddenSmooth ease 0.26s;
+}
+@keyframes hiddenSmooth{
+  from{
+    opacity: 0;
+    transform: scale(0);
+  }
+  to{
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.container_items{
+  margin: 49px 104px 0 104px;
+}
+.avatar_order_info{
+  width: 153px;
+  height: 153px;
+  position: relative;
+}
+.avatar_order_info img{
+  width: 93%;
+  height: 93%;
+  overflow: clip;
+  border-radius: 50%;
+  border: 0.25rem solid #74ffec;
+}
+.avatar_order_info::before,
+.avatar_order_info::after{
+    -webkit-animation: clipMe 10s linear infinite;
+    animation: clipMe 8s linear infinite;
+    border: rgb(0 188 255) solid 8px;
+    border-radius: 9999px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    content: ' ';
+    height: 220px;
+    left: -33px;
+    opacity: 0.6;
+    position: absolute;
+    top: -39px;
+    -webkit-transform: scale(0.714);
+    transform: scale(0.714);
+    width: 220px;
+}
+.avatar_order_info::before{
+  animation-delay: -5s;
+}
+.info_fullname{
+  font-size: 22px;
+  font-weight: 600;
+  color: #474747;
+}
+.info_email{
+  font-size: 16px;
+  color: #474747;
+}
+.info_phone{
+  font-size: 16px;
+  color: #474747;
+}
+.info_address{
+  font-size: 16px;
+  color: #474747;
+}
+.info_address{
+  font-size: 16px;
+  color: #474747;
+}
+.container_order_info_exits{
+  margin-top: 3%;
+}
+.fa-arrow-left{
+  margin-left: 3%;
 }
