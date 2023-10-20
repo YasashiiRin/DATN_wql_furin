@@ -181,7 +181,8 @@ def search_customer(request):
     id_customer = request.customer.id
 
     my_orders = Orders.objects.filter(customer = id_customer).all()
-
+    filtered_schedules_return = Schedules.objects.select_related('vehicle__driver__carowner').all()
+    all_shedules_return= [schedule for schedule in filtered_schedules_return if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
     my_filter_form = YourFilterForm()
     if request.method == 'GET':
         my_filter_form = YourFilterForm(request.GET)
@@ -255,12 +256,18 @@ def search_customer(request):
                 searchvalue = 'search_err'
             else:
                 searchvalue = 'search_success'
-            return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules,  'my_orders' : my_orders, 'notifi_search' : searchvalue})
+            return render(request, 'HomeApp/home_customer.html', {
+                'my_filter_form': my_filter_form,
+                'schedules': all_shedules,
+                'my_orders' : my_orders,
+                'current_date' : current_date,
+                'notifi_search' : searchvalue
+            })
 
         else:
              print("novalid")
 
-    return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': schedules,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
+    return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules_return,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
 
 def upload_images(request,customerid):
     my_filter_form = ImageUploadForm()

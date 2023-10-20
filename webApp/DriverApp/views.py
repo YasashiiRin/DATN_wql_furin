@@ -15,7 +15,9 @@ from django.utils.crypto import get_random_string
 
 def driver(request):
     if 'driver_sessionid' in request.session:
-        current_date = timezone.now().date()
+        # current_date = timezone.now().date()
+        current_date = timezone.localtime(timezone.now()).date()
+        current_time = timezone.localtime(timezone.now()).time()
         driver_id= request.driver.id
         driver_orders = Orders.objects.filter(vehicle__driver_id = driver_id)
         vehicle = Vehicle.objects.filter(driver=driver_id).all()

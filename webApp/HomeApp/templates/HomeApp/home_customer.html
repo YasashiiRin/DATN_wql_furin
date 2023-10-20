@@ -54,9 +54,9 @@
                       <div>
                          <i class="fa-solid fa-clock-rotate-left" style="color: #ffffff;"></i>
                       </div>
-                        <p class="nav_history" href="#">History book</p>
+                        <p class="nav_history" href="#">Book History</p>
                       <div>
-                        <i class="fa-solid fa-caret-down" style="color: #fff;"></i>
+                        <i class="fa-solid fa-caret-down rotate_iconnext" style="color: #fff;"></i>
                       </div>
                     </div>
                   {%else%}
@@ -110,7 +110,7 @@
                 <div class="nav__cta__info--has-menu">
                   <div class="nav__cta__info">
                     <p class="nav__cta">{{request.customer.name_customer}}</p>
-                    <p class="nav__mores"><i class="fa-solid fa-caret-down" style="color: #ff4405;"></i></p>
+                    <p class="nav__mores"><i class="fa-solid fa-caret-down rotate_iconnext_login" style="color: #ff4405;"></i></p>
                   </div>
                   <div class="nav__cta__menu">
                     <ul class="nav__cta__list">
@@ -565,6 +565,7 @@
           const hoverScroll = document.querySelector('.nav__cta__info--has-menu--book_car')
           const blockScroll = document.querySelector('.nav__cta__menu_history_book')
           const arrayScroll = document.querySelectorAll('.block__content__history')
+          const rotate_iconnext = document.querySelector('.rotate_iconnext')
           console.log("array history :", arrayScroll)
           const len = arrayScroll.length
           console.log(arrayScroll[len - 1])
@@ -572,12 +573,14 @@
 
           hoverScroll.addEventListener('mouseenter',function(){
             blockScroll.style.display = 'block';
+            rotate_iconnext.style.transform = 'rotate(270deg)'
             setTimeout(function() {
               blockScroll.scrollTop = blockScroll.scrollHeight;
           }, 0);
           })
           hoverScroll.addEventListener('mouseleave',function(){
             blockScroll.style.display = 'none';
+            rotate_iconnext.style.transform = 'rotate(0deg)'
           })
 
 

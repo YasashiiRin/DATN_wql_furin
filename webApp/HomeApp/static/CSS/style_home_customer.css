@@ -135,6 +135,9 @@
 .nav__cta__info--has-menu:hover .nav__cta__menu {
   display: block;
 }
+.nav__cta__info--has-menu:hover .rotate_iconnext_login {
+  transform: rotate(270deg);
+}
   .nav__mores{
     margin-left: 8px;
     margin-right: 5px;
@@ -168,10 +171,8 @@
     height: 31px;
     background: #ffbc80d6;
     border: 1px solid #ff6442;
+    margin: 10px;
   }
-  /* .block_destroy_order{
-    display: block;
-  } */
   .content_history_book{
     display: flex;
   }
@@ -435,9 +436,10 @@
     width: 500px;
     height: 500px;
     right: 33%;
-    top:55px;
+    top:71px;
     background-color: #fff;
     border-radius: 8px;
+    box-shadow: 1px 1px 5px #38437d;
   }
   .nav_invoice{
     padding:15px;
@@ -454,8 +456,8 @@
     align-items: center;
   }
   .invoice_logo a {
-    color: rgb(0, 0, 0);
-    font-weight: 500;
+    color: rgb(80 80 80);
+    font-weight: 600;
   }
   .incoive_logo_img{
 
@@ -463,8 +465,8 @@
   .span_iconoutbook{
     width: 30px;
     height: 30px;
-    font-size: 28px;
-    color: rgb(255, 39, 39);
+    font-size: 26px;
+    color:rgb(255 86 39);
   }
   .invoice_conten_right a {
     color: rgb(0, 0, 0);
@@ -477,7 +479,6 @@
   .invoice_container_conten{
     width: 100%;
     height: auto;
-    margin-left: 18px;
   }
   .invoice_container_title{
     padding: 18px;
@@ -486,20 +487,20 @@
   .invoice_container_title p{
     font-size: 18px;
     font-weight: 600;
-    color:#2d2156;
+    color:#2d2156e8;
   }
   .invoice_info_book-title{
     margin-right: 10px;
   }
   .invoice_info_book{
     display: flex;
-    margin: 19px;
+    margin: 19px 19px 19px 37px;
     font-size: 15px;
     font-weight: 550;
     padding: 6px;
     color: #5e5e5e;
     border-bottom: 1px solid #f84d2e;
-    border-left: 1px solid #f84d2e;
+    border-left: 4px solid #f84d2e;
   }
   .invoice_info_book p{
     font-size: 12px;
@@ -514,7 +515,20 @@
     border: none;
     margin-left: 70%;
     margin-top: 3%;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: #ff9b69;
     border: 1.8px solid #ff5009;
+  }
+  .input_quantity{
+    border: 1px solid #334a64;
+    width: 50px;
+    height: 23px;
+    padding-left: 5px;
+    font-weight: 600;
+    border-radius: 3px;
+    color: #345967;
   }
   .input_book_car{
     position: relative;
