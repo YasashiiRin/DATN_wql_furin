@@ -120,7 +120,7 @@
     <div class="notifi_sendemail">
         <div class="nav_sendemail">
             <div class="title_sendemail">
-                <p>Sendemail</p>
+                <p>Email xác thực đã được gửi</p>
             </div>
             <div class="icon_sendemail">
                 <div class="icon_success_sendemail"><img src="{%static 'images/icon_ss.png' %}"></div>
@@ -128,10 +128,10 @@
         </div>
         <div class="body_sendemail">
             <div class="body_sendemail_title">
-                <span> Successfully sent authentication email <span>
+                <span> Email xác thực đã được gửi tới email của bạn <span>
             </div>
             <div class="body_sendemail_content">
-                <span>We have sent a verification email to the email you just registered with. Please check your email and verify<span>
+                <span>Chúng tôi đã gửi một Email xác thực tới email mà bạn vừa dùng để đăng ký. Vui lòng kiểm tra email của bạn và xác thực<span>
             </div>
             <div class="bt_sendemail">
                 <div class="bt_route">
@@ -192,16 +192,16 @@ console.log("notification"+notification);
 console.log(typeof notification)
 if(notification==='faild'){
     toast({
-        title: "Login failed",
-        content: "Your account or password is incorrect, please check again",
+        title: "Đăng nhập thất bại",
+        content: "Tài khoản hoặc mật khẩu của bạn không chính xác, vui lòng đăng nhập lại",
         typeicon: "error",
         duration: 8000
 
     })}
 else if (notification==='signup'){
     toast({
-        title: "Sign up failed",
-        content: "Email isexitst",
+        title: "Đăng ký thất bại",
+        content: "Email đã tổn tại",
         typeicon: "error",
         duration: 8000
 
@@ -209,8 +209,8 @@ else if (notification==='signup'){
 }  
 else if(notification==='noverifi'){
     toast({
-        title: "Sign up failed",
-        content: "Email not verifi",
+        title: "Đăng nhập thất bại",
+        content: "Tài khoản bạn chưa được xác thực, vui lòng xác thực và thử lại",
         typeicon: "error",
         duration: 8000
 
@@ -218,8 +218,8 @@ else if(notification==='noverifi'){
 }
 else if(notification==='verifisuccess'){
     toast({
-        title: "Authentication",
-        content: "Email authentication successful",
+        title: "Xác thực tài khoản thành công",
+        content: "Bạn đã xác thực tài khoản thành công , có thể thực hiện đăng nhập",
         typeicon: "success",
         duration: 8000
 
@@ -227,8 +227,8 @@ else if(notification==='verifisuccess'){
 }
 else if(notification==='isNoneAccount'){
     toast({
-        title: "account does not have sufficient permissions",
-        content: "The account does not have sufficient permissions to perform this action",
+        title: "Tài khoản không đủ quyền",
+        content: "Tài khoản bạn vừa nhập không đủ quyền để thực hiện hành động này",
         typeicon: "error",
         duration: 8000
 
@@ -237,8 +237,8 @@ else if(notification==='isNoneAccount'){
 
 else if(notification==='verifi_isexists'){
     toast({
-        title: "Verified email",
-        content: "Your account has been authenticated, you can log in",
+        title: "Tài khoản đã được xác thực",
+        content: "Tài khoản bạn vừa nhập đã xác thực, xin hãy thử lại với tài khoản khác !",
         typeicon: "error",
         duration: 8000
 
@@ -251,7 +251,14 @@ else if(notification==='sendEmail'){
     blocksendemail.style.display = 'block' 
     container.classList.add('show')
 }     
-  
+const dltoast = document.querySelectorAll('.toast-exit');
+console.log("button_exit: ",dltoast)
+dltoast.forEach(element => {
+  element.onclick = function(){
+    console.log("is click exits")
+    element.parentElement.remove('toast')
+  }
+})   
   
 
         {% comment %} Handel toast {% endcomment %}

@@ -218,6 +218,7 @@ def search_customer(request):
             # filtered_schedules = Schedules.objects.filter(query) 
             time_years = search_query.split('-')
             time_parts = search_query.split(':')
+            time_with_vn = search_query.split(' ')
             if search_query.isdigit():
                 print("is integer")
                 filtered_schedules = Schedules.objects.filter(
@@ -242,7 +243,44 @@ def search_customer(request):
                         Q(start_date__month = month, start_date__day = day)
                     )
                 except ValueError:
-                    pass    
+                    pass
+            elif len(time_with_vn) >= 2:
+                if time_with_vn[0] == 'ngày' or time_with_vn[0] == 'Ngày':
+                    print("search time vn:",time_with_vn)
+                    try:
+                        day = int(time_with_vn[1])
+                        filtered_schedules = Schedules.objects.filter(
+                            Q(start_date__day = day)
+                        )
+                        if len(time_with_vn) >=3:
+                            month = int(time_with_vn[2])
+                            filtered_schedules = Schedules.objects.filter(
+                                Q( start_date__month= month,start_date__day = day)
+                            )
+                    except ValueError:
+                        pass 
+                elif time_with_vn[0] == 'tháng' or time_with_vn[0] == 'Tháng':
+                    print("search time vn:",time_with_vn)
+                    try:
+                        month = int(time_with_vn[1])
+                        filtered_schedules = Schedules.objects.filter(
+                            Q(start_date__month = month)
+                        )
+                        if len(time_with_vn) >=3:
+                            day = int(time_with_vn[2])
+                            filtered_schedules = Schedules.objects.filter(
+                                Q( start_date__month= month, start_date__day = day)
+                            )
+                    except ValueError:
+                        pass
+                else:
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(vehicle__driver__carowner__username__icontains=search_query) |
+                        Q(vehicle__driver__name_driver__icontains = search_query) |
+                        Q(start_location__icontains=search_query) |
+                        Q(end_location__icontains=search_query) |
+                        Q(vehicle__type_vehicle__icontains=search_query)
+                    )
             else:
                 filtered_schedules = Schedules.objects.filter(
                 Q(vehicle__driver__carowner__username__icontains=search_query) |
@@ -250,20 +288,28 @@ def search_customer(request):
                 Q(end_location__icontains=search_query) |
                 Q(vehicle__type_vehicle__icontains=search_query)
             )
-            all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
-            searchvalue = ''   
-            if not all_shedules :
-                searchvalue = 'search_err'
-            else:
-                searchvalue = 'search_success'
-            return render(request, 'HomeApp/home_customer.html', {
-                'my_filter_form': my_filter_form,
-                'schedules': all_shedules,
-                'my_orders' : my_orders,
-                'current_date' : current_date,
-                'notifi_search' : searchvalue
-            })
-
+            try:
+                searchvalue = ''
+                all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)] 
+                if not all_shedules :
+                    searchvalue = 'search_err'
+                else:
+                    searchvalue = 'search_success'
+                return render(request, 'HomeApp/home_customer.html', {
+                    'my_filter_form': my_filter_form,
+                    'schedules': all_shedules,
+                    'my_orders' : my_orders,
+                    'current_date' : current_date,
+                    'notifi_search' : searchvalue
+                })
+            except:
+                return render(request, 'HomeApp/home_customer.html', {
+                    'my_filter_form': my_filter_form,
+                    'schedules': '',
+                    'my_orders' : my_orders,
+                    'current_date' : current_date,
+                    'notifi_search' : 'search_err'
+                })
         else:
              print("novalid")
 

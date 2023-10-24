@@ -161,8 +161,9 @@ input.valid+.span::before {
 
 .form-label {
     margin-top: 8px;
-    font-size: 14px;
-    padding-bottom: 4px;
+    font-size: 15px;
+    padding-bottom: 3px;
+    color: #4d4d4d;
 }
 
 .form-group.invalid .form-message {
@@ -177,8 +178,8 @@ input.valid+.span::before {
 
 .form-message {
     position: relative;
-    font-size: 12px;
-    padding: 4px 40px 0;
+    font-size: 14px;
+    padding: 3.5px 40px 0;
 }
 
 .container .container-forms .container-Underform .form-info {

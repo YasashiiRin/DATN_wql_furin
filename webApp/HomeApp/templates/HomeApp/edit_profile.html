@@ -15,7 +15,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> {% endcomment %}
     <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'CSS/fontawesome.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_customer_form.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_profile_customer.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap_editpf.css' %}">
     
     <link
@@ -97,9 +97,9 @@
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb" style="margin-left:109px;" class="main-breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home_customer_view' %}"> Home </a></li>
-            <li class="breadcrumb-item"><a href="{% url 'view_profile_customer' %}"> Profile </a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+            <li class="breadcrumb-item"><a href="{% url 'home_customer_view' %}"> Giao Diện Chính </a></li>
+            <li class="breadcrumb-item"><a href="{% url 'view_profile_customer' %}"> Hồ Sơ Cá Nhân </a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chỉnh Sửa Hồ Sơ Cá Nhân</li>
           </ol>
         </nav>
     <div class="container">
@@ -121,7 +121,7 @@
                     <form method="post" action="{% url 'upload_images' customerid=request.customer.id %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       {{ form_upload.as_p }}
-                      <button type="submit">Upload</button>
+                      <button type="submit" class="bt_update_img">Thay đổi</button>
                     </form>
 								</div>
 							</div>
@@ -156,7 +156,7 @@
 						<div class="card-body">
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Full Name</h6>
+									<h6 class="mb-0">Tên</h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" class="form-control input_item_info" value="{{myinfo.name_customer}}">
@@ -172,7 +172,7 @@
 							</div>
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Phone</h6>
+									<h6 class="mb-0">Số điện thoại</h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" class="form-control input_item_info" value="{{myinfo.phone_customer}}">
@@ -180,7 +180,7 @@
 							</div>
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Address</h6>
+									<h6 class="mb-0">Địa chỉ</h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" class="form-control input_item_info" value="{{myinfo.address_customer}}">
@@ -207,8 +207,13 @@
 	</div>
     <div id="tagtoast">
     </div>
+    <script src="{% static 'JS/toast_profile_customer.js' %}"></script>
     <script> 
+  
         document.addEventListener("DOMContentLoaded", function () {
+
+        const fileInput = document.querySelector('input[type="file"]');  
+
         const btsave = document.querySelector('.btn-save_edit')
         const listinput_info = document.querySelectorAll('.input_item_info')
         const listinput_item = document.querySelectorAll('.list_input')
@@ -237,16 +242,34 @@
                     .then(response => response.json())
                     .then(data => {
                         if(data.message){
-                        
+                          toast({
+                            title: "Thay đổi thành công!",
+                            content: "Bạn vừa thay đổi thông tin thành công.",
+                            typeicon: "success",
+                            duration: 8000
+                        })  
                         }else if(data.error){
-                          
+                          toast({
+                            title: "Thay đổi thất bại!",
+                            content: data.error,
+                            typeicon: "error",
+                            duration: 8000
+                        })   
                         }
+                        const dltoast = document.querySelectorAll('.toast-exit');
+                        console.log("button_exit: ",dltoast)
+                        dltoast.forEach(element => {
+                          element.onclick = function(){
+                            console.log("is click exits")
+                            element.parentElement.remove('toast')
+                          }
+                        })
                     })
                     .catch(error => {
                       console.error('Đã xảy ra lỗi:', error);
                     });
             }
-        });
+        });  
     </script>
   </body>
 </html>

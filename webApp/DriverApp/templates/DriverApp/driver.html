@@ -28,7 +28,7 @@
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="index.html">
-                    <h1 class="tm-site-title mb-0">Driver</h1>
+                    <h1 class="tm-site-title mb-0">Tài Xế</h1>
                 </a>
                 <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +40,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
                                 <i class="fas fa-tachometer-alt"></i>
-                                Dashboard
+                                Bảng điều khiển
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -68,7 +68,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link d-block" href="{% url 'logout_driver' %}">
-                               <b class="char_logout">Logout</b>
+                               <b class="char_logout">Đăng Xuất</b>
                             </a>
                         </li>
                     </ul>
@@ -79,14 +79,14 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <p class="block_welcome_driver">Welcome back , driver <b>{{request.driver.name_driver}}</b></p>
+                    <p class="block_welcome_driver">Chào mừng quay trở lại , Tài xế <b>{{request.driver.name_driver}}</b></p>
                 </div>
             </div>
             <!-- row -->
             <div class="row tm-content-row">
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block">
-                        <h2 class="tm-block-title">Map slots</h2>
+                        <h2 class="tm-block-title">Biểu đồ</h2>
                         
                         <canvas id="barChart"></canvas>
                         {% comment %} <canvas id="lineChart"></canvas>
@@ -111,7 +111,7 @@
                 </div> {% endcomment %}
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block-notification tm-block-taller tm-block-overflow">
-                        <h2 class="tm-block-title">Notification List</h2>
+                        <h2 class="tm-block-title">Danh Sách Thông Báo</h2>
                         <div class="tm-notification-items">
                             {% for order in driver_orders%}
                             <div class="media tm-notification-item"
@@ -130,13 +130,13 @@
                                     </div>
                                 </div>
                                 <div class="title_new">
-                                    <span class="char_new">New</span>
+                                    <span class="char_new">Mới</span>
                                 </div>
                                 <div class="media-body">
                                     <div>
                                         <p class="pd-title"><b>{{order.name_customer_order}}</b><a href="#"
                                             class="tm-notification-link"></a></p>
-                                        <span class="tm-small tm-text-color-secondary">slots : {{order.quantity_slot }} ___ Start day : {{order.day_schedule}}</span>   
+                                        <span class="tm-small tm-text-color-secondary">Số Chỗ : {{order.quantity_slot }} ___ Ngày đi : {{order.day_schedule}}</span>   
                                     </div>
                                     <div>
                                         <span class="tm-small tm-text-color-secondary">Thời gian đặt : {{order.pickup_daytime}}</span>
@@ -156,17 +156,17 @@
                 </div>  {% endcomment %}
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                        <h2 class="tm-block-title">Orders List</h2>
+                        <h2 class="tm-block-title">Danh Sách Đơn Đặt</h2>
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">NAME CUSTOMER</th>
-                                    <th scope="col">NAME SCHEDULE</th>
-                                    <th scope="col">SLOTS</th>
-                                    <th scope="col">PICKUP_LOCATION</th>
-                                    <th scope="col">DROPOFF_LOCATION</th>
-                                    <th scope="col">START TIME</th>                      
-                                    <th scope="col">START DAY</th>
+                                    <th scope="col">TÊN_NGƯỜI_ĐẶT</th>
+                                    <th scope="col">TÊN LỊCH TRÌNH</th>
+                                    <th scope="col">SỐ_CHỖ</th>
+                                    <th scope="col">ĐỊA ĐIỂM BẮT ĐẦU</th>
+                                    <th scope="col">ĐỊA ĐIỂM CUỐI</th>
+                                    <th scope="col">THỜI_GIAN_ĐI</th>                      
+                                    <th scope="col">NGÀY ĐI</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -187,17 +187,17 @@
                 </div>
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                        <h2 class="tm-block-title title_myschedules">My Schedules for the following days</h2>
+                        <h2 class="tm-block-title title_myschedules">DANH SÁCH CÁC LỊCH TRÌNH THEO NGÀY</h2>
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">SCHEDULE_ROUTE</th>
-                                    <th scope="col">NAME SCHEDULE</th>
-                                    <th scope="col">SLOTS</th>
-                                    <th scope="col">START_DAY</th>
-                                    <th scope="col">START_TIME</th>
-                                    <th scope="col">START LOCATION</th>
-                                    <th scope="col">END LOCATION</th>
+                                    <th scope="col">TUYẾN_LỊCH_TRÌNH</th>
+                                    <th scope="col">TÊN LỊCH TRÌNH</th>
+                                    <th scope="col">SỐ_CHỖ</th>
+                                    <th scope="col">NGÀY ĐI</th>
+                                    <th scope="col">THỜI_GIAN_ĐI</th>
+                                    <th scope="col">ĐỊA ĐIỂM BẮT ĐẦU</th>
+                                    <th scope="col">ĐỊA ĐIỂM CUỐI</th>
                                   
                                 </tr>
                             </thead>      
@@ -224,7 +224,7 @@
               <nav>
                 <div><a href="#" class="logo">Furin</a></div>
                 <div>
-                  <a href="#">Sẳn sàng đồng hành cùng bạn trong mọi chuyến đi</a>
+                  <a href="">Sẳn sàng đồng hành cùng bạn trong mọi chuyến đi</a>
                 </div>
               </nav>
             </div>
@@ -286,7 +286,7 @@
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Phone</h6>
+                          <h6 class="mb-0">Số điện thoại</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <span class="info_phone"></span>
@@ -295,7 +295,7 @@
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Address</h6>
+                          <h6 class="mb-0">Địa chỉ </h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <span class="info_address">{{request.customer.address_customer}} </span>

@@ -122,7 +122,7 @@
     <div class="notifi_sendemail">
         <div class="nav_sendemail">
             <div class="title_sendemail">
-                <p>Sendemail</p>
+                <p>Email xác thực đã được gửi</p>
             </div>
             <div class="icon_sendemail">
                 <div class="icon_success_sendemail"><img src="{%static 'images/icon_ss.png' %}"></div>
@@ -130,17 +130,17 @@
         </div>
         <div class="body_sendemail">
             <div class="body_sendemail_title">
-                <span> Successfully sent authentication email <span>
+                <span> Email xác thực đã được gửi tới email của bạn<span>
             </div>
             <div class="body_sendemail_content">
-                <span>We have sent a verification email to the email you just registered with. Please check your email and verify<span>
+                <span>Chúng tôi đã gửi một Email xác thực tới email mà bạn vừa dùng để đăng ký. Vui lòng kiểm tra email của bạn và xác thực<span>
             </div>
             <div class="bt_sendemail">
                 <div class="bt_route">
-                    <button class="bt_route--footer"><a href="https://mail.google.com/mail">Your Email</a></button>
+                    <button class="bt_route--footer"><a href="https://mail.google.com/mail">Tới Email</a></button>
                 </div>
                 <div class="bt_route">
-                    <button class="bt_route--footer"><a href="{% url 'home_customer_view' %}">Home</a></button>
+                    <button class="bt_route--footer"><a href="{% url 'home_customer_view' %}">Trang chủ</a></button>
                 </div>
             </div>
         </div>
@@ -197,16 +197,16 @@ console.log("notification"+notification);
 console.log(typeof notification)
 if(notification==='faild'){
     toast({
-        title: "Login failed",
-        content: "Your account or password is incorrect, please check again",
+        title: "Đăng nhập thất bại",
+        content: "Tài khoản hoặc mật khẩu bạn vừa nhập không chính xác, vui lòng thử lại!",
         typeicon: "error",
         duration: 8000
 
     })}
 else if (notification==='signup'){
     toast({
-        title: "Sign up failed",
-        content: "Email isexitst",
+        title: "Đăng ký thất bại",
+        content: "Email bạn vừa dùng để đăng ký đã tồn tại",
         typeicon: "error",
         duration: 8000
 
@@ -214,8 +214,8 @@ else if (notification==='signup'){
 }  
 else if(notification==='noverifi'){
     toast({
-        title: "Sign up failed",
-        content: "Email not verifi",
+        title: "Đăng nhập thất bại",
+        content: "Tài khoản bạn vừa đăng nhập chưa được xác thực , vui lòng xác thực và thử lại !",
         typeicon: "error",
         duration: 8000
 
@@ -223,8 +223,8 @@ else if(notification==='noverifi'){
 }
 else if(notification==='faildpass'){
     toast({
-        title: "Sign up failed",
-        content: "password is incorrect",
+        title: "Đăng Nhập thất bại ",
+        content: "Mật khẩu không chính xác",
         typeicon: "error",
         duration: 8000
 
@@ -232,8 +232,8 @@ else if(notification==='faildpass'){
 }
 else if(notification==='verifisuccess'){
     toast({
-        title: "Authentication",
-        content: "Email authentication successful",
+        title: "Xác thực thành công",
+        content: "Bạn vừa xác thực tài khoản thành công, hay đăng nhập ngay với tài khoản của mình",
         typeicon: "success",
         duration: 8000
 
@@ -247,7 +247,14 @@ else if(notification==='sendEmail'){
     container.classList.add('show')
 }  
   
-  
+const dltoast = document.querySelectorAll('.toast-exit');
+console.log("button_exit: ",dltoast)
+dltoast.forEach(element => {
+  element.onclick = function(){
+    console.log("is click exits")
+    element.parentElement.remove('toast')
+  }
+})   
 
         {% comment %} Handel toast {% endcomment %}
       

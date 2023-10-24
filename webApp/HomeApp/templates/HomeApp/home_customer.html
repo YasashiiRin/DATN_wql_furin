@@ -54,7 +54,7 @@
                       <div>
                          <i class="fa-solid fa-clock-rotate-left" style="color: #ffffff;"></i>
                       </div>
-                        <p class="nav_history" href="#">Book History</p>
+                        <p class="nav_history" href="#">Lịch Sử Đặt</p>
                       <div>
                         <i class="fa-solid fa-caret-down rotate_iconnext" style="color: #fff;"></i>
                       </div>
@@ -74,10 +74,10 @@
                                   {% comment %} <div class="block_info_img">Ngày đi : {{order.day_schedule}}</div> {% endcomment %}
                                   <div class="block__content__history">
                                     <div class="title_new">
-                                      <span class="char_new">New</span>
+                                      <span class="char_new">Mới</span>
                                     </div>
                                       <div class="content_history_book">
-                                        <p class="mb-2"><b> Name-Schedule : {{order.name_schedule_order}}</b>
+                                        <p class="mb-2"><b> Tên Chuyến Đi : {{order.name_schedule_order}}</b>
                                       </div>
                                       <div class ="content_history_book">
                                           <p href="#" class="tm-notification-link"> Số chỗ : {{order.quantity_slot}}</p>
@@ -118,7 +118,7 @@
                         <a href="{% url 'view_profile_customer' %}" class="nav__cta__link">
                           <i class="fa-regular fa-user" style="color: #ff4000;"></i>
                           <div class="nav__cta__function">
-                              <span class="nav__cta__functionname">Profile </span>
+                              <span class="nav__cta__functionname"> Hồ Sơ Cá Nhân </span>
                           </div>
                         </a>
                       </li>
@@ -126,7 +126,7 @@
                         <a href="{% url 'handle_logout' %}" class="nav__cta__link">
                           <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
                           <div class="nav__cta__function">
-                              <span class="nav__cta__functionname">Logout</span>
+                              <span class="nav__cta__functionname">Đăng Xuất</span>
                           </div>
                         </a>
                       </li>
@@ -175,16 +175,16 @@
                       <table class="table">
                           <thead>
                               <tr>
-                                  <th scope="col">NAME CAROWNER</th>
-                                  <th scope="col">STATUS_SLOTS</th>
-                                  <th scope="col">NAME DRIVER</th>
-                                  <th scope="col">TYPE_VEHICLE</th>
-                                  <th scope="col">QUANTITY_SLOT</th>
-                                  <th scope="col">IMAGE</th>
-                                  <th scope="col">STARTING_LOCATION</th>
-                                  <th scope="col">ENDING_LOCATION</th>
-                                  <th scope="col">START_TIME</th>
-                                  <th scope="col">START_DAY</th>
+                                  <th scope="col">Tên_Nhà_Xe</th>
+                                  <th scope="col">Trạng_Thái_Chỗ </th>
+                                  <th scope="col">Tên_Tài_Xế</th>
+                                  <th scope="col">Loại_Phương_Tiện </th>
+                                  <th scope="col">Số_Lượng_Chỗ</th>
+                                  <th scope="col">Hình Ảnh</th>
+                                  <th scope="col">Điểm_Xuất_Phát</th>
+                                  <th scope="col">Điểm_Kết_Thức</th>
+                                  <th scope="col">Giờ_Xuất_Phát</th>
+                                  <th scope="col">Ngày_Xuất_Phát</th>
                               </tr>
                           </thead>
                           <tbody>
@@ -218,7 +218,7 @@
                                      data-endlocation ="{{schedule.end_location}}"
                                      data-quantityslot ="{{schedule.vehicle.slot_vehicle}}"
                                      data-startday ="{{schedule.start_date}}"
-                                     >Book</button></td>
+                                     > Đặt</button></td>
                               </tr>
                               {% endfor %}
                           </tbody>
@@ -363,7 +363,7 @@
       <div class="nav_invoice">
         <div class="invoice_logo">
           <img class="incoive_logo_img" style="width:50px; height:50px;" src="{% static 'images/logo_light.png' %}"></img>
-          <a href="#" class="logo">Invoice</a>
+          <a href="#" class="logo">Hóa Đơn</a>
         </div>
         <div class="invoice_conten_right">
           <div class="span_iconoutbook">✘</div>
@@ -376,7 +376,7 @@
         <div class="invoice_container_conten">
           <div class="invoice_info_book">
             <div class="invoice_info_book-title">
-              <p>Driver: </p>
+              <p>Tài xế: </p>
             </div>
             <div>
             <p class="drivername">none</p>
@@ -384,38 +384,38 @@
           </div>
           <div class="invoice_info_book">
             <div class="invoice_info_book-title">
-              <p>Vehicle: </p>
+              <p>Loại phương tiện: </p>
             </div>
             <p class="vehicletype">none</p>
           </div>
           <div class="invoice_info_book">
             <div class="invoice_info_book-title">
-              <p>Start location: </p>
+              <p>Điểm bắt đầu: </p>
             </div>
             <p class="startlocation">none</p>
           </div>
           <div class="invoice_info_book">
             <div class="invoice_info_book-title">
-              <p>End location: </p>
+              <p>Điểm đến: </p>
             </div>
             <p class="endlocation">none</p>
           </div>
           <div class="invoice_info_book">
             <div class="invoice_info_book-title">
-              <p>Start day : </p>
+              <p>Ngày đi: </p>
             </div>
             <p class="startday">none</p>
           </div>
           <div class="invoice_info_book">
             <div class="invoice_info_book-title">
-              <p>Choses quantity slots: </p>
+              <p>Số lượng chỗ muốn đặt: </p>
             </div>
             <input  class="input_quantity" type="number" name="quantity" min="1" max="5">
           </div>
         </div>
       </div>
       <div class="invoice_footer">
-        <button class="invoice_bt">Confirm</button>
+        <button class="invoice_bt">Xác nhận</button>
       </div>
     </div>
     <div id="tagtoast">
@@ -424,7 +424,9 @@
     <script src="{% static 'JS/toast_customer_form.js' %}"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        
+
+      
+          
           const input_quantity= document.querySelector('.input_quantity')
           const invoice = document.querySelector('.invoice_block_book')
           const container = document.querySelector('.container')
@@ -537,6 +539,14 @@
                     
                         })
                       }
+                      const dltoast = document.querySelectorAll('.toast-exit');
+                      console.log("button_exit: ",dltoast)
+                      dltoast.forEach(element => {
+                        element.onclick = function(){
+                          console.log("is click exits")
+                          element.parentElement.remove('toast')
+                        }
+                      }) 
                   })
                   .catch(error => {
                       console.error("Đã xảy ra lỗi:", error);
@@ -662,6 +672,7 @@
                         })  
                           container.classList.remove("show");
                           invoice.style.display ='none'
+                          
                       } else if (data.error_Cancel) {
                           const data_err = data.error_Cancel;
                           toast({
@@ -672,6 +683,14 @@
                     
                         })
                       }
+                      const dltoast = document.querySelectorAll('.toast-exit');
+                      console.log("button_exit: ",dltoast)
+                      dltoast.forEach(element => {
+                        element.onclick = function(){
+                          console.log("is click exits")
+                          element.parentElement.remove('toast')
+                        }
+                      }) 
                   })
                   .catch(error => {
                       console.error("Đã xảy ra lỗi:", error);
@@ -680,7 +699,6 @@
               });
             
       });
-
       const notification = "{{notifi_search}}";
           console.log("waiting notifi search ")
           console.log(notification)
@@ -711,15 +729,14 @@
               
                   })  
               }
-              
-                const main = document.querySelector('#tagtoast');
-                const dltoast = document.querySelector('.toast-exit');
-                console.log(dltoast)
-                console.log(main)
-                dltoast.onclick = function(){
-                  console.log("remove toast")
-                  main.remove();
-              }          
+                const dltoast = document.querySelectorAll('.toast-exit');
+                console.log("button_exit: ",dltoast)
+                dltoast.forEach(element => {
+                  element.onclick = function(){
+                    console.log("is click exits")
+                    element.parentElement.remove('toast')
+                  }
+                })        
   </script>
   
   </body>

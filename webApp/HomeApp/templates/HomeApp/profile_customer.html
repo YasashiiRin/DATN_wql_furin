@@ -12,7 +12,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> {% endcomment %}
     <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'CSS/fontawesome.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_customer_form.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_profile_customer.css' %}">
     <link
       rel="icon"
       type="image/x-icon"
@@ -27,9 +27,8 @@
               <!-- Breadcrumb -->
               <nav aria-label="breadcrumb" class="main-breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="{% url 'home_customer_view' %}">Home</a></li>
-                  <li class="breadcrumb-item"><a href="">Profile</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Customer Profile</li>
+                  <li class="breadcrumb-item"><a href="{% url 'home_customer_view' %}">Giao Diện Chính</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> Hồ Sơ Cá Nhân</li>
                 </ol>
               </nav>
               <!-- /Breadcrumb -->
@@ -82,7 +81,7 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Full Name</h6>
+                          <h6 class="mb-0">Tên </h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <span class="info_fullname">{{request.customer.name_customer}} </span>
@@ -100,7 +99,7 @@
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Phone</h6>
+                          <h6 class="mb-0">Số Điện Thoại</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <span class="info_phone">{{request.customer.phone_customer}}</span>
@@ -109,7 +108,7 @@
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Address</h6>
+                          <h6 class="mb-0">Địa Chỉ</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <span class="info_address">{{request.customer.address_customer}} </span>
@@ -127,7 +126,7 @@
                       <hr>
                       <div class="row">
                         <div class="col-sm-12">
-                          <a class="btn btn-info " target="__blank" href="{% url 'view_editprofile' %}">Edit</a>
+                          <a class="btn btn-info " target="__blank" href="{% url 'view_editprofile' %}">Chỉnh sửa thông tin</a>
                         </div>
                       </div>
                     </div>
@@ -142,8 +141,9 @@
     
             </div>
     </div>
-        <div id="tagtoast">
-        </div>
+    <div id="tagtoast">
+      </div>
+        <script src="{% static 'JS/toast_profile_customer.js' %}"></script>
         <script>
 
         </script>

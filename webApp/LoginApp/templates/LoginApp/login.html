@@ -26,7 +26,7 @@
                 <div class="form-info">
                     <div class="tableform">
                         <div class="tableformcell">
-                            <p>have an account?</p>
+                            <p>Have an account?</p>
                             <div class="btn">
                                 Log in
                             </div>
@@ -120,7 +120,7 @@
     <div class="notifi_sendemail">
         <div class="nav_sendemail">
             <div class="title_sendemail">
-                <p>Sendemail</p>
+                <p>Email xác thực đã được gửi</p>
             </div>
             <div class="icon_sendemail">
                 <div class="icon_success_sendemail"><img src="{%static 'images/icon_ss.png' %}"></div>
@@ -128,10 +128,10 @@
         </div>
         <div class="body_sendemail">
             <div class="body_sendemail_title">
-                <span> Successfully sent authentication email <span>
+                <span> Email xác thực đã được gửi tới email của bạn <span>
             </div>
             <div class="body_sendemail_content">
-                <span>We have sent a verification email to the email you just registered with. Please check your email and verify<span>
+                <span>Chúng tôi đã gửi một Email xác thực tới email mà bạn vừa dùng để đăng ký. Vui lòng kiểm tra email của bạn và xác thực<span>
             </div>
             <div class="bt_sendemail">
                 <div class="bt_route">
@@ -191,16 +191,16 @@ console.log("notification"+notification);
 console.log(typeof notification)
 if(notification==='faild'){
     toast({
-        title: "Login failed",
-        content: "Your account or password is incorrect, please check again",
+        title: "Đăng nhập thất bại",
+        content: "Tài khoản hoặc mật khẩu bạn vừa nhập không chính xác!",
         typeicon: "error",
         duration: 8000
 
     })}
 else if (notification==='verifi_isexists'){
     toast({
-        title: "Email is Exists",
-        content: "Email is Exists",
+        title: "Tài khoản đã được xác thực",
+        content: "Tài khoản bạn vừa nhập đã được xác thực , vui lòng điền tài khoản khác",
         typeicon: "error",
         duration: 8000
 
@@ -208,8 +208,8 @@ else if (notification==='verifi_isexists'){
 } 
 else if(notification==='isNoneAccount'){
     toast({
-        title: "account does not have sufficient permissions",
-        content: "The account does not have sufficient permissions to perform this action",
+        title: "Tài khoản không đủ quyền",
+        content: "Tài khoản bạn vừa nhập không đủ quyền để thực hiện hành động này!",
         typeicon: "error",
         duration: 8000
 
@@ -217,8 +217,8 @@ else if(notification==='isNoneAccount'){
 }
 else if(notification==='verifisuccess'){
     toast({
-        title: "Authentication",
-        content: "Email authentication successful",
+        title: "Xác thực thành công",
+        content: "Bạn vừa xác thực tài khoản thành công, hãy đăng nhập ngay bằng tài khoản của bạn",
         typeicon: "success",
         duration: 8000
 
@@ -231,7 +231,14 @@ else if(notification==='sendEmail'){
     blocksendemail.style.display = 'block' 
     container.classList.add('show')
 }    
-  
+const dltoast = document.querySelectorAll('.toast-exit');
+console.log("button_exit: ",dltoast)
+dltoast.forEach(element => {
+  element.onclick = function(){
+    console.log("is click exits")
+    element.parentElement.remove('toast')
+  }
+})   
 
         {% comment %} Handel toast {% endcomment %}
       

@@ -1,10 +1,11 @@
+
 function toast({
     title = '',
     content = '',
     typeicon = 'Success',
-    duration = 4000
+    duration = 8000
 }) {
-    const main = $('#tagtoast');
+    const blockmain = document.getElementById('tagtoast');
     const icons = {
         success: "fa-solid fa-circle-check",
         error: "fa-solid fa-circle-exclamation"
@@ -18,7 +19,7 @@ function toast({
     // else if (typeicon === 'error') {
     //     checkicon = icons.error;
     // }
-    if (main) {
+    if (blockmain) {
         const toast = document.createElement('div');
         toast.classList.add('toast', `toast--${typeicon}`);
         toast.style.animation = `slidetoast ease 1s, opc linear 1s ${delay}s forwards`;
@@ -41,9 +42,9 @@ function toast({
          </div>
    
           `;
-        main.appendChild(toast);
+          blockmain.appendChild(toast);
         setTimeout(function() {
-            main.removeChild(toast);
+            blockmain.removeChild(toast);
         }, duration)
     }
 }
