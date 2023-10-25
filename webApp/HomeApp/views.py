@@ -22,8 +22,15 @@ from datetime import datetime
 from CarownerApp.models import CustomSession
 from django.contrib.sessions.models import Session
 def homeview(request):
-    
-    return render(request, 'HomeApp/home.html')
+    my_filter_form = YourFilterForm()
+    current_date = timezone.localtime(timezone.now()).date()
+    current_time = timezone.localtime(timezone.now()).time()
+    filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
+    all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
+    return render(request, 'HomeApp/home.html',{
+        'schedules' :all_shedules,
+        'my_filter_form' : my_filter_form,
+    })
 def home_customer_view(request):
     if 'customer_sessionid' in request.session:
         print("has session customer.....")
@@ -53,6 +60,11 @@ def controller_redirect_regisCustomer(request):
 
 
 def handle_logout(request):
+    my_filter_form = YourFilterForm()
+    current_date = timezone.localtime(timezone.now()).date()
+    current_time = timezone.localtime(timezone.now()).time()
+    filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
+    all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
     try:
         session_key = request.session.get(settings.CUSTOMER_SESSION_COOKIE_NAME)
         if session_key:
@@ -66,7 +78,10 @@ def handle_logout(request):
     except:
         print("customer is logout...................")
         pass        
-    return render(request, 'HomeApp/home.html')
+    return render(request, 'HomeApp/home.html',{
+        'schedules' :all_shedules,
+        'my_filter_form' : my_filter_form,
+    })
 
 def custom_logout(request):
     # session_key_to_delete = request.session.session_key
@@ -189,33 +204,6 @@ def search_customer(request):
         if my_filter_form.is_valid():
             print("isvalid")
             search_query = my_filter_form.cleaned_data.get('search_query', '')
-            # search_carowner = my_filter_form.cleaned_data.get('search_carowner')
-            # search_slot = my_filter_form.cleaned_data.get('search_slot')
-            # search_start_location = my_filter_form.cleaned_data.get('search_start_location')
-            # search_end_location = my_filter_form.cleaned_data.get('search_end_location')
-            # search_start_time = my_filter_form.cleaned_data.get('search_start_time')
-            # search_name_driver = my_filter_form.cleaned_data.get('search_name_driver')
-            # print("isvali: :" ,search_slot)
-            # print("isvali: :" ,search_end_location)
-            # print("isvali: :" ,search_name_driver)
-            # query = Q()
-
-            # # if search_carowner:
-            # #     query |= Q(vehicle__driver__carowner__username=search_carowner)
-
-            # if search_slot:
-            #     query |= Q(slot_vehicle = search_slot)
-
-            # if search_start_location:
-            #     query |= Q(start_location=search_start_location)
-
-            # if search_end_location:
-            #     query |= Q(end_location=search_end_location)    
-
-            # if search_name_driver:
-            #     query |= Q(vehicle__driver__name_driver=search_name_driver)      
-
-            # filtered_schedules = Schedules.objects.filter(query) 
             time_years = search_query.split('-')
             time_parts = search_query.split(':')
             time_with_vn = search_query.split(' ')
@@ -314,6 +302,114 @@ def search_customer(request):
              print("novalid")
 
     return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules_return,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
+def search_home(request):
+
+    current_date = timezone.localtime(timezone.now()).date()
+    current_time = timezone.localtime(timezone.now()).time()
+    filtered_schedules_return = Schedules.objects.select_related('vehicle__driver__carowner').all()
+    all_shedules_return= [schedule for schedule in filtered_schedules_return if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
+    my_filter_form = YourFilterForm()
+    if request.method == 'GET':
+        my_filter_form = YourFilterForm(request.GET)
+        if my_filter_form.is_valid():
+            print("isvalid")
+            search_query = my_filter_form.cleaned_data.get('search_query', '')
+            time_years = search_query.split('-')
+            time_parts = search_query.split(':')
+            time_with_vn = search_query.split(' ')
+            if search_query.isdigit():
+                print("is integer")
+                filtered_schedules = Schedules.objects.filter(
+                    Q(slot_vehicle= int(search_query)) # Tìm kiếm theo năm
+                )       
+            elif len(time_parts) >=2 :
+                print(time_parts)
+                try:
+                    hour = int(time_parts[0])
+                    minute = int(time_parts[1])
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(start_time__hour =hour, start_time__minute =minute)
+                    )
+                except ValueError:
+                    pass
+            elif len(time_years) >=2 :
+                print(time_years)
+                try:
+                    month = int(time_years[0])
+                    day = int(time_years[1])
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(start_date__month = month, start_date__day = day)
+                    )
+                except ValueError:
+                    pass
+            elif len(time_with_vn) >= 2:
+                if time_with_vn[0] == 'ngày' or time_with_vn[0] == 'Ngày':
+                    print("search time vn:",time_with_vn)
+                    try:
+                        day = int(time_with_vn[1])
+                        filtered_schedules = Schedules.objects.filter(
+                            Q(start_date__day = day)
+                        )
+                        if len(time_with_vn) >=3:
+                            month = int(time_with_vn[2])
+                            filtered_schedules = Schedules.objects.filter(
+                                Q( start_date__month= month,start_date__day = day)
+                            )
+                    except ValueError:
+                        pass 
+                elif time_with_vn[0] == 'tháng' or time_with_vn[0] == 'Tháng':
+                    print("search time vn:",time_with_vn)
+                    try:
+                        month = int(time_with_vn[1])
+                        filtered_schedules = Schedules.objects.filter(
+                            Q(start_date__month = month)
+                        )
+                        if len(time_with_vn) >=3:
+                            day = int(time_with_vn[2])
+                            filtered_schedules = Schedules.objects.filter(
+                                Q( start_date__month= month, start_date__day = day)
+                            )
+                    except ValueError:
+                        pass
+                else:
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(vehicle__driver__carowner__username__icontains=search_query) |
+                        Q(vehicle__driver__name_driver__icontains = search_query) |
+                        Q(start_location__icontains=search_query) |
+                        Q(end_location__icontains=search_query) |
+                        Q(vehicle__type_vehicle__icontains=search_query)
+                    )
+            else:
+                filtered_schedules = Schedules.objects.filter(
+                Q(vehicle__driver__carowner__username__icontains=search_query) |
+                Q(start_location__icontains=search_query) |
+                Q(end_location__icontains=search_query) |
+                Q(vehicle__type_vehicle__icontains=search_query)
+            )
+            try:
+                searchvalue = ''
+                all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)] 
+                if not all_shedules :
+                    searchvalue = 'search_err'
+                else:
+                    searchvalue = 'search_success'
+                return render(request, 'HomeApp/home.html', {
+                    'my_filter_form': my_filter_form,
+                    'schedules': all_shedules,
+                    'current_date' : current_date,
+                    'notifi_search' : searchvalue
+                })
+            except:
+                return render(request, 'HomeApp/home.html', {
+                    'my_filter_form': my_filter_form,
+                    'schedules': '',
+                    'current_date' : current_date,
+                    'notifi_search' : 'search_err'
+                })
+        else:
+             print("novalid")
+
+    return render(request, 'HomeApp/home.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules_return,'notifi_search' : 'search_err' })
 
 def upload_images(request,customerid):
     my_filter_form = ImageUploadForm()

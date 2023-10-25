@@ -390,7 +390,9 @@
     left: 0;
     position: relative;
   } */
-  
+  /* LIST SCHEDULE TABLE */
+
+
   /* BUSINESS HEADER */
   
   section#business-header {
@@ -428,6 +430,7 @@
     font-family: cursive;
   }
   .engagements__section__flex img{
+    width: 100%;
     height: 260px;
     border-radius: 3px;
   }
@@ -460,7 +463,7 @@
     margin-bottom: 6px;
   }
   .split.home__conten{
-    /* border-left: 2px solid #f3f3f3; */
+    margin-left: 80px;
   }
   /* engagements SECTION */
   

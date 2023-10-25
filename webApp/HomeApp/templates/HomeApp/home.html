@@ -12,8 +12,8 @@
     <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
     <script src="{% static 'JS/style.js' %}"></script>
     <link rel="stylesheet" href="{% static 'CSS/fontawesome.min.css' %}">
-
     <link rel="stylesheet" href="{% static 'CSS/templatemo-style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_home.css' %}">
     <link
       rel="icon"
       type="image/x-icon"
@@ -27,62 +27,17 @@
         <nav>
           <div>
             <img class="logo_img" style="width:50px; height:50px;" src="{% static 'images/logo_light.png' %}"></img>
-            <a href="#" class="logo">Furin</a>
+            <a  class="logo">Furin</a>
             <ul class="nav-links">
-              <li><a class="nav__hover" href="#">Chính sách</a></li>
-              <li><a class="nav__hover" href="#">Liên hệ</a></li>
+              <li><a class="nav__hover" href="https://www.facebook.com/ran432001/">Chính sách</a></li>
             </ul>
           </div>
           <div>
             <ul id="nav-links" class="nav-links">
               <li><a class="nav__hover" href="https://www.facebook.com/ran432001/">Facebook</a></li>
-              {% comment %} {% if request.customer %}
-              <li>
-                <div class="nav__cta__info--has-menu">
-                  <div class="nav__cta__info">
-                    <p class="nav__cta">{{request.customer.name_customer}}</p>
-                    <p class="nav__mores"><i class="fa-solid fa-caret-down" style="color: #ff4405;"></i></p>
-                  </div>
-                  <div class="nav__cta__menu">
-                    <ul class="nav__cta__list">
-                      <li class="nav__cta__item">
-                        <a href="{% url 'handle_logout' %}" class="nav__cta__link">
-                          <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
-                          <div class="nav__cta__function">
-                              <span class="nav__cta__functionname">Logout</span>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="nav__cta__item">
-                        <a href="" class="nav__cta__link">
-                          <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
-                          <div class="nav__cta__function">
-                              <span class="nav__cta__functionname">function </span>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="nav__cta__item">
-                        <a href="" class="nav__cta__link">
-                          <i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4000;"></i>
-                          <div class="nav__cta__function">
-                              <span class="nav__cta__functionname">function</span>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </li>
-              {% else %} {% endcomment %}
               <li><a class="nav__hover" href="{% url 'controller_redirect_regisCustomer'%}">Log in</a></li> 
               <li><a class="nav__noLogin" href="{% url 'controller_redirect_regisCustomer'%}" class="nav__cta">Sign up</a></li>
-              {% comment %} {% endif %} {% endcomment %}
             </ul>
-          </div>
-          <div class="hamburger">
-            <span class="hamburger-bar"></span
-            ><span class="hamburger-bar"></span>
-            <span class="hamburger-bar"></span>
           </div>
         </nav>
       </div>
@@ -114,8 +69,6 @@
                 Sẳn sàng để vào giao diện quản lý của bạn chưa 
               </p>
               <a href="{% url 'redirectRegister' %}" class="btn">Đăng Nhập</a>
-              <a href="#" class="" 
-              >
             </div>
             <div class="main__cta__text active">
               <h1>Đăng nhập Tài xế </h1>
@@ -123,8 +76,6 @@
                 Sẳn sàng để vào giao diện của bạn chưa và bắt đầu với các chuyến đi thú vị
               </p>
               <a href="{% url 'driver_login_view' %}" class="btn">Đăng Nhập</a>
-              <a href="#" class="" 
-              >
             </div>
             <div class="main__cta__text ">
               <h1>Bạn đã có tài khoản?</h1>
@@ -132,13 +83,81 @@
                 Hãy đăng nhập vào tài khoản của bạn để bắt đầu chuyến đi cùng chúng tôi
               </p>
               <a href="{% url 'controller_redirect_regisCustomer' %}" class="btn">Đăng Nhập</a>
-              <a href="#" class="" 
-              >
             </div>
           </div>
           {% comment %} ----------------------------- {% endcomment %}
         </div>
       </div>
+    </section>
+    <section class="list_schedule_notlogin">
+      <div class="block_title_list_schedules">
+        <div class="">
+          <h2 class="tm-block-title_nologin"> Danh sách chuyến đi </h2>
+        </div>
+        <div class="block_search_form">
+          <div class="tm-bg-primary-dark-block_book_car">
+            {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
+            <form method="GET" action="{% url 'search_home' %}" class="search-form">
+              <div class="input_book_car">
+                  {{ my_filter_form.as_p }}
+                  <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                    color: #ff8276;"></i></button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 tm-block-col block_info_schedules_nologin">
+        <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Tên_Nhà_Xe</th>
+                        <th scope="col">Trạng_Thái_Chỗ </th>
+                        <th scope="col">Tên_Tài_Xế</th>
+                        <th scope="col">Loại_Phương_Tiện </th>
+                        <th scope="col">Số_Lượng_Chỗ</th>
+                        <th scope="col">Hình Ảnh</th>
+                        <th scope="col">Điểm_Xuất_Phát</th>
+                        <th scope="col">Điểm_Kết_Thức</th>
+                        <th scope="col">Giờ_Xuất_Phát</th>
+                        <th scope="col">Ngày_Xuất_Phát</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for schedule in schedules %}
+                    <tr>
+                        <th scope="row"><b>{{schedule.vehicle.driver.carowner.username}}</b></th>
+                        <td>
+                          {%if schedule.slot_vehicle == 0 %}
+                            <div class="tm-status-circle isfull">
+                            </div>Is Full
+                          {%else%}
+                            <div class="tm-status-circle notfull">
+                            </div>Not Full
+                          {%endif%}  
+                        </td>
+                        <td><b>{{schedule.vehicle.name_driver}}</b></td>
+                        <td><b>{{schedule.vehicle.type_vehicle}}</b></td>
+                        <td><b>{{schedule.slot_vehicle}}</b></td>
+                        <td><img style="border-radius:3px;" class="list_img_vehicle" data-img-vehilce="{{ schedule.vehicle.img_vehicle.url }}" src="{{schedule.vehicle.img_vehicle.url}}"></td>
+                        <td><b>{{schedule.start_location}}</b></td>
+                        <td><b>{{schedule.end_location}}</b></td>
+                        <td>{{schedule.start_time}}</td>
+                        <td>{{schedule.start_date}}</td>
+                        {%if request.customer%}
+                        <td><button class="bt_book_car"><a href="{% url 'home_customer_view' %}"> Đặt</a></button></td>
+                        {%else%}
+                        <td><button class="bt_book_car"><a href="{% url 'controller_redirect_regisCustomer' %}"> Đặt</a></button></td>
+                        {%endif%}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     </section>
     <section id="business-header">
       <div class="container">
@@ -150,7 +169,6 @@
            Lý do chính kéo tôi vào cuộc hành trình , chỉ đơn giản là những
            khung hình trong đôi mắt mình thay đổi khi những con đường lướt qua
           </p>
-          {% comment %} <a href="#" class="btn">Bắt đầu đặt</a> {% endcomment %}
         </div>
       </div>
     </section>
@@ -203,11 +221,9 @@
               Không bi huệ thảo tồi.
             </p>
             <div class="Home__conten__footer">
-              <a href="#" class=""
-              ><i class="fa-solid fa-book-open"></i> Khám phá điều lệ </a
-            >
+              <a href="#" class="style_margin_bottom"><i class="fa-solid fa-book-open"></i> Khám phá điều lệ </a>
             <a href="#" class="footer"
-              ><i class="fa-solid fa-angles-right"></i> xem thêm tính năng bảo mật</a
+              ><i class="fa-solid fa-angles-right "></i> xem thêm tính năng bảo mật</a
             >
             </div>
           </div>
@@ -228,7 +244,7 @@
               tôi sẻ cho bạn biết nguồn động lực và ý tưởng để chúng tôi làm ra website này. 
 
             </p>
-            <a href="#" class="text-cta">Tìm hiểu thêm</a>
+            <p class="text-cta">Tìm hiểu thêm</p>
           </div>
           <div class="infos__section__card">
             <img
@@ -239,7 +255,7 @@
             <p class="sous-titre">
               Nơi chúng tôi chia sẻ những thông tin những câu chuyện về những chuyến đi của chúng tôi
             </p>
-            <a href="#" class="text-cta">Tìm hiểu thêm</a>
+            <p class="text-cta">Tìm hiểu thêm</p>
           </div>
           <div class="infos__section__card">
             <img
@@ -250,7 +266,7 @@
             <p class="sous-titre">
               Chúng tôi sẻ cho bạn biết dự định của bản thân ý tưởng phát triển trong tương lai.
             </p>
-            <a href="#" class="text-cta">Tìm hiểu thêm</a>
+            <a class="text-cta">Tìm hiểu thêm</a>
           </div>
         </div>
       </div>
@@ -259,16 +275,94 @@
     <footer class="bg-dark">
       <div class="container">
         <nav>
-          <div><a href="#" class="logo">Furin</a></div>
+          <div><a class="logo">Furin</a></div>
           <div>
-            <a href="#">Sẳn sàng đồng hành cùng bạn trong mọi chuyến đi</a>
+            <p>Sẳn sàng đồng hành cùng bạn trong mọi chuyến đi</p>
           </div>
         </nav>
       </div>
     </footer>
+    <div class ="display_img_click">
+      <img class="display_img_item">
+      <span class="display_img_button_exit">✘</span>
+    </div>
+    <div id="tagtoast">
+    </div>
     <script src="{% static 'JS/book.js' %}"></script>
+    <script src="{% static 'JS/toast_customer_form.js' %}"></script>
     <script>
-      AOS.init();
+
+      document.addEventListener("DOMContentLoaded", function () {
+
+        const container = document.querySelector('.container')
+
+        list_img_vehicle = document.querySelectorAll('.list_img_vehicle')
+        console.log("list img",list_img_vehicle)
+        list_img_vehicle.forEach(imglist => {
+          imglist.addEventListener("click", function () {
+            const display_img_click = document.querySelector('.display_img_click')
+            const img_get = this.getAttribute('data-img-vehilce')
+            const img_item = document.querySelector('.display_img_item')
+            const img_bt_exit = document.querySelector('.display_img_button_exit')
+            console.log("get_img :",img_get)
+            display_img_click.style.display = 'block'
+            img_item.src = img_get;
+            console.log("background black: ",container)
+            container.classList.add("show");
+            img_bt_exit.onclick= function(){
+              display_img_click.style.display = 'none'
+              container.classList.remove("show");
+            }
+            
+          })
+        })
+
+
+      })
+      const notification = "{{notifi_search}}";
+          console.log("waiting notifi search ")
+          console.log(notification)
+                  if(notification==='search_success'){
+                    toast({
+                        title: "Found Results",
+                        content: "you just performed a search action",
+                        typeicon: "success",
+                        duration: 8000
+                
+                      })
+                      const targetElement = document.querySelector('.list_schedule_notlogin');
+                      if (targetElement) {
+                        targetElement.scrollIntoView();
+                        window.scrollBy(0, -68);
+                      }
+                  }
+                  else if (notification==='search_err'){
+                    toast({
+                        title: "Not Found",
+                        content: "The keyword you entered was not found, or you may have entered the wrong format of the keyword",
+                        typeicon: "error",
+                        duration: 8000
+                
+                    })  
+                }
+                else if (notification==='sessionfail'){
+                  toast({
+                      title: "Session Failed",
+                      content: "waiting or refresh page",
+                      typeicon: "error",
+                      duration: 8000
+              
+                  })  
+              }
+                const dltoast = document.querySelectorAll('.toast-exit');
+                console.log("button_exit: ",dltoast)
+                dltoast.forEach(element => {
+                  element.onclick = function(){
+                    console.log("is click exits")
+                    element.parentElement.remove('toast')
+                  }
+                })        
+
     </script>
   </body>
 </html>

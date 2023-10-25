@@ -366,8 +366,9 @@
     position: relative;
   }
   section#main__cta_customer{
-    padding-block: 2rem;
-  
+ 
+    padding-top: 15px;
+    padding-bottom: 30px;
     background-image: url("../images/bg26.jpg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -424,10 +425,16 @@
   }
   .display_img_button_exit{
     position: fixed;
+    width: 31px;
+    height: 31px;
+    padding: 0px 5px 38px 5px;
     top: 148px;
     right: 348px;
-    color: #ff2828;
+    color: #efff69;
     font-size: 26px;
+    cursor: pointer;
+    background-color: #00000073;
+    border-radius: 5px;
   }
   /* --------------------invoice--------------------------- */
   .invoice_block_book{
@@ -467,6 +474,7 @@
     height: 30px;
     font-size: 26px;
     color:rgb(255 86 39);
+    cursor: pointer;
   }
   .invoice_conten_right a {
     color: rgb(0, 0, 0);

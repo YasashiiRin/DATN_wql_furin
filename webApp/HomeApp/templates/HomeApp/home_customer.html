@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/style_home_customer.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'CSS/UI_customer.css' %}">
     {% comment %} <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> {% endcomment %}
     <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
@@ -169,9 +168,10 @@
                   </div>  {% endcomment %}
                 </div >
             </div>
-              <div class="col-12 tm-block-col block_info_schedules">
+              <div class="col-12 tm-bg-primary-dark tm-block-col block_info_schedules">
+                <h2 class="tm-block-title">Danh sách các chuyến đi </h2>
                   <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                      <h2 class="tm-block-title">Danh sách các chuyến đi </h2>
+                      
                       <table class="table">
                           <thead>
                               <tr>
@@ -457,9 +457,10 @@
               console.log("get_img :",img_get)
               display_img_click.style.display = 'block'
               img_item.src = img_get;
-
+              container.classList.add("show");
               img_bt_exit.onclick= function(){
                 display_img_click.style.display = 'none'
+                container.classList.remove("show");
               }
               
             })

@@ -60,20 +60,20 @@ button:focus {
   margin-top: 20px;
 }
 .block_info_schedules{
-  width: 1168px;
+  width: 1211px;
   height: 468px;
 }
 .tm-block-col {
   margin-bottom: 3px;
 }
 .tm-block {
-  padding: 40px;
+  padding: 1px 40px 40px 40px;
   -webkit-box-shadow: 1px 1px 5px 0 #455c71;
   -moz-box-shadow: 1px 1px 5px 0 #455c71;
   box-shadow: 1px 1px 5px 0 #455c71;
   min-height: 350px;
   height: 100%;
-  max-height: 468px;
+  max-height: 436px;
 }
 .tm-block-avatar,
 .tm-block-settings {
@@ -97,7 +97,7 @@ button:focus {
   font-size: 1.1rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 30px;
+  padding: 15px 0 15px 37px;
 }
 .nav-link {
   color: #fff;
@@ -161,7 +161,7 @@ button:focus {
 }
 .tm-content-row {
   justify-content: space-between;
-  margin-left: -20px;
+  margin-left: -41px;
   margin-right: -20px;
 }
 .tm-col {
