@@ -787,6 +787,8 @@ input[type="checkbox"]:focus {
 p.pd-title{
   margin-bottom: 0.18rem!important;
 }
+
+
 .notifi_sendemail{
   display: none;
   position: fixed;

@@ -203,7 +203,7 @@ class ScheduleAdmin(admin.ModelAdmin):
                 max_start_schedules.append(schedule)
         messages_list = []        
         for schedule in max_start_schedules:
-            messages_item = f'<div class="info1">Name Schedule : {schedule.name_schedule} - Driver: {schedule.vehicle.driver}</div>   <div class="info2">Max start_day : {schedule.start_date}</div>'
+            messages_item = f'<div class="info1">Name Schedule : {schedule.name_schedule} - Driver: {schedule.vehicle.name_driver} - Lịch trình số: {schedule.label_schedule}</div>   <div class="info2">Max start_day : {schedule.start_date}</div>'
             messages_list.append(mark_safe(messages_item))
             # print(f"Vehicle ID: {schedule.vehicle.email_driver}, Max Start Day: {schedule.start_date}")
         for message in messages_list:

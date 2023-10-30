@@ -108,8 +108,22 @@ body{
     border-top: 1px solid #e9a986;
     border-right: 1px solid #e9a986;
 }
+.bt_primary{
+    font-weight: 500;
+    color: #fff;
+    background: #254e87;
+    border-radius: 6px;
+    border-left: 2px solid #ffaa40;
+    border-bottom: 2px solid #e9a986;
+    border-top: 1px solid #e9a986;
+    border-right: 1px solid #e9a986;
+}
 .custom_image_upload{
     margin-top: 8px;
     outline: 1px solid #61b7e0;
     color: #8e8e8e;
+}
+.btn-save_edit{
+    width: 152px;
+    height: 37px;
 }

@@ -192,10 +192,11 @@
     content: "";
     display: block;
     position: absolute;
-    width: 568px;
+    width: 377px;
     height: 50px;
     right: 247px;
     top: 57px;
+    /* background-color: #32c2ff; */
   }
   .title_new{
     margin-right: 3px;
@@ -238,6 +239,7 @@
     height: 50px;
     right: 0;
     top: -43px;
+    background-color: #2f2a50;
   }
   /* .nav__cta:hover {
     background: var(--clr-neutral-100);
@@ -249,7 +251,8 @@
     top: 99px;
     right:0;
     width: 300px;
-    background-color: rgba(60, 60, 60, 60%);
+    width: 300px;
+    background-color: rgb(23 21 35 / 88%);
     z-index: 99;
     border-radius: 2px;
     transform-origin: 60% top;
@@ -289,14 +292,14 @@
 }
 .nav__cta__link{
   display:flex;
-  width: 130px;
+  width: 154px;
   align-items: center;
   margin: auto;
-  background-color: #fbe3da;
+  background-color: #ffffff;
   border-bottom: 1px solid #d3d3d3;
   border-radius: 15px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 18px;
+  margin-bottom: 18px;
 }
 .nav__cta__function{
   margin-left: 8px;
@@ -382,6 +385,31 @@
 
   }
 
+  
+
+  .question_mark--icon{
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+  }
+  .search_policy{
+    display: none;
+    position: fixed;
+    right: 25%;
+    top: 119px;
+    z-index: 999;
+    transform-origin: 50% top;
+    animation:hiddenSmooth ease 0.26s;
+  }
+  .img_search_policy{
+    border-radius: 3px;
+  }
+
+
+
+
+
   .block_history_book_car{
     display: block;
     width: 96.8%;
@@ -400,6 +428,7 @@
     top: 0;
     background-color: rgba(27, 27, 27, 65%);
     display: none;
+    z-index: 99;
   }
   .container.show::before{
     display: block;
@@ -447,6 +476,7 @@
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 1px 1px 5px #38437d;
+    z-index: 999;
   }
   .nav_invoice{
     padding:15px;
@@ -546,8 +576,11 @@
   }
   .block_search_form{
     margin-left: 0;
-    margin-right: 20%;
   }
+
+
+
+
   .custom-css-class{
     outline: 1px solid #403755;
     height: 33px;
@@ -591,10 +624,10 @@
    
   }
   .bt_search{
-    top: -133%;
-    right: -23px;
+    top: -137%;
+    right: 25px;
     position: absolute;
-    width: 85px;
+    width: 34px;
     height: 35px;
     border: none;
     border-radius: 16px;
