@@ -1,20 +1,4 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
 
-body {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    font-family: "Helvetica Neue";
-    background-color: #f4f4f5;
-}
-
-body>div {
-    margin: auto;
-}
 
 #tagtoast {
     position: fixed;
@@ -57,6 +41,9 @@ body>div {
 
 .toast-body {
     flex-grow: 1;
+}
+.toast-body span{
+    line-height: 0.8;
 }
 
 .toast+.toast {

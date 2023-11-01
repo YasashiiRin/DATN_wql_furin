@@ -83,7 +83,7 @@ button:focus {
   max-height: 573px;
 }
 .tm-block-notification{
-  padding: 40px;
+  padding: 30px 30px 30px 30px;
   -webkit-box-shadow: 1px 1px 5px 0 #455c71;
   -moz-box-shadow: 1px 1px 5px 0 #455c71;
   box-shadow: 1px 1px 5px 0 #455c71;
@@ -254,15 +254,16 @@ button:focus {
 .tm-notification-items {
   scroll-behavior: smooth;
   overflow-y: scroll;
-  height: 90%;
+  height: 86%;
 }
 .tm-notification-item {
   padding: 15px;
+  margin-right: 8px;
   background-color: #4e657a;
   color: #fff;
   font-size: 95%;
   margin-bottom: 15px;
-  box-shadow: 4px 1px 5px #2f2f2f;
+  box-shadow: 1px 1px 5px #2f2f2f;
   border-radius: 3px;
 }
 .tm-notification-item:last-child {

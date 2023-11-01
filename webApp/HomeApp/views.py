@@ -53,6 +53,8 @@ def home_customer_view(request):
         })
     else:
         return render(request, 'HomeApp/home.html')
+    
+    
 def controller_redirect_register(request):
     return redirect('login')
 def controller_redirect_regisCustomer(request):

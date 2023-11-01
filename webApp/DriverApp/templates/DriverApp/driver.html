@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{% static 'CSS/templatemo_driver.css' %}">
     <!-- https://getbootstrap.com/ -->
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/styleDriver.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_driver.css' %}">
+    
     <!--
 	Product Admin CSS Template
 	https://templatemo.com/tm-524-product-admin
@@ -27,7 +29,7 @@
     <div class="" id="home">
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="{% url 'driver' %}">
                     <h1 class="tm-site-title mb-0">Tài Xế</h1>
                 </a>
                 <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -84,7 +86,7 @@
             </div>
             <!-- row -->
             <div class="row tm-content-row">
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                <div class="col-block-margin-right col-xl-6 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block">
                         <h2 class="tm-block-title">Biểu đồ</h2>
                         
@@ -109,11 +111,11 @@
                          </div>
                     </div>
                 </div> {% endcomment %}
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                <div class="col-xl-6 col-block-margin-left tm-block-col">
                     <div class="tm-bg-primary-dark tm-block-notification tm-block-taller tm-block-overflow">
                         <h2 class="tm-block-title">Danh Sách Thông Báo</h2>
                         <div class="tm-notification-items">
-                            {% for order in driver_orders%}
+                            {% for order in notifi_orders%}
                             <div class="media tm-notification-item"
                                 data-order-info-phone = "{{order.customer.phone_customer}}"  
                                 data-order-info-address = "{{order.customer.address_customer}}"  
@@ -154,9 +156,27 @@
                         <canvas id="barChart"></canvas>
                     </div>  
                 </div>  {% endcomment %}
-                <div class="col-12 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                        <h2 class="tm-block-title">Danh Sách Đơn Đặt</h2>
+                <div class="tm-bg-primary-dark col-12 tm-block-col-height">
+                    <div class="block_title_list_schedules">
+                        <div class="">
+                          <h2 class="tm-block-title_nologin"> Danh sách đơn đặt</h2>
+                        </div>
+                        <div class="block_search_form">
+                            <div class="tm-bg-primary-dark-block_book_car">
+                              {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
+                              <form method="GET" action="{% url 'search_order' %}" class="search-form">
+                                <div class="input_book_car">
+                                    {{ my_filter_form.as_p }}
+                                    <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                                      color: #ff8276;"></i></button>
+                                </div>
+                  
+                              </form>
+                            </div>
+                          </div>
+                    </div>  
+                    <div class="tm-bg-primary-dark tm-block-taller tm-block-scroll tm-block-margin-driver">
+  
                         <table class="table">
                             <thead>
                                 <tr>
@@ -185,14 +205,31 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-12 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                        <h2 class="tm-block-title title_myschedules">DANH SÁCH CÁC LỊCH TRÌNH THEO NGÀY</h2>
+                <div class="tm-bg-primary-dark col-12 tm-block-col-height">
+                    <div class="block_title_list_schedules block_title_list_schedules_list_schedules">
+                        <div class="">
+                          <h2 class="tm-block-title_nologin"> Danh sách các lịch trình theo ngày:</h2>
+                        </div>
+                        {% comment %} <div class="block_search_form">
+                            <div class="tm-bg-primary-dark-block_book_car">
+                             
+                              <form method="GET" action="{% url 'search_list_schedules' %}" class="search-form">
+                                <div class="input_book_car">
+                                    {{ my_filter_form.as_p }}
+                                    <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                                      color: #ff8276;"></i></button>
+                                </div>
+                  
+                              </form>
+                            </div>
+                          </div> {% endcomment %}
+                    </div> 
+                    <div class="tm-bg-primary-dark tm-block-margin-driver tm-block-taller tm-block-scroll">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">TUYẾN_LỊCH_TRÌNH</th>
-                                    <th scope="col">TÊN LỊCH TRÌNH</th>
+                                    <th scope="col">TÊN_LỊCH_TRÌNH</th>
                                     <th scope="col">SỐ_CHỖ</th>
                                     <th scope="col">NGÀY ĐI</th>
                                     <th scope="col">THỜI_GIAN_ĐI</th>
@@ -316,6 +353,8 @@
             </div>
         </div>
     </div>
+    <div id="tagtoast">
+    </div>
     <script src="{% static 'JS/jquery-3.3.1.min.js' %}"></script>
     <!-- https://jquery.com/download/ -->
     <script src="{%static 'JS/moment.min.js' %}"></script>
@@ -324,10 +363,18 @@
     <!-- http://www.chartjs.org/docs/latest/ -->
     <script src="js/bootstrap.min.js"></script>
     <!-- https://getbootstrap.com/ -->
-    {% comment %} <script src="{% static 'JS/tooplate-scripts.js' %}"></script> {% endcomment %}
+    <script src="{% static 'JS/toast_driver_form.js' %}"></script>
     <script>
 
     document.addEventListener("DOMContentLoaded", function () {
+
+        var check_list_order = "{{order}}"
+        var list_orders = [
+            {% for order in  driver_orders%}
+                    "{{ order.quantity_slot}}",
+            {% endfor %}
+        ]
+        console.log("array_list_order: ",list_orders)
 
         const width_threshold = 480;
         var schedule_lable1 = [
@@ -423,8 +470,8 @@
                 var marginBottom = 20;
                 if(numberOfBars <= 7 ){
                     console.log("his array <= 5")
-                    maxBarHeight = 25;
-                    marginBottom = 25;
+                    maxBarHeight = 15;
+                    marginBottom = 15;
                 }else if(numberOfBars > 7 && numberOfBars <=12){
                     console.log("his array > 5 && <= 10 ")
                     maxBarHeight = 15;
@@ -540,13 +587,18 @@
               }
             const blockScroll = document.querySelector('.tm-notification-items')
             const arrayScroll = document.querySelectorAll('.tm-notification-item')
-            console.log(arrayScroll)
-            blockScroll.scrollTop = blockScroll.scrollHeight;
-            const len = arrayScroll.length
-            arrayScroll[len - 1].classList.add('title_new_active')
 
-            const tm_block_scroll = document.querySelector('.tm-block-scroll')
-            tm_block_scroll.scrollTop = tm_block_scroll.scrollHeight;
+            // Chỉnh sroll về cuối cho list thông báo
+            //console.log(arrayScroll)
+            //blockScroll.scrollTop = blockScroll.scrollHeight;
+
+            // Set tiêu đề đánh dấu thông báo mới nhất
+            const len = arrayScroll.length
+            arrayScroll[0].classList.add('title_new_active')
+
+            // chỉnh vị trí scroll về cuối của list order
+            {% comment %} const tm_block_scroll = document.querySelector('.tm-block-scroll')
+            tm_block_scroll.scrollTop = tm_block_scroll.scrollHeight; {% endcomment %}
 
             arrayScroll.forEach(customer => {
                 customer.addEventListener("click", function(){
@@ -582,7 +634,74 @@
                     }
                 })
             })
-     });    
+     });
+     const notification = "{{notifi_search}}";
+     console.log("waiting notifi search ")
+     console.log(notification)
+             if(notification==='search_success'){
+               toast({
+                   title: "Tìm thấy các kết quả",
+                   content: "Đã tìm thấy các kết quả phù hợp với từ khóa tìm kiếm của bạn",
+                   typeicon: "success",
+                   duration: 8000
+           
+                 })
+                 const targetElement = document.querySelector('.block_title_list_schedules');
+                 if (targetElement) {
+                   targetElement.scrollIntoView();
+                   window.scrollBy(0, -50);
+                 }
+             }
+             else if (notification==='search_err'){
+               toast({
+                   title: "Không tìm thấy",
+                   content: "Từ khóa bạn nhập không tồn tại hoặc không hợp lệ",
+                   typeicon: "error",
+                   duration: 8000
+           
+               })
+               const targetElement = document.querySelector('.block_title_list_schedules');
+               if (targetElement) {
+                 targetElement.scrollIntoView();
+                 window.scrollBy(0,-30);
+               }  
+           }
+           else if (notification==='search_err_schedules'){
+            toast({
+                title: "Không tìm thấy",
+                content: "Từ khóa bạn nhập không tồn tại hoặc không hợp lệ,bạn có thể nhấp vào dấu ? cạnh ô tìm kiếm để hiểu rõ hơn",
+                typeicon: "error",
+                duration: 8000
+        
+            })
+            const targetElement = document.querySelector('.block_title_list_schedules_list_schedules');
+            if (targetElement) {
+              targetElement.scrollIntoView();
+              window.scrollBy(0, -30);
+            }  
+        }
+        else if (notification==='search_success_schedules'){
+            toast({
+                title: "Tìm thấy các kết quả",
+                content: "Đã tìm thấy các kết quả phù hợp với từ khóa tìm kiếm của bạn",
+                typeicon: "success",
+                duration: 8000
+        
+              })
+            const targetElement = document.querySelector('.block_title_list_schedules_list_schedules');
+            if (targetElement) {
+              targetElement.scrollIntoView();
+              window.scrollBy(0, -68);
+            }  
+        }
+           const dltoast = document.querySelectorAll('.toast-exit');
+           console.log("button_exit: ",dltoast)
+           dltoast.forEach(element => {
+             element.onclick = function(){
+               console.log("is click exits")
+               element.parentElement.remove('toast')
+             }
+           })     
     </script>
 </body>
 

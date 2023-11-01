@@ -443,6 +443,7 @@
     top: 134px;
     border-radius: 8px;
     background-color: #fff;
+    z-index: 999;
   }
   .display_img_click img {
     border-radius: 6px;

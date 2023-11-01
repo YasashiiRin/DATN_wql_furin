@@ -8,4 +8,6 @@ urlpatterns = [
     path('handle_verifi_driver/',views.handle_verifi_driver,name='handle_verifi_driver'),
     path('logout_driver',views.logout_driver,name='logout_driver'),
     path('activateD/<str:uid>/<str:token>/',views.activate_driver, name='activateD'),
+    path('search_order/',views.search_order, name='search_order'),
+    path('search_list_schedules/',views.search_list_schedules, name='search_list_schedules'),
 ]

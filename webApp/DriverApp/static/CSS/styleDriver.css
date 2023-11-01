@@ -534,6 +534,112 @@
     font-weight: 700;
   }
   
+
+ 
+  
+  .block_info_schedules_nologin{
+    margin: 19px 56px;
+    width: 1213px;
+    height: 468px;
+  }
+  .tm-block-title_nologin{
+    padding: 6px 0 15px 37px;
+    color: #fff;
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+  .block_title_list_schedules{
+    display: flex;
+    align-items: center;
+    padding-top: 15px;
+  }
+  .input_book_car{
+    position: relative;
+  }
+  .bt_search{
+    top: -137%;
+    right: -6px;
+    position: absolute;
+    width: 44px;
+    height: 35px;
+    border: none;
+    border-radius: 16px;
+    margin: 46px 0 20px 182px;
+    background: none;
+  }
+  .block_search_form{
+    margin:0px 5px 0 56px;
+  }
+  .custom-css-class{
+    outline: 1px solid #403755;
+    height: 33px;
+    width: 231px;
+    min-width: 220px;
+    min-height: 30px;
+    padding-left: 10px;
+    transition: all 0.3s;
+    border: none;
+    border-radius: 10px;
+    -webkit-box-shadow: 1px 1px 5px 0 #455c71;
+    -moz-box-shadow: 1px 1px 5px 0 #455c71;
+    box-shadow: 1px 1px 5px 0 #455c71;
+  }
+  .tm-block-margin-driver{
+    padding: 15px 40px 40px 40px;
+    -webkit-box-shadow: 1px 1px 5px 0 #455c71;
+    -moz-box-shadow: 1px 1px 5px 0 #455c71;
+    box-shadow: 1px 1px 5px 0 #455c71;
+    min-height: 350px;
+    height: 100%;
+    max-height: 471px;
+    margin-bottom: 28;
+  }
+  .tm-block-col-height{
+    height: 569px;
+    margin-bottom: 32px;
+  }
+  .col-block-margin-left{
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 0px;
+    padding-left: 15px;
+  }
+  .col-block-margin-right{
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 0px;
+  }
+  
+  
+  .question_mark--icon{
+    width: 20px;
+    height: 20px;
+  }
+  .search_policy{
+    display: none;
+    position: fixed;
+    right: 25%;
+    top: 89px;
+    z-index: 999;
+    transform-origin: 50% top;
+    animation:hiddenSmooth ease 0.26s;
+  }
+  .img_search_policy{
+    border-radius: 3px;
+  }
+
+
+
+
+
+
+
+
+
+
   /* FOOTER */
   
   footer {
