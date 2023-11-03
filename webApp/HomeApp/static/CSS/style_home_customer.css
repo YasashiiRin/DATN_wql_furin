@@ -384,6 +384,10 @@
     min-height: 14px;
 
   }
+  .world_primakey{
+    color: #db545a;
+    font-weight: 600;
+  }
 
   
 
@@ -577,6 +581,51 @@
   }
   .block_search_form{
     margin-left: 0;
+  }
+
+
+  .showchoice{
+    display: none;
+    position: fixed;
+    top: 198px;
+    right: 25%;
+    background-color: #f1f1f1;
+    z-index: 999;
+    max-width: 660px;
+    border-radius: 2px;
+    box-shadow: 1px 1px 5px 0 #32345f;
+  }
+  .showchoice_button{
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+  }
+  .showchoice_title{
+    padding-bottom: 9px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #4d4d4d;
+    border-bottom: 3px solid #c1c1c1;
+  }
+  .body_showchoice{
+    padding: 18px;
+    border-left: 8px solid #5c6ec3;
+  }
+  .bt_primary{
+    width: 80px;
+    height: 30px;
+    font-weight: 500;
+    color: #fff;
+    background: #254e87;
+    border-radius: 6px;
+    border-left: 2px solid #ffaa40;
+    border-bottom: 2px solid #e9a986;
+    border-top: 1px solid #e9a986;
+    border-right: 1px solid #e9a986;
+  }
+  .showchoice_content{
+    line-height: 1.5;
+    padding: 9px 9px 5px 5px;
   }
 
 

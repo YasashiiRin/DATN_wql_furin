@@ -65,6 +65,7 @@ class Orders(models.Model):
     state_order = models.BooleanField(default=False)
     day_schedule = models.DateField(null=True)
     pickup_daytime = models.DateTimeField(null=True)
+    state_book = models.CharField(max_length=255,null=True)
     class Meta:
         db_table= 'orders'
 

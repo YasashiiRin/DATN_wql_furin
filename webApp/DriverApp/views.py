@@ -253,11 +253,12 @@ def search_order(request):
     all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]
     schedules_lb1 = [schedule for schedule in all_shedules if schedule.label_schedule == 1]
     schedules_lb2 = [schedule for schedule in all_shedules if schedule.label_schedule == 2]
-
     if schedules_lb2:
         soft_schedules =np.hstack((schedules_lb1,schedules_lb2))
     else:
-         soft_schedules = schedules_lb1
+        soft_schedules = schedules_lb1
+    reversed_list = list(reversed(driver_orders))
+    print(reversed_list)     
     my_filter_form = YourFilterForm()
     if request.method == 'GET':
         my_filter_form = YourFilterForm(request.GET)
@@ -345,7 +346,7 @@ def search_order(request):
                     searchvalue = 'search_success'
                 return render(request, 'DriverApp/driver.html', {
                     'driver_orders': filter_orders,
-                    'notifi_orders': driver_orders,
+                    'notifi_orders': reversed_list,
                     'all_schedules' : soft_schedules,
                     'my_filter_form' : my_filter_form,
                     'notifi_search' : searchvalue,
@@ -353,7 +354,7 @@ def search_order(request):
             except:
                 return render(request, 'DriverApp/driver.html', {
                     'driver_orders': filter_orders,
-                    'notifi_orders': driver_orders,
+                    'notifi_orders': reversed_list,
                     'all_schedules' : soft_schedules,
                     'my_filter_form' : my_filter_form,
                     'notifi_search' : 'search_err'
@@ -363,7 +364,7 @@ def search_order(request):
 
     return render(request, 'DriverApp/driver.html', {
         'my_filter_form': my_filter_form,
-        'notifi_orders': driver_orders,
+        'notifi_orders': reversed_list,
         'driver_orders': driver_orders,
         'all_schedules' : list(all_shedules),
         'notifi_search' : 'search_err' })

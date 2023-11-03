@@ -131,18 +131,18 @@
                                     {%endif%}    
                                     </div>
                                 </div>
-                                <div class="title_new">
-                                    <span class="char_new">Mới</span>
-                                </div>
-                                <div class="media-body">
+                                <div class="media-body body_notifi">
                                     <div>
-                                        <p class="pd-title"><b>{{order.name_customer_order}}</b><a href="#"
+                                        <p class="pd-title"><b class="b-title">{{ order.name_customer_order }}</b><span class="world_primakey">{{ order.state_book }}<span><a href="#"
                                             class="tm-notification-link"></a></p>
                                         <span class="tm-small tm-text-color-secondary">Số Chỗ : {{order.quantity_slot }} ___ Ngày đi : {{order.day_schedule}}</span>   
                                     </div>
                                     <div>
                                         <span class="tm-small tm-text-color-secondary">Thời gian đặt : {{order.pickup_daytime}}</span>
                                     </div>
+                                </div>
+                                <div class="title_new">
+                                    <span class="char_new">Mới</span>
                                 </div>
                             </div>
                             {%endfor%}
@@ -191,7 +191,13 @@
                             </thead>
                             <tbody>
                                 {% for order in driver_orders%}
-                                <tr>
+                                <tr class="info_list_order"
+                                data-order-info-phone = "{{order.customer.phone_customer}}"  
+                                data-order-info-address = "{{order.customer.address_customer}}"  
+                                data-order-info-email = "{{order.customer.email_customer}}" 
+                                data-order-info-name = "{{order.name_customer_order}}" 
+                                data-order-info-img = "{{order.customer.img_customer}}"
+                                >
                                     <th scope="row"><b>{{order.name_customer_order}}</b></th>
                                     <th scope="row"><b>{{order.name_schedule_order}}</b></th>
                                     <td><b>{{order.quantity_slot}}</b></td>
@@ -402,7 +408,7 @@
 
         var location;
             
-        {% comment %} lấy vị trí tác lịch trình hiển thị {% endcomment %}
+        {% comment %} lấy vị trí các lịch trình hiển thị {% endcomment %}
             var foundDuplicate = false;
             var len_schedule_day = combindarray_schedule_startday.length;
             for(i= 0 ; i < len_schedule_day ; i++){
@@ -599,6 +605,45 @@
             // chỉnh vị trí scroll về cuối của list order
             {% comment %} const tm_block_scroll = document.querySelector('.tm-block-scroll')
             tm_block_scroll.scrollTop = tm_block_scroll.scrollHeight; {% endcomment %}
+
+            // Hiển thị thông tin người đặt từ Danh sách thông báo
+            const array_info_customer_order = document.querySelectorAll('.info_list_order')
+            array_info_customer_order.forEach(customer => {
+                customer.addEventListener("click", function(){
+                    const data_order_info_c_name = this.getAttribute('data-order-info-name')
+                    const data_order_info_c_img = this.getAttribute('data-order-info-img')
+                    const data_order_info_c_email = this.getAttribute('data-order-info-email')
+                    const data_order_info_c_address = this.getAttribute('data-order-info-address')
+                    const data_order_info_c_phone = this.getAttribute('data-order-info-phone')
+
+                    const container_order_info_customer = document.querySelector('.container_order_info_customer')
+                    container_order_info_customer.style.display = 'block'
+
+                    
+                    const info_email = document.querySelector('.info_email').innerHTML=data_order_info_c_email;
+                    const info_phone = document.querySelector('.info_phone').innerHTML=data_order_info_c_phone;
+                    const info_address = document.querySelector('.info_address').innerHTML=data_order_info_c_address;
+                    const info_img = document.querySelector('.info_img');
+                    const info_fullname = document.querySelector('.info_fullname').innerHTML=data_order_info_c_name;
+                    if(data_order_info_c_img){
+                        info_img.src = '/media/'+data_order_info_c_img;
+                    }
+                    else{
+                        info_img.src = '/media/no_avatar.png'
+                    }
+                    console.log(data_order_info_c_name)
+                    console.log(data_order_info_c_img)
+                    console.log(data_order_info_c_email)
+                    console.log(data_order_info_c_address)
+                    console.log(data_order_info_c_phone)
+                    const container_order_info_exits = document.querySelector('.container_order_info_exits')
+                    container_order_info_exits.onclick=function(){
+                        container_order_info_customer.style.display = 'none';
+                    }
+                })
+            })
+
+            // Hiển thị thông tin người đặt từ Danh sách thông báo
 
             arrayScroll.forEach(customer => {
                 customer.addEventListener("click", function(){

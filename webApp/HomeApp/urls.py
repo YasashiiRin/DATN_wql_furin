@@ -10,6 +10,8 @@ urlpatterns = [
     path('controller_redirect_regisCustomer',views.controller_redirect_regisCustomer, name='controller_redirect_regisCustomer'),
     path('driver_login_view/',views.driver_login_view,name='driver_login_view'),
 
+    path('checkBeforeBook/<int:schedule_id>/<int:customer_id>/<int:slots>/',views.checkBeforeBook,name='checkBeforeBook'),
+    path('handle_book_vehicle_second/<int:schedule_id>/<int:customer_id>/<int:slot>/',views.handle_book_vehicle_second,name='handle_book_vehicle_second'),
     path('book_vehicle/<int:schedule_id>/<int:customer_id>/<int:slot>/',views.handle_book_vehicle,name='handle_book_vehicle'),
 
     path('handle_cancel_order/<int:idorder>/',views.handle_cancel_order,name='handle_cancel_order'),

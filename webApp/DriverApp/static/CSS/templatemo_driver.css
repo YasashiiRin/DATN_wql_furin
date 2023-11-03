@@ -73,6 +73,8 @@ button:focus {
 .tm-block-col {
   margin-bottom: 30px;
 }
+
+
 .tm-block {
   padding: 40px;
   -webkit-box-shadow: 1px 1px 5px 0 #455c71;
@@ -82,6 +84,9 @@ button:focus {
   height: 100%;
   max-height: 573px;
 }
+
+
+
 .tm-block-notification{
   padding: 30px 30px 30px 30px;
   -webkit-box-shadow: 1px 1px 5px 0 #455c71;
@@ -239,6 +244,10 @@ button:focus {
     clip: rect(0px, 220px, 220px, 218px);
   }
 }
+
+
+
+
 .title_new{
   margin-right: 3px;
 }
@@ -272,6 +281,20 @@ button:focus {
 .tm-notification-link {
   color: #f5a623;
 }
+
+
+
+
+.world_primakey{
+  color: #ff8a8f;
+  font-weight: 600;
+}
+.body_notifi{
+  padding-left: 9px;
+}
+
+
+
 .tm-text-color-secondary {
   /* color: #bdcbd8; */
   color: #b5d6f3;;
@@ -787,6 +810,9 @@ input[type="checkbox"]:focus {
 }
 p.pd-title{
   margin-bottom: 0.18rem!important;
+}
+.b-title{
+  margin-right: 5px;
 }
 
 

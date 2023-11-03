@@ -116,6 +116,7 @@ def view_profile_customer(request):
         'form_upload' : my_filter_form,
         'img_customer' : img_customer
     })
+
 def view_editprofile(request):
     id_customer = request.customer.id
     my_filter_form = ImageUploadForm()
@@ -128,6 +129,86 @@ def view_editprofile(request):
         'form_upload' : my_filter_form,
         'img_customer' : img_customer,
     })
+
+def checkBeforeBook(request,schedule_id,customer_id,slots):
+    try:
+        current_datetime = datetime.now()
+        schedule_id = schedule_id
+        customer_id = customer_id
+        print("vehicle_id : ", schedule_id)
+        print("customer_id_book3 : ", customer_id)
+        schedule = Schedules.objects.get(pk=schedule_id)
+        check_cm = Orders.objects.filter(customer=customer_id,schedule=schedule)
+        name_schedule_order = schedule.name_schedule
+        start_time = schedule.start_time
+        day_schedule = schedule.day_schedule
+        if check_cm :
+            slot = Orders.objects.get(customer=customer_id,schedule=schedule).quantity_slot
+            print(" Quantiti slots: ", slot)
+            print(" tồn tại người dùng ở lịch trình này ..............")
+            return JsonResponse({'message': 'isexits','nameschedule' :name_schedule_order,'slots': slot,'start_time': start_time ,'day_schedule':day_schedule,'newslots': slots})
+        else:
+            print(" không tồn tại người dùng ở lịch trình này ..............")
+            return JsonResponse({'message': 'isnotexits'})    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500) 
+
+def handle_book_vehicle_second(request,schedule_id,customer_id,slot):
+    try:
+        current_datetime = datetime.now()
+        schedule_id = schedule_id
+        customer_id = customer_id
+        slot = slot
+        print("vehicle_id : ", schedule_id)
+        print("customer_id_book2 : ", customer_id)
+        schedule = Schedules.objects.get(pk=schedule_id)
+        start_day = schedule.start_date
+        customer =Customer.objects.get(pk=customer_id)
+        vehicle =schedule.vehicle
+        driver = vehicle.driver
+        carowner = driver.carowner
+
+        name_customer_order = customer.name_customer
+        name_driver_order = driver.name_driver
+        name_vehicle_order = vehicle.name_vehicle
+        name_carowner_order = carowner.username
+
+        carowner_id = carowner.id
+
+        pickup_location= schedule.start_location
+        dropoff_location = schedule.end_location
+        start_time= schedule.start_time
+        end_time=schedule.end_time
+        name_schedule_order = schedule.name_schedule
+
+        slot_vehicle = schedule.slot_vehicle
+        slot_t = slot_vehicle - slot
+        handel_slots = slot
+        check_cm = Orders.objects.get(customer=customer_id,schedule=schedule)
+        if check_cm :
+            if slot > check_cm.quantity_slot:
+                if slot_t >= 0:
+                    schedule.slot_vehicle = slot_t
+                    schedule.save()
+                    check_cm.delete()
+                    new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
+                    new_order_update.save()
+                    return JsonResponse({'message': 'Đặt xe thành công'})
+
+                else:
+                    return JsonResponse({'error': 'không đủ chỗ '})
+            elif slot < check_cm.quantity_slot:
+                schedule.slot_vehicle = schedule.slot_vehicle + check_cm.quantity_slot
+                check_cm.delete()
+                new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
+                schedule.save()
+                new_order_update.save()
+                return JsonResponse({'message': 'Đặt xe thành công'})
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500) 
+
+
 def handle_book_vehicle(request,schedule_id,customer_id,slot):
     try:
         current_datetime = datetime.now()
@@ -135,8 +216,8 @@ def handle_book_vehicle(request,schedule_id,customer_id,slot):
         customer_id = customer_id
         slot = slot
         print("vehicle_id : ", schedule_id)
-        print("customer_id : ", customer_id)
-        schedule = Schedules.objects.get(pk=schedule_id)
+        print("customer_id_book1 : ", customer_id)
+        schedule = Schedules.objects.get(pk=schedule_id) 
         start_day = schedule.start_date
         customer =Customer.objects.get(pk=customer_id)
         vehicle =schedule.vehicle
@@ -158,7 +239,7 @@ def handle_book_vehicle(request,schedule_id,customer_id,slot):
         if slot_t >= 0:
             schedule.slot_vehicle = slot_t
             schedule.save()
-            od = Orders(customer=customer,vehicle= vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime =current_datetime )
+            od = Orders(customer=customer,vehicle= vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime =current_datetime,state_book = '')
             od.save()
             return JsonResponse({'message': 'Đặt xe thành công'})
 

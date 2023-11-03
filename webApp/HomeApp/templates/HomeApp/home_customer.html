@@ -418,6 +418,32 @@
     <div class="search_policy">
       <img src="{%static '/images/search_policy.png'%}"  class="img_search_policy">
     </div>
+    <div class="showchoice">
+      <div class="body_showchoice">
+        <div class="showchoice_title">
+          <span>Bạn đã đặt lịch trình này</span>
+        </div>
+        <div class="showchoice_content">
+          <span>Bạn đã đặt chuyến đo cho : <span class="showchoice_startday world_primakey">20/10/2023</span>
+            với tên lịch trình là <span class="showchoice_nameschedule world_primakey">Đà Nẵng Quảng Bình</span>
+            <br>
+            Giờ xuất phát: <span class="showchoice_start_time world_primakey">3</span>
+            <br>
+            Số chỗ là: <span class="showchoice_slot world_primakey">1</span>
+            <br>
+            Bây giờ bạn có muốn<span class="world_primakey"> chỉnh sửa lại đơn đặt </span>với số chỗ là : <span class="showchoice_new_slots world_primakey">3</span> không!.
+          </span>
+        </div>
+        <div class="showchoice_button">
+          <div class="bt_click">
+            <button class="bt_primary bt_click_oce">Đặt</button>
+          </div>
+          <div class="bt_click">
+            <button class="bt_primary bt_click_cancel">Hủy</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="tagtoast">
     </div>
     <script src="{% static 'JS/book.js' %}"></script>
@@ -460,6 +486,17 @@
           const endlocation = document.querySelector('.endlocation')
           const button_confirm = document.querySelector('.invoice_bt')
           const startday = document.querySelector('.startday')
+
+
+          const showChoiceBook = document.querySelector('.showchoice')
+          const bt_click_oce = document.querySelector('.bt_click_oce')
+          const bt_click_cancel = document.querySelector('.bt_click_cancel')
+
+          const showchoice_startday = document.querySelector('.showchoice_startday')
+          const showchoice_nameschedule = document.querySelector('.showchoice_nameschedule')
+          const showchoice_slot = document.querySelector('.showchoice_slot')
+          const showchoice_start_time = document.querySelector('.showchoice_start_time')
+          const showchoice_new_slots = document.querySelector('.showchoice_new_slots')
           console.log(bookButtons)
 
 
@@ -491,7 +528,6 @@
 
           {% comment %} -----------------------Book----------------------- {% endcomment %}
 
-
           bookButtons.forEach(button => {
               button.addEventListener("click", function () {
                   const scheduleId = this.dataset.scheduleId;
@@ -501,7 +537,7 @@
                   const vehicletype_get = this.getAttribute('data-vehicletype')
                   const startlocation_get = this.getAttribute('data-startlocation')
                   const endlocation_get = this.getAttribute('data-endlocation')
-             
+                
                   const quantityslot = this.getAttribute('data-quantityslot')
                   const startday_get = this.getAttribute('data-startday')
                   
@@ -528,51 +564,136 @@
                   invoice.style.display ='block'
 
                 console.log(button_confirm)
+
+                function handelBook(scheduleId,customerId,slot){
+                  fetch(`/book_vehicle/${scheduleId}/${customerId}/${slot}/`, {
+                    method: "POST",
+                    headers: {
+                      "X-CSRFToken": "{{ csrf_token }}",  
+                    },
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    
+                    if (data.message) {
+                        const notifi_book = data.message;
+                        toast({
+                          title: "Thành công!",
+                          content: "Bạn vừa đặt một chuyến đi thành công.",
+                          typeicon: "success",
+                          duration: 8000
+                  
+                      })  
+                        container.classList.remove("show");
+                        invoice.style.display ='none'
+                    } else if (data.error) {
+                        const data_err = data.error;
+                        toast({
+                          title: "Đặt thất bại",
+                          content: data_err,
+                          typeicon: "error",
+                          duration: 8000
+                  
+                      })
+                      container.classList.remove("show");
+                      invoice.style.display ='none'
+                    }
+                    const dltoast = document.querySelectorAll('.toast-exit');
+                    console.log("button_exit: ",dltoast)
+                    dltoast.forEach(element => {
+                      element.onclick = function(){
+                        console.log("is click exits")
+                        element.parentElement.remove('toast')
+                      }
+                    }) 
+                  })
+                  .catch(error => {
+                    console.error("Đã xảy ra lỗi:", error);
+                  });
+                }
+                function handelBookSecond(scheduleId,customerId,slot){
+                  fetch(`/handle_book_vehicle_second/${scheduleId}/${customerId}/${slot}/`, {
+                    method: "POST",
+                    headers: {
+                      "X-CSRFToken": "{{ csrf_token }}",  
+                    },
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    
+                    if (data.message) {
+                        const notifi_book = data.message;
+                        toast({
+                          title: "Thành công!",
+                          content: "Bạn vừa đặt một chuyến đi thành công.",
+                          typeicon: "success",
+                          duration: 8000
+                  
+                      })  
+                        container.classList.remove("show");
+                        invoice.style.display ='none'
+                    } else if (data.error) {
+                        const data_err = data.error;
+                        toast({
+                          title: "Đặt thất bại!",
+                          content: data_err,
+                          typeicon: "error",
+                          duration: 8000
+                  
+                      })
+                      container.classList.remove("show");
+                      invoice.style.display ='none'
+                    }
+                    const dltoast = document.querySelectorAll('.toast-exit');
+                    console.log("button_exit: ",dltoast)
+                    dltoast.forEach(element => {
+                      element.onclick = function(){
+                        console.log("is click exits")
+                        element.parentElement.remove('toast')
+                      }
+                    }) 
+                  })
+                  .catch(error => {
+                    console.error("Đã xảy ra lỗi:", error);
+                  });
+                }
                 button_confirm.onclick= function (){
                     const slot = input_quantity.value
                     console.log("slot :",slot)
-                  fetch(`/book_vehicle/${scheduleId}/${customerId}/${slot}/`, {
+                  fetch(`/checkBeforeBook/${scheduleId}/${customerId}/${slot}/`, {
                       method: "POST",
                       headers: {
                         "X-CSRFToken": "{{ csrf_token }}",  
                       },
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                      
-                      if (data.message) {
-                          const notifi_book = data.message;
-                          toast({
-                            title: "successfully",
-                            content: "Booked the car successfully",
-                            typeicon: "success",
-                            duration: 8000
-                    
-                        })  
-                          container.classList.remove("show");
-                          invoice.style.display ='none'
-                      } else if (data.error) {
-                          const data_err = data.error;
-                          toast({
-                            title: "Error",
-                            content: data_err,
-                            typeicon: "error",
-                            duration: 8000
-                    
-                        })
-                      }
-                      const dltoast = document.querySelectorAll('.toast-exit');
-                      console.log("button_exit: ",dltoast)
-                      dltoast.forEach(element => {
-                        element.onclick = function(){
-                          console.log("is click exits")
-                          element.parentElement.remove('toast')
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                      if(data.message=== 'isexits'){
+                        
+                        showchoice_startday.innerHTML = data.day_schedule
+                        showchoice_nameschedule.innerHTML = data.nameschedule
+                        showchoice_slot.innerHTML = data.slots
+                        showchoice_start_time.innerHTML = data.start_time
+                        showchoice_new_slots.innerHTML = data.newslots
+                        showChoiceBook.style.display = 'block'
+                        invoice.style.display ='none'
+                        bt_click_oce.onclick = function(){
+                          console.log("handelBookSecond..............")
+                          handelBookSecond(scheduleId,customerId,slot)
+                          showChoiceBook.style.display = 'none'
                         }
-                      }) 
-                  })
-                  .catch(error => {
+                        bt_click_cancel.onclick = function(){
+                          showChoiceBook.style.display = 'none'
+                          container.classList.remove("show");
+                        }
+
+                      }else if(data.message === 'isnotexits' ){
+                        handelBook(scheduleId,customerId,slot)
+                      }
+                    })
+                    .catch(error => {
                       console.error("Đã xảy ra lỗi:", error);
-                  }); 
+                  })
                 } 
                   
                   const searchIcon = document.querySelector('.search-icon');
@@ -687,8 +808,8 @@
                       if (data.notifiCancel) {
                           const notifi_book = data.notifiCancel;
                           toast({
-                            title: "Cancel Successfully",
-                            content: "Cancel order successfully",
+                            title: "Hủy thành công!",
+                            content: "Bạn vừa hủy một chuyến đi của mình",
                             typeicon: "error",
                             duration: 8000
                     
@@ -699,7 +820,7 @@
                       } else if (data.error_Cancel) {
                           const data_err = data.error_Cancel;
                           toast({
-                            title: "Cancel Error",
+                            title: "Hủy thất bại!",
                             content: data_err,
                             typeicon: "error",
                             duration: 8000
