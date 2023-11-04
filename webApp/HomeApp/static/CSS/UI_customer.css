@@ -94,12 +94,18 @@
   background: none;
 }
 .block_search_form{
+  display: none;
+  margin:19px 5px 0 56px;
+}
+.block_search_form-datetime{
+  /* display: none; */
   margin:19px 5px 0 56px;
 }
 
 
 
 .question_mark--icon{
+  display: none;
   width: 20px;
   height: 20px;
 }
@@ -131,7 +137,7 @@
 .custom-css-class{
   outline: 1px solid #403755;
   height: 33px;
-  width: 231px;
+  width: 447px;
   min-width: 220px;
   min-height: 30px;
   padding-left: 10px;
@@ -141,9 +147,80 @@
   -webkit-box-shadow: 1px 1px 5px 0 #455c71;
   -moz-box-shadow: 1px 1px 5px 0 #455c71;
   box-shadow: 1px 1px 5px 0 #455c71;
+  background-color: #fff;
+}
+.custom-css-class--picker{
+  outline: 1px solid #403755;
+  height: 33px;
+  width: 231px;
+  min-width: 220px;
+  min-height: 30px;
+  padding: 0 41px 0 10px;
+  transition: all 0.3s;
+  border: none;
+  border-radius: 10px;
+  -webkit-box-shadow: 1px 1px 5px 0 #455c71;
+  -moz-box-shadow: 1px 1px 5px 0 #455c71;
+  box-shadow: 1px 1px 5px 0 #455c71;
+}
+#select_mounth{
+  color: #160d3b;
+  border: none;
+  height: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+  border-right: 1px solid #160d3b;
+}
+#select_year{
+  color: #160d3b;
+  border: none;
+  height: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+}
+#select_search_text{
+  color: #160d3b;
+  border: none;
+  height: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+  border-right: 1px solid #160d3b;
+}
+#select_mounth:hover{
+  color: #ff8276;
+
+}
+#select_year:hover{
+  color: #ff8276;
+}
+#select_search_text:hover{
+  color: #ff8276;
+}
+.mr-5px{
+  margin-right: 5px;
+}
+.search_text{
+  width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.input-with-tooltip {
+  position: relative;
+  cursor: pointer;
 }
 
-
+.input-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+  padding: 5px;
+  z-index: 1;
+  display: none;
+}
 
 /* ---------------------Policy-Page----------------------- */
 

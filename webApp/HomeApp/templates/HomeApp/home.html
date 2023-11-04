@@ -96,6 +96,9 @@
         <div class="">
           <h2 class="tm-block-title_nologin"> Danh sách chuyến đi</h2>
         </div>
+        <div>
+          
+        </div>
         <div class="block_search_form">
           <div class="tm-bg-primary-dark-block_book_car">
             {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
@@ -109,8 +112,55 @@
             </form>
           </div>
         </div>
+
         <div class="question_mark">
           <img src="{%static '/images/ico1.png' %}" class="question_mark--icon">
+        </div>
+        <div class="block_search_form-datetime">
+          <div class="tm-bg-primary-dark-block_book_car">
+            {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
+            
+            <form method="GET" action="{% url 'search_datetime_and_word' %}" class="search-form">
+              <div class="input_book_car custom-css-class">
+                <input type="text" name="search_text"  id="select_search_text" class="mr-5px search_text" placeholder="Điểm bắt đầu..điểm kết thúc..tên tài xế..loại phương tiện">
+                <input type="date" name="input_date" class="mr-5px" id="select_mounth">
+                <select size="1" autocomplete="off" id="select_mounth" name="hours">
+                  <option value="">Giờ</option>
+                  <option value="01">01</option>
+                  <option value="02">02</option>
+                  <option value="03">03</option>
+                  <option value="04">04</option>
+                  <option value="05">05</option>
+                  <option value="06">06</option>
+                  <option value="07">07</option>
+                  <option value="08">08</option>
+                  <option value="09">09</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="00">00</option>
+              </select>  
+              <select id="select_year" name="minutes">
+                  <option value="">Phút</option>
+              </select>
+                  {% comment %} <input class="custom-css-class--picker" type="datetime-local" id="birthdaytime" name="birthdaytime"> {% endcomment %}
+                  <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                    color: #ff8276;"></i></button>
+              </div>
+
+            </form>
+          </div>
         </div>
       </div>
 
@@ -405,6 +455,45 @@
     <script>
 
       document.addEventListener("DOMContentLoaded", function () {
+
+
+        var select_search_text = document.getElementById("select_search_text");
+    select_search_text.addEventListener('mouseover', function() {
+        var tooltip = document.createElement('div');
+        tooltip.className = 'input-tooltip';
+        tooltip.textContent = select_search_text.placeholder;
+        select_search_text.parentElement.classList.add('input-with-tooltip');
+        select_search_text.parentElement.appendChild(tooltip);
+    });
+
+    select_search_text.addEventListener('mouseout', function() {
+        var tooltip = select_search_text.parentElement.querySelector('.input-tooltip');
+        if (tooltip) {
+            select_search_text.parentElement.classList.remove('input-with-tooltip');
+            select_search_text.parentElement.removeChild(tooltip);
+        }
+    });
+
+
+
+
+
+
+        const select_year= document.getElementById('select_year')
+        for(var i =0 ;i<=60 ;i++){
+          var option = document.createElement("option");
+          if(i<10){
+            option.value = '0'+i;
+            option.text = '0'+i;
+            select_year.appendChild(option);
+          }else{
+          option.value = i;
+          option.text = i;
+          select_year.appendChild(option);
+          }
+          
+        }
+
         const container = document.querySelector('.container')
         const img_search_policy= document.querySelector('.img_search_policy')
 
@@ -506,7 +595,7 @@
                   else if (notification==='search_err'){
                     toast({
                         title: "Không tìm thấy",
-                        content: "Từ khóa bạn nhập không tồn tại hoặc không hợp lệ,bạn có thể nhấp vào dấu ? cạnh ô tìm kiếm để hiểu rõ hơn",
+                        content: "Thông tin bạn nhập không tìm thấy , bạn có thể đổi thông tin chính xác hơn và thử lại.",
                         typeicon: "error",
                         duration: 8000
                 

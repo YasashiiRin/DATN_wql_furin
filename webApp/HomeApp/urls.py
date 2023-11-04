@@ -17,6 +17,8 @@ urlpatterns = [
     path('handle_cancel_order/<int:idorder>/',views.handle_cancel_order,name='handle_cancel_order'),
     
     path('search_customer/',views.search_customer, name='search_customer'),
+    path('search_datetime_and_word/',views.search_datetime_and_word, name='search_datetime_and_word'),
+
     path('search_home/',views.search_home, name='search_home'),
     path('view_profile_customer',views.view_profile_customer,name='view_profile_customer'),
     path('view_editprofile',views.view_editprofile,name='view_editprofile'),
