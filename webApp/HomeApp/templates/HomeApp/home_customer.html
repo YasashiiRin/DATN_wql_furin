@@ -33,13 +33,41 @@
             <div class="tm-bg-primary-dark-block_book_car">
               {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
               <form method="GET" action="{% url 'search_customer' %}" class="search-form">
-                <div class="input_book_car">
-                    {{ my_filter_form.as_p }}
+                <div class="input_book_car custom-css-class">
+                  <input type="text" name="search_text"  id="select_search_text" class="mr-5px search_text" placeholder="Điểm bắt đầu..điểm kết thúc..tên tài xế..loại phương tiện">
+                  <input type="date" name="input_date" class="mr-5px" id="select_mounth">
+                  <select size="1" autocomplete="off" id="select_mounth" name="hours">
+                    <option value="">Giờ</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="00">00</option>
+                </select>  
+                <select id="select_year" name="minutes">
+                    <option value="">Phút</option>
+                </select>
                     <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
                       color: #ff8276;"></i></button>
-                      <div class="question_mark">
-                        <img src="{%static '/images/ico1.png' %}" class="question_mark--icon">
-                      </div>
                 </div>
                 <div class="group_button_search_book">
                   
@@ -145,7 +173,7 @@
       </div>
     </header>
     <section id="main__cta_customer">
-      <div class="container">
+      <div class="container_table">
         <div class="container_customer">
           <!-- row -->
           <div class="row tm-content-row">
@@ -172,22 +200,19 @@
                       <table class="table">
                           <thead>
                               <tr>
-                                  <th scope="col">Tên_Nhà_Xe</th>
                                   <th scope="col">Trạng_Thái_Chỗ </th>
-                                  <th scope="col">Tên_Tài_Xế</th>
                                   <th scope="col">Loại_Phương_Tiện </th>
-                                  <th scope="col">Số_Lượng_Chỗ</th>
+                                  <th scope="col">Số_Chỗ</th>
                                   <th scope="col">Hình Ảnh</th>
                                   <th scope="col">Điểm_Xuất_Phát</th>
                                   <th scope="col">Điểm_Kết_Thức</th>
                                   <th scope="col">Giờ_Xuất_Phát</th>
-                                  <th scope="col">Ngày_Xuất_Phát</th>
+                                  <th scope="col">Ngày_Đi</th>
                               </tr>
                           </thead>
                           <tbody>
                               {% for schedule in schedules %}
                               <tr>
-                                  <th scope="row"><b>{{schedule.vehicle.driver.carowner.username}}</b></th>
                                   <td>
                                     {%if schedule.slot_vehicle == 0 %}
                                       <div class="tm-status-circle isfull">
@@ -197,7 +222,6 @@
                                       </div>Not Full
                                     {%endif%}  
                                   </td>
-                                  <td><b>{{schedule.vehicle.name_driver}}</b></td>
                                   <td><b>{{schedule.vehicle.type_vehicle}}</b></td>
                                   <td><b>{{schedule.slot_vehicle}}</b></td>
                                   <td><img style="border-radius:3px;" class="list_img_vehicle" data-img-vehilce="{{ schedule.vehicle.img_vehicle.url }}" src="{{schedule.vehicle.img_vehicle.url}}"></td>
@@ -456,22 +480,7 @@
         const qm = document.querySelector('.question_mark--icon');
         const block_qm_policy = document.querySelector('.search_policy')
 
-        qm.addEventListener("click", function () {
-          const container = document.querySelector('.container')
-          const img_search_policy= document.querySelector('.img_search_policy')
-          console.log("is click question mark")
-          block_qm_policy.style.display='block';
-          container.classList.add("show");
-          const containershow = document.querySelector('.container.show')
-          console.log("containershow:", containershow)
-          console.log("img_search_policy:",img_search_policy)
-          const check = containershow.classList.contains('show')
-          console.log("check:", check)
-          img_search_policy.onclick = function(event){
-              block_qm_policy.style.display='none';
-              container.classList.remove("show");
-          }
-        })
+
       
           
           const input_quantity= document.querySelector('.input_quantity')
@@ -681,6 +690,7 @@
                           console.log("handelBookSecond..............")
                           handelBookSecond(scheduleId,customerId,slot)
                           showChoiceBook.style.display = 'none'
+                          container.classList.remove("show");
                         }
                         bt_click_cancel.onclick = function(){
                           showChoiceBook.style.display = 'none'
@@ -841,6 +851,21 @@
                   }); 
                 });
               });
+              const select_year= document.getElementById('select_year')
+              for(var i =0 ;i<=60 ;i++){
+                var option = document.createElement("option");
+                if(i<10){
+                  option.value = '0'+i;
+                  option.text = '0'+i;
+                  select_year.appendChild(option);
+                }else{
+                option.value = i;
+                option.text = i;
+                select_year.appendChild(option);
+                }
+                
+              }
+      
             
       });
       const notification = "{{notifi_search}}";

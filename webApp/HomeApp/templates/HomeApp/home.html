@@ -169,14 +169,13 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Tên_Nhà_Xe</th>
-                        <th scope="col">Trạng_Thái_Chỗ </th>
-                        <th scope="col">Tên_Tài_Xế</th>
+  
+                        <th scope="col">Trạng_Thái</th>
                         <th scope="col">Loại_Phương_Tiện </th>
-                        <th scope="col">Số_Lượng_Chỗ</th>
+                        <th scope="col">Số_chỗ</th>
                         <th scope="col">Hình Ảnh</th>
                         <th scope="col">Điểm_Xuất_Phát</th>
-                        <th scope="col">Điểm_Kết_Thức</th>
+                        <th scope="col">Điểm_Đến</th>
                         <th scope="col">Giờ_Xuất_Phát</th>
                         <th scope="col">Ngày_Xuất_Phát</th>
                     </tr>
@@ -184,17 +183,16 @@
                 <tbody>
                   {% for schedule in schedules %}
                     <tr>
-                        <th scope="row"><b>{{schedule.vehicle.driver.carowner.username}}</b></th>
+                    
                         <td>
                           {%if schedule.slot_vehicle == 0 %}
                             <div class="tm-status-circle isfull">
-                            </div>Is Full
+                            </div>Hết
                           {%else%}
                             <div class="tm-status-circle notfull">
-                            </div>Not Full
+                            </div>Còn
                           {%endif%}  
                         </td>
-                        <td><b>{{schedule.vehicle.name_driver}}</b></td>
                         <td><b>{{schedule.vehicle.type_vehicle}}</b></td>
                         <td><b>{{schedule.slot_vehicle}}</b></td>
                         <td><img style="border-radius:3px;" class="list_img_vehicle" data-img-vehilce="{{ schedule.vehicle.img_vehicle.url }}" src="{{schedule.vehicle.img_vehicle.url}}"></td>

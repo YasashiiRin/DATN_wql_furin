@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Product Admin - Dashboard HTML Template</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
     <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
     <!-- https://fonts.google.com/specimen/Roboto -->
@@ -19,10 +18,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/styleDriver.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_driver.css' %}">
     
-    <!--
-	Product Admin CSS Template
-	https://templatemo.com/tm-524-product-admin
-	-->
+    <link
+        rel="icon"
+        type="image/x-icon"
+        href="{% static 'images/logo5.ico' %}"/>
+    <title>Furin-Driver</title>
 </head>
 
 <body id="reportsPage">
@@ -55,16 +55,15 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-cog"></i>
-                                {% comment %} <span>
-                                    Settings <i class="fas fa-angle-down"></i>
-                                </span> {% endcomment %}
+                                <div class="driver_f--state">
+                                    <i class="fas fa-cog"></i>
+                                    <span>
+                                        Settings <i class="fas fa-angle-down"></i>
+                                    </span>
+                                    
+                                </div>
                             </a>
-                            {% comment %} <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Profile</a>
-                                <a class="dropdown-item" href="#">Billing</a>
-                                <a class="dropdown-item" href="#">Customize</a>
-                            </div> {% endcomment %}
+                        
                         </li>
                     </ul>
                     <ul class="navbar-nav">
@@ -83,6 +82,25 @@
                 <div class="col">
                     <p class="block_welcome_driver">Chào mừng quay trở lại , Tài xế <b>{{request.driver.name_driver}}</b></p>
                 </div>
+
+            </div>
+            <div class="change-c--state">
+                <ul class="tg-list">
+                    <li class="tg-list-item">
+                            <div>
+                                <span>Thay đổi trạng thái: </span>
+                            </div>
+                            <div>     
+                                <input class="tgl tgl-ios" id="cb2" type="checkbox"/>
+                                <label class="tgl-btn" for="cb2"></label>
+                            </div> 
+                    </li>
+                    <li class="tg-list-item">
+                        <input class="tgl tgl-skewed" id="cb3" type="checkbox"/>
+                        <label class="tgl-btn--skewed" data-tg-off="Đang dừng" data-tg-on="Đang khởi hành" for="cb3"></label>
+                    </li>
+                    </li>
+                  </ul>
             </div>
             <!-- row -->
             <div class="row tm-content-row">
@@ -679,6 +697,58 @@
                     }
                 })
             })
+
+
+            {% comment %} -------------------thay đổi trạng thái ------------------ {% endcomment %}
+
+            const driver_id = "{{driver_id}}"
+            const state = "{{state}}"
+            console.log("driver_id: ", driver_id)
+            console.log("state: ", state)
+            const toggleBt = document.querySelector('.tgl-ios')
+            const skewedBt = document.querySelector('.tgl-skewed')
+            const initialState = toggleBt.checked;
+
+            if(state === 'Đang khởi hành'){
+                toggleBt.checked = true
+                skewedBt.checked = true;
+            }else if(state === 'Đang dừng'){
+                toggleBt.checked = false
+                skewedBt.checked = false;
+            }
+
+            toggleBt.addEventListener('change', function(){
+                const newState = toggleBt.checked;
+                var checkstate = 0;
+                if(newState){
+                    console.log("đang bật")
+                    skewedBt.checked = true;
+                    checkstate = 1;
+
+                }else{
+                    console.log("đang tắt")
+                    skewedBt.checked = false;
+                    checkstate = 0;
+                }
+                fetch(`/change_state/${driver_id}/${checkstate}/`,{
+                    method: "POST",
+                    headers : {
+                        "X-CSRFToken": "{{ csrf_token }}", 
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.message){
+                        console.log(data.message)
+                    }else if (data.error){
+                        console.log(data.error)
+                    }
+                })
+                .catch(error => {
+                    console.error("Đã xảy ra lỗi:", error);
+                });
+            })
+
      });
      const notification = "{{notifi_search}}";
      console.log("waiting notifi search ")

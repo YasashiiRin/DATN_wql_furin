@@ -21,14 +21,21 @@ from django.db.models import Q
 from datetime import datetime
 from CarownerApp.models import CustomSession
 from django.contrib.sessions.models import Session
+import numpy as np
 def homeview(request):
     my_filter_form = YourFilterForm()
     current_date = timezone.localtime(timezone.now()).date()
     current_time = timezone.localtime(timezone.now()).time()
     filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
     all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
+    schedules_lb1 = [schedule for schedule in all_shedules if schedule.label_schedule == 1]
+    schedules_lb2 = [schedule for schedule in all_shedules if schedule.label_schedule == 2]
+    if schedules_lb2:
+        soft_schedules =np.hstack((schedules_lb1,schedules_lb2))
+    else:
+        soft_schedules = schedules_lb1
     return render(request, 'HomeApp/home.html',{
-        'schedules' :all_shedules,
+        'schedules' :soft_schedules,
         'my_filter_form' : my_filter_form,
     })
 def home_customer_view(request):
@@ -181,10 +188,11 @@ def handle_book_vehicle_second(request,schedule_id,customer_id,slot):
         end_time=schedule.end_time
         name_schedule_order = schedule.name_schedule
 
-        slot_vehicle = schedule.slot_vehicle
-        slot_t = slot_vehicle - slot
-        handel_slots = slot
         check_cm = Orders.objects.get(customer=customer_id,schedule=schedule)
+        current_slot = check_cm.quantity_slot
+        slot_vehicle = schedule.slot_vehicle
+        slot_t = slot_vehicle - slot + current_slot
+        handel_slots = slot
         if check_cm :
             if slot > check_cm.quantity_slot:
                 if slot_t >= 0:
@@ -194,11 +202,10 @@ def handle_book_vehicle_second(request,schedule_id,customer_id,slot):
                     new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
                     new_order_update.save()
                     return JsonResponse({'message': 'Đặt xe thành công'})
-
                 else:
                     return JsonResponse({'error': 'không đủ chỗ '})
             elif slot < check_cm.quantity_slot:
-                schedule.slot_vehicle = schedule.slot_vehicle + check_cm.quantity_slot
+                schedule.slot_vehicle = slot_t
                 check_cm.delete()
                 new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
                 schedule.save()
@@ -302,7 +309,7 @@ def search_datetime_and_word(request):
                     minute = int(search_query_minutes)
                     filtered_schedules = Schedules.objects.filter(
                         Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
-                        Q(vehicle__driver__name_driver__icontains = search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
+                       
                         Q(start_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
                         Q(end_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
                         Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute)
@@ -311,7 +318,7 @@ def search_datetime_and_word(request):
                     minute = 00
                     filtered_schedules = Schedules.objects.filter(
                         Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
-                        Q(vehicle__driver__name_driver__icontains = search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
+                       
                         Q(start_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
                         Q(end_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
                         Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute)
@@ -326,7 +333,7 @@ def search_datetime_and_word(request):
                         minute = int(search_query_minutes)
                         filtered_schedules = Schedules.objects.filter(
                             Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
-                            Q(vehicle__driver__name_driver__icontains = search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
+                            
                             Q(start_location__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
                             Q(end_location__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
                             Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute)
@@ -335,7 +342,7 @@ def search_datetime_and_word(request):
                         minute = 00
                         filtered_schedules = Schedules.objects.filter(
                             Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
-                            Q(vehicle__driver__name_driver__icontains = search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
+                            
                             Q(start_location__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
                             Q(end_location__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
                             Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute)
@@ -352,7 +359,7 @@ def search_datetime_and_word(request):
                 day = int(time_years[2])
                 filtered_schedules = Schedules.objects.filter(
                     Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_date__month = month, start_date__day = day) |
-                    Q(vehicle__driver__name_driver__icontains = search_query_search_text ,start_date__month = month, start_date__day = day) |
+                    
                     Q(start_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day) |
                     Q(end_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day) |
                     Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_date__month = month, start_date__day = day)
@@ -447,7 +454,7 @@ def search_datetime_and_word(request):
 
 
 def search_customer(request):
-
+    
     current_date = timezone.localtime(timezone.now()).date()
     current_time = timezone.localtime(timezone.now()).time()
 
@@ -456,110 +463,168 @@ def search_customer(request):
     my_orders = Orders.objects.filter(customer = id_customer).all()
     filtered_schedules_return = Schedules.objects.select_related('vehicle__driver__carowner').all()
     all_shedules_return= [schedule for schedule in filtered_schedules_return if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
-    my_filter_form = YourFilterForm()
     if request.method == 'GET':
-        my_filter_form = YourFilterForm(request.GET)
-        if my_filter_form.is_valid():
-            print("isvalid")
-            search_query = my_filter_form.cleaned_data.get('search_query', '')
-            time_years = search_query.split('-')
-            time_parts = search_query.split(':')
-            time_with_vn = search_query.split(' ')
-            if search_query.isdigit():
-                print("is integer")
-                filtered_schedules = Schedules.objects.filter(
-                    Q(slot_vehicle= int(search_query)) # Tìm kiếm theo năm
-                )       
-            elif len(time_parts) >=2 :
-                print(time_parts)
+        
+        search_query_time_inputdate = request.GET['input_date']
+        search_query_hours = request.GET['hours']
+        search_query_minutes = request.GET['minutes']
+        search_query_search_text = request.GET['search_text']
+            
+        if  search_query_time_inputdate and search_query_hours and search_query_search_text:
+            print("check_search_datetime_and_word.....Cả 3 thông tin ")
+            time_years = search_query_time_inputdate.split('-')
+            if len(time_years) >=2:
+                print(time_years)
+            try:
+                hour = int(search_query_hours)
+                month = int(time_years[1])
+                day = int(time_years[2])
+                if search_query_minutes:
+                    minute = int(search_query_minutes)
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
+                       
+                        Q(start_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
+                        Q(end_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
+                        Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute)
+                    )
+                else:
+                    minute = 00
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
+                       
+                        Q(start_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
+                        Q(end_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
+                        Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute)
+                    )    
+            except ValueError:
+                pass
+        elif  search_query_hours and search_query_search_text:
+                print("check_search_datetime_and_word.....search_query_hours and search_query_search_text")
                 try:
-                    hour = int(time_parts[0])
-                    minute = int(time_parts[1])
+                    hour = int(search_query_hours)
+                    if search_query_minutes:
+                        minute = int(search_query_minutes)
+                        filtered_schedules = Schedules.objects.filter(
+                            Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
+                            Q(start_location__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
+                            Q(end_location__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
+                            Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute)
+                        )
+                    else:
+                        minute = 00
+                        filtered_schedules = Schedules.objects.filter(
+                            Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
+                            
+                            Q(start_location__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
+                            Q(end_location__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute) |
+                            Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_time__hour =hour, start_time__minute =minute)
+                        )    
+                except ValueError:
+                    pass   
+        elif  search_query_time_inputdate and search_query_search_text:
+            print("check_search_datetime_and_word.....search_query_time_inputdate and search_query_search_text")
+            time_years = search_query_time_inputdate.split('-')
+            if len(time_years) >=2:
+                print(time_years)
+            try:
+                month = int(time_years[1])
+                day = int(time_years[2])
+                filtered_schedules = Schedules.objects.filter(
+                    Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_date__month = month, start_date__day = day) |
+                    
+                    Q(start_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day) |
+                    Q(end_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day) |
+                    Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_date__month = month, start_date__day = day)
+                )
+            
+            except ValueError:
+                pass 
+
+        elif  search_query_time_inputdate and search_query_hours:
+            print("check_search_datetime_and_word.....search_query_time_inputdate and search_query_hours: ")
+            time_years = search_query_time_inputdate.split('-')
+            if len(time_years) >=2:
+                print(time_years)
+            try:
+                hour = int(search_query_hours)
+                month = int(time_years[1])
+                day = int(time_years[2])
+                if search_query_minutes:
+                    minute = int(search_query_minutes)
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute)
+                    )
+                else:
+                    minute = 00
+                    filtered_schedules = Schedules.objects.filter(
+                        Q(start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute)
+                    )    
+            except ValueError:
+                pass
+        elif search_query_time_inputdate:
+            print("check_search_datetime_and_word.....search_query_time_inputdate")
+            time_years = search_query_time_inputdate.split('-')
+            if len(time_years) >=2:
+                print(time_years)
+            try:
+                month = int(time_years[1])
+                day = int(time_years[2])
+                filtered_schedules = Schedules.objects.filter(
+                    Q(start_date__month = month, start_date__day = day)
+                )
+            except ValueError:
+                pass
+            print("check_search_datetime_and_word......",search_query_time_inputdate,search_query_hours,search_query_minutes)
+        elif  search_query_hours:
+            print("check_search_datetime_and_word.....search_query_hours")
+            try:
+                hour = int(search_query_hours)
+                if search_query_minutes:
+                    minute = int(search_query_minutes)
+                    filtered_schedules = Schedules.objects.filter(
+                    Q(start_time__hour =hour, start_time__minute =minute)
+                )
+                else:
+                    minute = 00
                     filtered_schedules = Schedules.objects.filter(
                         Q(start_time__hour =hour, start_time__minute =minute)
                     )
-                except ValueError:
+            except ValueError:
                     pass
-            elif len(time_years) >=2 :
-                print(time_years)
-                try:
-                    month = int(time_years[0])
-                    day = int(time_years[1])
-                    filtered_schedules = Schedules.objects.filter(
-                        Q(start_date__month = month, start_date__day = day)
-                    )
-                except ValueError:
-                    pass
-            elif len(time_with_vn) >= 2:
-                if time_with_vn[0] == 'ngày' or time_with_vn[0] == 'Ngày':
-                    print("search time vn:",time_with_vn)
-                    try:
-                        day = int(time_with_vn[1])
-                        filtered_schedules = Schedules.objects.filter(
-                            Q(start_date__day = day)
-                        )
-                        if len(time_with_vn) >=3:
-                            month = int(time_with_vn[2])
-                            filtered_schedules = Schedules.objects.filter(
-                                Q( start_date__month= month,start_date__day = day)
-                            )
-                    except ValueError:
-                        pass 
-                elif time_with_vn[0] == 'tháng' or time_with_vn[0] == 'Tháng':
-                    print("search time vn:",time_with_vn)
-                    try:
-                        month = int(time_with_vn[1])
-                        filtered_schedules = Schedules.objects.filter(
-                            Q(start_date__month = month)
-                        )
-                        if len(time_with_vn) >=3:
-                            day = int(time_with_vn[2])
-                            filtered_schedules = Schedules.objects.filter(
-                                Q( start_date__month= month, start_date__day = day)
-                            )
-                    except ValueError:
-                        pass
-                else:
-                    filtered_schedules = Schedules.objects.filter(
-                        Q(vehicle__driver__carowner__username__icontains=search_query) |
-                        Q(vehicle__driver__name_driver__icontains = search_query) |
-                        Q(start_location__icontains=search_query) |
-                        Q(end_location__icontains=search_query) |
-                        Q(vehicle__type_vehicle__icontains=search_query)
-                    )
+        elif  search_query_search_text:
+            print("check_search_datetime_and_word.....search_query_search_text")
+            filtered_schedules = Schedules.objects.filter(
+                Q(vehicle__driver__carowner__username__icontains=search_query_search_text) |
+                Q(vehicle__driver__name_driver__icontains = search_query_search_text) |
+                Q(start_location__icontains=search_query_search_text) |
+                Q(end_location__icontains=search_query_search_text) |
+                Q(vehicle__type_vehicle__icontains=search_query_search_text)
+            )                                
+        try:
+            searchvalue = ''
+            all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)] 
+            if not all_shedules :
+                searchvalue = 'search_err'
             else:
-                filtered_schedules = Schedules.objects.filter(
-                    Q(vehicle__driver__carowner__username__icontains=search_query) |
-                    Q(start_location__icontains=search_query) |
-                    Q(end_location__icontains=search_query) |
-                    Q(vehicle__type_vehicle__icontains=search_query)
-                )
-            try:
-                searchvalue = ''
-                all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)] 
-                if not all_shedules :
-                    searchvalue = 'search_err'
-                else:
-                    searchvalue = 'search_success'
-                return render(request, 'HomeApp/home_customer.html', {
-                    'my_filter_form': my_filter_form,
+                searchvalue = 'search_success'
+            return render(request, 'HomeApp/home_customer.html', {
                     'schedules': all_shedules,
                     'my_orders' : my_orders,
                     'current_date' : current_date,
                     'notifi_search' : searchvalue
                 })
-            except:
+        except:
                 return render(request, 'HomeApp/home_customer.html', {
-                    'my_filter_form': my_filter_form,
                     'schedules': '',
                     'my_orders' : my_orders,
                     'current_date' : current_date,
                     'notifi_search' : 'search_err'
-                })
-        else:
-             print("novalid")
+                })    
 
-    return render(request, 'HomeApp/home_customer.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules_return,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
+
+    return render(request, 'HomeApp/home_customer.html', {'schedules': all_shedules_return,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
+
 
 def search_home(request):
 

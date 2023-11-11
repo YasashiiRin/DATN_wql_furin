@@ -15,6 +15,7 @@ class Driver(models.Model):
     verify_driver = models.BooleanField(default=False)
     token_driver = models.CharField(max_length=255, null=True, blank=True)
     comfirm_account=models.BooleanField(default=False)
+    state = models.CharField(max_length=30, null=True)
     def __str__(self):
         return self.email_driver
     class Meta:

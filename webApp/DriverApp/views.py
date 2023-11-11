@@ -14,6 +14,8 @@ from django.utils.crypto import get_random_string
 from HomeApp.forms import YourFilterForm
 from django.db.models import Q
 import numpy as np
+import json
+from django.http import JsonResponse
 
 
 def driver(request):
@@ -23,6 +25,7 @@ def driver(request):
         current_date = timezone.localtime(timezone.now()).date()
         current_time = timezone.localtime(timezone.now()).time()
         driver_id= request.driver.id
+        state = Driver.objects.get(pk = driver_id).state
         driver_orders = Orders.objects.filter(vehicle__driver_id = driver_id)
         filtered_schedules = Schedules.objects.filter(vehicle__driver = driver_id).all()
         all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]
@@ -37,8 +40,10 @@ def driver(request):
         context ={
             'driver_orders': reversed_list,
             'notifi_orders': reversed_list,
-            'all_schedules' : list(all_shedules),
+            'all_schedules' : list(soft_schedules),
             'my_filter_form' : my_filter_form,
+            'driver_id' : driver_id,
+            'state' : state,
         }
         return render(request, 'DriverApp/driver.html',context)
     else:
@@ -384,3 +389,25 @@ def logout_driver(request):
         print(" Driver Logged out...............")   
         pass     
     return render(request, 'DriverApp/driver_login.html')
+
+def change_state(request,driver_id,checkstate):
+    print("start change state................................................")
+    try:
+        print("id driver at state driver :", driver_id)
+        print("check state at state driver :", checkstate)
+        driver = Driver.objects.get(pk = driver_id)
+        if driver:
+            if checkstate == 1:
+                driver.state = 'Đang khởi hành'
+                driver.save()
+                return JsonResponse({'notifiCancel': 'Cancel order Successfull.......'})
+            elif checkstate == 0 :
+                driver.state = 'Đang dừng'
+                driver.save()
+                return JsonResponse({'notifiCancel': 'Cancel order Successfull.......'})
+        else:
+            return JsonResponse({'error_Cancel': 'Cancel order failed.......'})
+    except Orders.DoesNotExist:
+        return JsonResponse({'error': 'Có lỗi xảy ra vui lòng liên hệ với quản trị viên'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500) 

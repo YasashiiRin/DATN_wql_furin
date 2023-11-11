@@ -60,7 +60,8 @@ button:focus {
   margin-top: 20px;
 }
 .block_info_schedules{
-  width: 1211px;
+  margin: 22px 22px;
+  width: 1269px;
   height: 468px;
 }
 .tm-block-col {
@@ -161,8 +162,6 @@ button:focus {
 }
 .tm-content-row {
   justify-content: space-between;
-  margin-left: -41px;
-  margin-right: -20px;
 }
 .tm-col {
   padding-left: 20px;

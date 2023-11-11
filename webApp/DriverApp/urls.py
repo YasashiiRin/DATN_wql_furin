@@ -10,4 +10,6 @@ urlpatterns = [
     path('activateD/<str:uid>/<str:token>/',views.activate_driver, name='activateD'),
     path('search_order/',views.search_order, name='search_order'),
     path('search_list_schedules/',views.search_list_schedules, name='search_list_schedules'),
+
+    path('change_state/<int:driver_id>/<int:checkstate>/',views.change_state, name='change_state'),
 ]

@@ -62,7 +62,8 @@ class DriverAdminForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         if not self.user.is_superuser:
-       
+            self.fields['state'].widget = forms.widgets.HiddenInput()
+            self.fields['state'].required = False
             self.fields['carowner'].widget = forms.widgets.HiddenInput()
             self.fields['carowner'].required = False
 
@@ -75,7 +76,7 @@ class DriverAdminForm(forms.ModelForm):
         return super().save(commit)  
         
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ('carowner','name_driver', 'email_driver', 'address_driver', 'phone_driver', 'verify_driver','token_driver','comfirm_account')
+    list_display = ('carowner','name_driver', 'email_driver', 'address_driver', 'phone_driver', 'verify_driver','state','comfirm_account')
     inlines = [VehicleInline]
     search_fields = ('name_driver','phone_driver','email_driver')
     form = DriverAdminForm
