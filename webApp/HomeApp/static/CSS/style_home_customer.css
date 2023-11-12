@@ -526,7 +526,7 @@
     width: 100%;
     height: auto;
   }
-  .invoice_container_title{
+  /* .invoice_container_title{
     padding: 18px;
     margin-top: 10px;
   }
@@ -534,7 +534,7 @@
     font-size: 18px;
     font-weight: 600;
     color:#2d2156e8;
-  }
+  } */
   .invoice_info_book-title{
     margin-right: 10px;
   }

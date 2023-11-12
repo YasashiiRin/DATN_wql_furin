@@ -253,6 +253,7 @@ def search_order(request):
     current_date = timezone.localtime(timezone.now()).date()
     current_time = timezone.localtime(timezone.now()).time()
     driver_id= request.driver.id
+    state = Driver.objects.get(pk = driver_id).state
     driver_orders = Orders.objects.filter(vehicle__driver_id = driver_id)
     filtered_schedules = Schedules.objects.filter(vehicle__driver = driver_id).all()
     all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date >= current_date]
@@ -266,113 +267,178 @@ def search_order(request):
     print(reversed_list)     
     my_filter_form = YourFilterForm()
     if request.method == 'GET':
-        my_filter_form = YourFilterForm(request.GET)
-        if my_filter_form.is_valid():
-            print("isvalid")
-            print("Search at Driver............................................")
-            search_query = my_filter_form.cleaned_data.get('search_query', '')
-            time_years = search_query.split('-')
-            time_parts = search_query.split(':')
-            time_with_vn = search_query.split(' ')
-            print("Search_query: ", search_query)
-            if search_query.isdigit():
-                print("is integer")
-                filter_orders=driver_orders.filter(
-                    Q(quantity_slot= int(search_query)) 
-                )
-            elif len(time_parts) >=2 :
-                print(time_parts)
+        
+        search_query_time_inputdate = request.GET['input_date']
+        search_query_hours = request.GET['hours']
+        search_query_minutes = request.GET['minutes']
+        search_query_search_text = request.GET['search_text']
+            
+        if  search_query_time_inputdate and search_query_hours and search_query_search_text:
+            print("check_search_datetime_and_word.....Cả 3 thông tin ")
+            time_years = search_query_time_inputdate.split('-')
+            if len(time_years) >=2:
+                print(time_years)
+            try:
+                hour = int(search_query_hours)
+                month = int(time_years[1])
+                day = int(time_years[2])
+                if search_query_minutes:
+                    minute = int(search_query_minutes)
+                    filter_orders = driver_orders.filter(
+                        Q(name_customer_order__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                       
+                        Q(pickup_location__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                        Q(dropoff_location__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                        Q(quantity_slot__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute)
+                    )
+                else:
+                    minute = 00
+                    filter_orders = driver_orders.filter(
+                        Q(name_customer_order__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                       
+                        Q(pickup_location__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                        Q(dropoff_location__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                        Q(quantity_slot__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute)
+                    )    
+            except ValueError:
+                pass
+        elif  search_query_hours and search_query_search_text:
+                print("check_search_datetime_and_word.....search_query_hours and search_query_search_text")
                 try:
-                    hour = int(time_parts[0])
-                    minute = int(time_parts[1])
+                    hour = int(search_query_hours)
+                    if search_query_minutes:
+                        minute = int(search_query_minutes)
+                        filter_orders = driver_orders.filter(
+                            Q(name_customer_order__icontains=search_query_search_text ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                       
+                            Q(pickup_location__icontains=search_query_search_text ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                            Q(dropoff_location__icontains=search_query_search_text ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                            Q(quantity_slot__icontains=search_query_search_text ,start_date_time__hour =hour, start_date_time__minute =minute)
+                        )
+                    else:
+                        minute = 00
+                        filter_orders = driver_orders.filter(
+                            Q(name_customer_order__icontains=search_query_search_text ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                       
+                            Q(pickup_location__icontains=search_query_search_text ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                            Q(dropoff_location__icontains=search_query_search_text ,start_date_time__hour =hour, start_date_time__minute =minute) |
+                            Q(quantity_slot__icontains=search_query_search_text ,start_date_time__hour =hour, start_date_time__minute =minute)
+                        )    
+                except ValueError:
+                    pass   
+        elif  search_query_time_inputdate and search_query_search_text:
+            print("check_search_datetime_and_word.....search_query_time_inputdate and search_query_search_text")
+            time_years = search_query_time_inputdate.split('-')
+            if len(time_years) >=2:
+                print(time_years)
+            try:
+                month = int(time_years[1])
+                day = int(time_years[2])
+                filter_orders = driver_orders.filter(
+                    Q(name_customer_order__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day) |
+                       
+                    Q(pickup_location__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day) |
+                    Q(dropoff_location__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day) |
+                    Q(quantity_slot__icontains=search_query_search_text ,day_schedule__month = month, day_schedule__day = day)
+                )
+            
+            except ValueError:
+                pass 
+
+        elif  search_query_time_inputdate and search_query_hours:
+            print("check_search_datetime_and_word.....search_query_time_inputdate and search_query_hours: ")
+            time_years = search_query_time_inputdate.split('-')
+            if len(time_years) >=2:
+                print(time_years)
+            try:
+                hour = int(search_query_hours)
+                month = int(time_years[1])
+                day = int(time_years[2])
+                if search_query_minutes:
+                    minute = int(search_query_minutes)
+                    filter_orders = driver_orders.filter(
+                        Q(day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute)
+                    )
+                else:
+                    minute = 00
+                    filter_orders = driver_orders.filter(
+                        Q(day_schedule__month = month, day_schedule__day = day ,start_date_time__hour =hour, start_date_time__minute =minute)
+                    )    
+            except ValueError:
+                pass
+        elif search_query_time_inputdate:
+            print("check_search_datetime_and_word.....search_query_time_inputdate")
+            time_years = search_query_time_inputdate.split('-')
+            if len(time_years) >=2:
+                print(time_years)
+            try:
+                month = int(time_years[1])
+                day = int(time_years[2])
+                filter_orders = driver_orders.filter(
+                    Q(day_schedule__month = month, day_schedule__day = day)
+                )
+            except ValueError:
+                pass
+            print("check_search_datetime_and_word......",search_query_time_inputdate,search_query_hours,search_query_minutes)
+        elif  search_query_hours:
+            print("check_search_datetime_and_word.....search_query_hours")
+            try:
+                hour = int(search_query_hours)
+                if search_query_minutes:
+                    minute = int(search_query_minutes)
+                    filter_orders = driver_orders.filter(
+                    Q(start_date_time__hour =hour, start_date_time__minute =minute)
+                )
+                else:
+                    minute = 00
                     filter_orders = driver_orders.filter(
                         Q(start_date_time__hour =hour, start_date_time__minute =minute)
                     )
-                except ValueError:
+            except ValueError:
                     pass
-            elif len(time_years) >=2 :
-                print(time_years)
-                try:
-                    month = int(time_years[0])
-                    day = int(time_years[1])
-                    filter_orders = driver_orders.filter(
-                        Q(day_schedule__month = month, day_schedule__day = day)
-                    )
-                except ValueError:
-                    pass
-            elif len(time_with_vn) >= 2:
-                if time_with_vn[0] == 'ngày' or time_with_vn[0] == 'Ngày':
-                    print("search time vn:",time_with_vn)
-                    try:
-                        day = int(time_with_vn[1])
-                        filter_orders = driver_orders.filter(
-                            Q(day_schedule__day = day)
-                        )
-                        if len(time_with_vn) >=3:
-                            month = int(time_with_vn[2])
-                            filter_orders = driver_orders.filter(
-                                Q( day_schedule__month= month, day_schedule__day = day)
-                            )
-                    except ValueError:
-                        pass 
-                elif time_with_vn[0] == 'tháng' or time_with_vn[0] == 'Tháng':
-                    print("search time vn:",time_with_vn)
-                    try:
-                        month = int(time_with_vn[1])
-                        filter_orders = driver_orders.filter(
-                            Q(day_schedule__month = month)
-                        )
-                        if len(time_with_vn) >=3:
-                            day = int(time_with_vn[2])
-                            filter_orders = driver_orders.filter(
-                                Q( day_schedule__month= month, day_schedule__day = day)
-                            )
-                    except ValueError:
-                        pass
-                else:
-                    filter_orders = driver_orders.filter(
-                        Q(name_customer_order__icontains=search_query) |
-                        Q(name_driver_order__icontains = search_query) |
-                        Q(name_schedule_order__icontains=search_query) |
-                        Q(name_vehicle_order__icontains=search_query) 
-                    )
+        elif  search_query_search_text:
+            print("check_search_datetime_and_word.....search_query_search_text")
+            filter_orders = driver_orders.filter(
+                Q(name_customer_order__icontains=search_query_search_text) |
+                       
+                Q(pickup_location__icontains=search_query_search_text) |
+                Q(dropoff_location__icontains=search_query_search_text) |
+                Q(quantity_slot__icontains=search_query_search_text)
+            )                                
+        try:
+            searchvalue = ''
+            if not filter_orders :
+                searchvalue = 'search_err'
             else:
-                filter_orders = driver_orders.filter(
-                        Q(name_customer_order__icontains=search_query) |
-                        Q(name_driver_order__icontains = search_query) |
-                        Q(name_schedule_order__icontains=search_query) |
-                        Q(name_vehicle_order__icontains=search_query) 
-                )
-            try:
-                searchvalue = ''
-                if not filter_orders :
-                    searchvalue = 'search_err'
-                else:
-                    searchvalue = 'search_success'
-                return render(request, 'DriverApp/driver.html', {
+                searchvalue = 'search_success'
+            return render(request, 'DriverApp/driver.html', {
                     'driver_orders': filter_orders,
                     'notifi_orders': reversed_list,
                     'all_schedules' : soft_schedules,
                     'my_filter_form' : my_filter_form,
                     'notifi_search' : searchvalue,
-                })
-            except:
+                    'state' : state,
+                    'driver_id' : driver_id,
+            })
+        except:
                 return render(request, 'DriverApp/driver.html', {
-                    'driver_orders': filter_orders,
+                    'driver_orders': reversed_list,
                     'notifi_orders': reversed_list,
                     'all_schedules' : soft_schedules,
                     'my_filter_form' : my_filter_form,
-                    'notifi_search' : 'search_err'
+                    'notifi_search' : 'search_err',
+                    'state' : state,
+                    'driver_id' : driver_id,
                 })
-        else:
-             print("novalid")
 
     return render(request, 'DriverApp/driver.html', {
         'my_filter_form': my_filter_form,
         'notifi_orders': reversed_list,
-        'driver_orders': driver_orders,
+        'driver_orders': reversed_list,
         'all_schedules' : list(all_shedules),
-        'notifi_search' : 'search_err' })
+        'notifi_search' : 'search_err',
+        'driver_id' : driver_id,
+        'state' : state, })
              
 def logout_driver(request):
     try:

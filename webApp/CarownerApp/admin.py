@@ -34,10 +34,12 @@ class VehicleInline(admin.TabularInline):
  
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('name_customer', 'email_customer', 'password_customer','address_customer','phone_customer','last_login','verify_customer')
+    search_fields = ('name_customer','email_customer')
     def save_model(self, request, obj, form, change):
         if 'password_customer' in form.changed_data:
             obj.password_customer = make_password(obj.password_customer)
         super().save_model(request, obj, form, change)     
+
 class CarOwnerAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'phone_carowner','address_carowner','verify_carowner')
     inlines = [DriverInline]
@@ -61,9 +63,9 @@ class DriverAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
+        self.fields['state'].widget = forms.widgets.HiddenInput()
+        self.fields['state'].required = False
         if not self.user.is_superuser:
-            self.fields['state'].widget = forms.widgets.HiddenInput()
-            self.fields['state'].required = False
             self.fields['carowner'].widget = forms.widgets.HiddenInput()
             self.fields['carowner'].required = False
 
@@ -282,7 +284,7 @@ class ScheduleAdmin(admin.ModelAdmin):
         return queryset
     sort_by_start_day_descending.short_description = 'Sort by Start Day'
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','name_customer_order','pickup_daytime','quantity_slot','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','pickup_location','dropoff_location','start_date_time','dropoff_datetime')
+    list_display = ('vehicle','name_customer_order','pickup_daytime','quantity_slot','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','pickup_location','dropoff_location','start_date_time','dropoff_datetime','state_book')
     search_fields = ('name_customer_order','name_driver_order','name_schedule_order','quantity_slot')
     class Media:
         css = {

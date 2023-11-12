@@ -233,6 +233,9 @@
                                      data-schedule-id="{{ schedule.id }}" 
                                      data-customer-id="{{ request.customer.id }}"
                                      data-carownername ="{{schedule.vehicle.driver.carowner.username}}"
+                                     data-phonecarowner ="{{schedule.vehicle.driver.carowner.phone_carowner}}"
+
+                                     data-phonedriver ="{{schedule.vehicle.driver.phone_driver}}"
                                      data-drivername ="{{schedule.vehicle.name_driver}}"
                                      data-vehicletype ="{{schedule.vehicle.type_vehicle}}"
                                      data-startlocation ="{{schedule.start_location}}"
@@ -392,7 +395,7 @@
       </div>
       <div class="invoice_container">
         <div class="invoice_container_title">
-          <p class="carownername">Lã Tiểu Ngư</p>
+          {% comment %} <p class="carownername">Lã Tiểu Ngư</p> {% endcomment %}
         </div>
         <div class="invoice_container_conten">
           <div class="invoice_info_book">
@@ -401,6 +404,22 @@
             </div>
             <div>
             <p class="drivername">none</p>
+            </div>
+          </div>
+          <div class="invoice_info_book">
+            <div class="invoice_info_book-title">
+              <p>Số điện thoại tài xế: </p>
+            </div>
+            <div>
+            <p class="phone_driver">none</p>
+            </div>
+          </div>
+          <div class="invoice_info_book">
+            <div class="invoice_info_book-title">
+              <p>Số điện thoại nhà xe: </p>
+            </div>
+            <div>
+            <p class="phone_carowner">none</p>
             </div>
           </div>
           <div class="invoice_info_book">
@@ -488,11 +507,13 @@
           const container = document.querySelector('.container')
   
           const bookButtons = document.querySelectorAll(".bt_book_car");
-          const carownername = document.querySelector('.carownername')
+          {% comment %} const carownername = document.querySelector('.carownername') {% endcomment %}
           const drivername = document.querySelector('.drivername')
           const vehicletype = document.querySelector('.vehicletype')
           const startlocation = document.querySelector('.startlocation')
           const endlocation = document.querySelector('.endlocation')
+          const phonecarowner = document.querySelector('.phone_carowner')
+          const phonedriver = document.querySelector('.phone_driver')
           const button_confirm = document.querySelector('.invoice_bt')
           const startday = document.querySelector('.startday')
 
@@ -546,7 +567,9 @@
                   const vehicletype_get = this.getAttribute('data-vehicletype')
                   const startlocation_get = this.getAttribute('data-startlocation')
                   const endlocation_get = this.getAttribute('data-endlocation')
-                
+                  const phone_carowner = this.getAttribute('data-phonecarowner')
+                  const phone_driver = this.getAttribute('data-phonedriver')
+        
                   const quantityslot = this.getAttribute('data-quantityslot')
                   const startday_get = this.getAttribute('data-startday')
                   
@@ -562,13 +585,15 @@
                   
                   {% comment %} -----------set info invoice ------------- {% endcomment %}
 
-                  carownername.innerHTML=carownername_get
+                  {% comment %} carownername.innerHTML=carownername_get {% endcomment %}
                   drivername.innerHTML=drivername_get
                   vehicletype.innerHTML=vehicletype_get
                   startlocation.innerHTML=startlocation_get
                   endlocation.innerHTML=endlocation_get
                   startday.innerHTML =startday_get
                   input_quantity.max = quantityslot
+                  phonecarowner.innerHTML = phone_carowner
+                  phonedriver.innerHTML = phone_driver
                   container.classList.add("show");
                   invoice.style.display ='block'
 
