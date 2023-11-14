@@ -174,9 +174,12 @@
 								<div class="col-sm-3">
 									<h6 class="mb-0">Số điện thoại</h6>
 								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" class="form-control input_item_info" value="{{myinfo.phone_customer}}">
+								<div class="block_change--phone text-secondary">
+									<input type="text" class="input_change_phonenumber input_item_info" value="{{myinfo.phone_customer}}">
 								</div>
+                <div class="bt-change-phone">
+                  <button type="submit" class="bt_pk_v2 bt_submit_changephone">Thay đổi</button>
+                </div>
 							</div>
 							<div class="row mb-3">
 								<div class="col-sm-3">
@@ -205,6 +208,33 @@
 			</div>
 		</div>
 	</div>
+  <section class="section_input_otp">
+    <form action="javascript: void(0)" class="otp-form" name="otp-form">
+      <div class="title_otp">
+        <div class="title_otp-item">
+          <span>ENTER OTP</span>
+        </div>
+        <div class="invoice_conten_right">
+          <div class="span_iconoutbook">✘</div>
+        </div>
+      </div>
+      <div class="otp-input-fields">
+        <input type="number" class="otp__digit otp__field__1">
+        <input type="number" class="otp__digit otp__field__2">
+        <input type="number" class="otp__digit otp__field__3">
+        <input type="number" class="otp__digit otp__field__4">
+        <input type="number" class="otp__digit otp__field__5">
+        <input type="number" class="otp__digit otp__field__6">
+      </div>
+      <div class="bt-send">
+        <button type="submit" class="bt_pk_v2 bt_send--otp">Gửi</button>
+        <span class="bt-send_count_s" id="s_otp">Giây</span>
+      </div>
+      <div class="word_notifi--sendotp">
+        <span class="word_show"></span>
+      </div>
+    </form>
+  </section>
     <div id="tagtoast">
     </div>
     <script src="{% static 'JS/toast_profile_customer.js' %}"></script>
@@ -269,7 +299,174 @@
                       console.error('Đã xảy ra lỗi:', error);
                     });
             }
+
+
+
+            // Hiển thị giao diện nhập otp và gửi OTP
+            const section_input_otp = document.querySelector('.section_input_otp')
+            const bcover = document.querySelector('.container')
+            const bt_submit_changephone = document.querySelector('.bt_submit_changephone')
+            bt_submit_changephone.onclick = function (){
+              const data ={
+                phone_customer:listinput_info[2].value,
+              }
+              fetch('send_otp_sms/', {
+                method: 'POST',
+                headers: {
+                  "X-CSRFToken": "{{ csrf_token }}",
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              })
+                .then(response => response.json())
+                .then(data => {
+                  bcover.classList.add('show')
+                  section_input_otp.style.display ='block'
+                })
+                .catch(error => {
+                  console.error('Đã xảy ra lỗi:', error);
+                });
+            }
+            const exit_x = document.querySelector('.span_iconoutbook')
+            exit_x.onclick = function(){
+              bcover.classList.remove('show')
+              section_input_otp.style.display ='none'
+              location.reload()
+            }
+
+
+            // Đếm thời gian hết hạn mã OTP
+            var Expiration_time_otp = 100;
+            function count_time_OTP(s){
+              document.getElementById('s_otp').innerText = s.toString();
+              if(s > 0){
+                setTimeout(function(){
+                  localStorage.setItem('s_otp_value', s);
+                  count_time_OTP(s-1)
+                },1000)
+              }else{
+                const word_show = document.querySelector('.word_show')
+                word_show.innerHTML = 'Hết thời gian OTP tồn tại!'
+                localStorage.removeItem('s_otp_value')
+              }
+            }
+            var savedSValue = localStorage.getItem('s_otp_value');
+            var initialSValue = savedSValue ? parseInt(savedSValue) : 100;
+            count_time_OTP(initialSValue)
+
+
         });  
+var otp_inputs = document.querySelectorAll(".otp__digit")
+var input_otp = ""
+var mykey = "0123456789".split("")
+otp_inputs.forEach((_)=>{
+  _.addEventListener("keyup", handle_next_input)
+})
+function handle_next_input(event){
+  let current = event.target
+  let index = parseInt(current.classList[1].split("__")[2])
+  current.value = event.key
+  
+  if(event.keyCode == 8 && index > 1){
+    current.previousElementSibling.focus()
+  }
+  if(index < 6 && mykey.indexOf(""+event.key+"") != -1){
+    var next = current.nextElementSibling;
+    next.focus()
+  }
+  var _finalKey = ""
+  for(let {value} of otp_inputs){
+      _finalKey += value
+  }
+  if(_finalKey.length == 6){
+    console.log("input otp: ",_finalKey)
+    input_otp = _finalKey
+    console.log("input otp: ",input_otp)
+  }
+
+  const bt_sendotp = document.querySelector('.bt_send--otp')
+  const listinput_info = document.querySelectorAll('.input_item_info')
+  const word_show = document.querySelector('.word_show')
+  const section_input_otp = document.querySelector('.section_input_otp')
+  const bcover = document.querySelector('.container')
+  bt_sendotp.onclick=function(){
+    data={
+      'cm_otp':input_otp
+    }
+    fetch('handelOTP/', {
+      method: 'POST',
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+          if(data.message){
+            data2={
+              phone_customer:listinput_info[2].value,
+            }
+            fetch('save_edit_phone/', {
+              method: 'POST',
+              headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data2),
+            })
+              .then(response => response.json())
+              .then(data => {
+                  if(data.message){
+                    bcover.classList.remove('show')
+                    section_input_otp.style.display ='none'
+                    toast({
+                      title: "Thay đổi thành công!",
+                      content: "Bạn vừa thay đổi thông tin thành công.",
+                      typeicon: "success",
+                      duration: 8000
+                  })  
+                  }else if(data.error){
+                    toast({
+                      title: "Thay đổi thất bại!",
+                      content: data.error,
+                      typeicon: "error",
+                      duration: 8000
+                  })   
+                  }
+                  const dltoast = document.querySelectorAll('.toast-exit');
+                  console.log("button_exit: ",dltoast)
+                  dltoast.forEach(element => {
+                    element.onclick = function(){
+                      console.log("is click exits")
+                      element.parentElement.remove('toast')
+                    }
+                  })
+              })
+              .catch(error => {
+                console.error('Đã xảy ra lỗi:', error);
+              });
+          }else if(data.error){
+            if(data.error === 'OTPerror'){
+              word_show.innerHTML = 'OTP bạn vừa nhập không chính xác'
+            }else if(data.error === 'Expirationerror'){
+              word_show.innerHTML = 'OTP bạn vừa nhập đã hết hạn, vui lòng gửi lại yêu cầu'
+            }
+          }
+          const dltoast = document.querySelectorAll('.toast-exit');
+          console.log("button_exit: ",dltoast)
+          dltoast.forEach(element => {
+            element.onclick = function(){
+              console.log("is click exits")
+              element.parentElement.remove('toast')
+            }
+          })
+      })
+      .catch(error => {
+        console.error('Đã xảy ra lỗi:', error);
+      });
+  }
+}
     </script>
   </body>
 </html>

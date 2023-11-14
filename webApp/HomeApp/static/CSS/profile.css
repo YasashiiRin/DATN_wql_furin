@@ -108,6 +108,18 @@ body{
     border-top: 1px solid #e9a986;
     border-right: 1px solid #e9a986;
 }
+.bt_pk_v2{
+    font-weight: 500;
+    color: #fff;
+    width: 84px;
+    height: 32px;
+    background: #254e87;
+    border-radius: 6px;
+    border-left: 2px solid #ffaa40;
+    border-bottom: 2px solid #e9a986;
+    border-top: 1px solid #e9a986;
+    border-right: 1px solid #e9a986;
+}
 .bt_primary{
     font-weight: 500;
     color: #fff;
@@ -127,3 +139,172 @@ body{
     width: 152px;
     height: 37px;
 }
+
+
+
+
+
+.container::before{
+    
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    background-color: rgba(27, 27, 27, 65%);
+    display: none;
+    z-index: 99;
+  }
+  .container.show::before{
+    display: block;
+  }
+
+
+
+
+
+/* Thay đổi số điện thoại và otp */
+.block_change--phone{
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    flex: 0 0 50%;
+}
+.input_change_phonenumber{
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.section_input_otp{
+    display: none;
+    position: fixed;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    width: 444px;
+    height: auto;
+    top: 30%;
+    right: 30%;
+    z-index: 999;
+}
+.otp-form{
+    margin: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 8px 0px #02025044;
+}
+.title_otp-item span{
+    font-weight: 800;
+    color: #47c2ea;
+    font-family: "Poppins", sans-serif;
+}
+.title_otp-item{
+    margin-left: 30px;
+}
+.title_otp{
+    display: flex;
+    max-width: 400px;
+    text-align: center;
+    padding-top: 19px;
+    justify-content: space-between;
+    align-items: center;
+}
+.otp-input-fields{
+    margin: auto;
+    max-width: 400px;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 30px;
+}
+    
+.otp__digit{
+    height: 40px;
+    width: 40px;
+    background-color: transparent;
+    border-radius: 4px;
+    border: 1px solid #2f8f1f;
+    text-align: center;
+    outline: none;
+    font-size: 16px;
+}
+.otp__digit::-webkit-outer-spin-button,
+.otp__digit::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.otp__digit[type=number] {
+    -moz-appearance: textfield;
+}
+.otp__digit:focus{
+    border-width: 2px;
+    border-color: darken(#2f8f1f, 5%);
+    font-size: 20px;
+}
+
+
+.result{
+  max-width: 400px;
+  margin: auto;
+  padding: 24px;
+  text-align: center;
+}
+.result p{
+    font-size: 24px;
+    font-family: 'Antonio', sans-serif;
+    opacity: 1;
+    transition: color 0.5s ease;}
+.result p._ok{
+      color: green;
+    }
+.result p._notok{
+      color: red;
+      border-radius: 3px;
+    }
+.bt-send{
+    margin-left: 40%;
+}
+.bt_send--otp{
+    margin-bottom: 19px;
+}
+.invoice_conten_right{
+    margin-right: 30px;
+}
+.invoice_conten_right a {
+    color: rgb(0, 0, 0);
+    font-weight: 500;
+  }
+.span_iconoutbook{
+    width: 30px;
+    height: 30px;
+    font-size: 21px;
+    font-weight: 800;
+    color: rgb(255 86 39);
+    cursor: pointer;
+  }
+  .word_notifi--sendotp{
+    text-align: center;
+    padding-bottom: 10px;
+  }
+  .word_show{
+    font-weight: 500;
+    color: #ff2525;
+    font-size: 13px;
+  }
+  .bt-send_count_s{
+    color: #ff2525;
+    font-size: 13px;
+    margin-left: 25%;
+  }

@@ -25,4 +25,8 @@ urlpatterns = [
     path('upload_images/<int:customerid>/',views.upload_images,name='upload_images'),
     path('save_edit_info/',views.save_edit_info,name='save_edit_info'),
     path('custom_logout/',views.custom_logout, name='custom_logout'),
+
+    path('send_otp_sms/',views.send_otp_sms, name='send_otp_sms'),
+    path('handelOTP/',views.handelOTP,name='handelOTP'),
+    path('save_edit_phone/',views.save_edit_phone,name='save_edit_phone'),
 ]

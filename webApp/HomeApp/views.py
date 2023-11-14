@@ -779,7 +779,6 @@ def save_edit_info(request):
             c = Customer.objects.get(pk=id_customer)
             c.name_customer = received_name
             c.address_customer = received_address
-            c.phone_customer = received_phone
             c.save()
             return JsonResponse({'message': 'Dữ liệu đã được lưu thành công'})
         except Customer.DoesNotExist:
@@ -787,3 +786,96 @@ def save_edit_info(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
     return render(request, 'HomeApp/edit_profile.html', {'form_upload': form, 'myinfo' : my_profile})      
+
+from twilio.rest import Client
+import random
+import time
+import phonenumbers
+stored_otp_info = {
+    'otp':'',
+    'expiration_time': '',
+}
+def create_otp():
+    return str(random.randint(100000,999999))
+def send_otp_sms(request):
+    current_time = time.time()
+    if 'otp' in stored_otp_info and 'expiration_time' in stored_otp_info:
+        expiration_time_str = stored_otp_info['expiration_time']
+        if not expiration_time_str:
+            stored_otp_info['otp'] = create_otp()
+            stored_otp_info['expiration_time'] = current_time + 100
+
+    print("expiration_time:", stored_otp_info['expiration_time'])
+    print("current_time: ", current_time)
+    if request.method =='POST' :
+        try:
+            data= json.loads(request.body)
+            received_phone = data.get('phone_customer')
+            phone_number_parsed = phonenumbers.parse(received_phone, "VN")
+            if phonenumbers.is_valid_number(phone_number_parsed):
+                formatted_phone = phonenumbers.format_number(phone_number_parsed , phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+                print("received_phone: ", formatted_phone)
+                account_sid = 'AC7ad744dfef9935f5ec9c9d645d551639'
+                auth_token = 'deec7f1c394b7bf4e196b009719053c6'
+                client = Client(account_sid, auth_token)
+
+                message = client.messages.create(
+                    from_='+12106257751',
+                    body=f"Furin: OTP của bạn là:{stored_otp_info['otp']}",
+                    to=formatted_phone
+                )
+                print("Gửi mã đã khởi động hàm gửi mã OTP....................")
+                print("Mã OTP ở server hiện tại là :....................",stored_otp_info['otp'])
+                return JsonResponse({'message': 'Gửi OTP thành công'})
+            else:
+                print("Số điện thoại không hợp lệ")
+                return JsonResponse({'error': 'Số điện thoại không hợp lệ'})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
+
+def handelOTP(request):
+    if request.method =='POST' :
+        print("handelOTP đã khởi chạy.................................")
+        try:
+            data = json.loads(request.body)
+            received_otp = data.get('cm_otp')
+            current_time = time.time()
+            print("expiration_time:", stored_otp_info['expiration_time'])
+            print("current_time: ", current_time)
+            print("input otp:",received_otp)
+            print("otp server:",stored_otp_info['otp'])
+            if 'otp' in stored_otp_info and 'expiration_time' in stored_otp_info:
+                expiration_time = stored_otp_info['expiration_time']
+                if expiration_time:
+                    if stored_otp_info['otp'] == received_otp:
+                        print("Mã OTP hợp lệ")
+                        return JsonResponse({'message': 'success'})
+                    else:
+                        print('Mã OTP không hợp lệ')
+                        return JsonResponse({'error': 'OTPerror'}, status=400)
+                else:
+                    print('Mã OTP hết thời gian hiệu lực')
+                    return JsonResponse({'error': 'Expirationerror'}, status=400)
+            else:
+                print("Không tìn thấy mã otp")
+                return JsonResponse({'error': 'Không tìm thấy thông tin mã OTP'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
+
+def save_edit_phone(request):
+    id_customer = request.customer.id
+    my_profile = Customer.objects.get(pk=id_customer)
+    print("save_edit_phone đang khởi chạy.........................................")
+    if request.method == 'POST':
+        try:
+            data= json.loads(request.body)
+            received_phone = data.get('phone_customer')
+            print("received_phone: ", received_phone)
+            c = Customer.objects.get(pk=id_customer)
+            c.phone_customer = received_phone
+            c.save()
+            stored_otp_info['otp'] = ''
+            stored_otp_info['expiration_time'] = ''
+            return JsonResponse({'message': 'Dữ liệu đã được lưu thành công'})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
