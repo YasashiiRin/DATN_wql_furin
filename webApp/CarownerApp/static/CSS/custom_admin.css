@@ -1,0 +1,91 @@
+ul.messagelist li {
+    display: flex;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    padding: 10px 10px 10px 65px;
+    margin: 0 0 10px 0;
+    background: #ddf1ff  url(../images/logo5.ico) 40px 12px no-repeat;
+    background-size: 16px auto;
+    color: var(--body-fg);
+    word-break: break-word;
+    white-space: pre-wrap;
+    border-bottom: 4px solid #e5e5e5;
+    justify-content: space-between;
+}
+.info1{
+
+}
+h1 {
+    margin: 0 0 20px;
+    font-weight: 500;
+    font-size: 1.25rem;
+    color: #727a9e;
+}
+table thead th .text a {
+    display: block;
+    cursor: pointer;
+    padding: 8px 10px;
+    font-weight: 700;
+    color: #6f6f6f;
+}
+.info2{
+    margin-right: 219px;
+}
+#toolbar form input[type="submit"] {
+    border: 1px solid var(--border-color);
+    font-size: 0.8125rem;
+    padding: 4px 8px;
+    margin: 0;
+    vertical-align: middle;
+    background: #3db7ff;
+    box-shadow: 0 -15px 20px -10px rgba(0, 0, 0, 0.15) inset;
+    font-weight: 600;
+    cursor: pointer;
+    color: #ffffff;
+}
+#toolbar {
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border-top: 1px solid var(--hairline-color);
+    border-bottom: 1px solid var(--hairline-color);
+    background: #fffcce;
+    color: var(--body-quiet-color);
+}
+
+/* action */
+#changelist .actions {
+    padding: 10px;
+    background: var(--body-bg);
+    border-top: none;
+    border-bottom: none;
+    line-height: 1.5rem;
+    background: #fffcce;
+    width: 98%;
+}
+#changelist .actions label {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0.8125rem;
+    color: #ff4d00;
+    font-weight: 600;
+    
+}
+#changelist .actions .button {
+    font-size: 0.8125rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    height: 1.5rem;
+    line-height: 1;
+    padding: 4px 8px;
+    margin: 0;
+    background: #3db7ff;
+    box-shadow: 0 -15px 20px -10px rgba(0, 0, 0, 0.15) inset;
+    font-weight: 600;
+    cursor: pointer;
+    color: #ffffff;
+}
+/* hover click */
+#changelist tbody tr:has(.action-select:checked) {
+    background-color: #76767630;
+}

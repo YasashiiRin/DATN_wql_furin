@@ -1,0 +1,258 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Oswald|Roboto);
+
+body {
+    position: absolute;
+    font-family: "Open Sans", sans-serif;
+    height: 100%;
+    width: 100%;
+    background: url('../images/bg6.jpg') 50% fixed;
+    background-size: cover;
+    overflow: hidden;
+    left: 0;
+    top: 0;
+}
+
+.container {
+    position: relative;
+    margin: 30px auto 0;
+    width: 600px;
+    height: 300px;
+    top: 50%;
+    margin-top: -160px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.tableform {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.form {
+    width: 100%;
+    height: 100%;
+}
+
+.tableformcell {
+    display: table-cell;
+    vertical-align: middle;
+    transition: all 0.5s;
+    margin: 30px auto 0;
+}
+
+.container .container-forms {
+    position: relative;
+}
+
+.container .btn {
+    cursor: pointer;
+    text-align: center;
+    margin: 0 auto;
+    width: 88px;
+    color: #fff;
+    background-color: #ff73b3;
+    opacity: 1;
+    transition: all 0.5s;
+}
+
+.container .btn.signup {
+    width: 96px;
+}
+
+.container .btn:hover {
+    opacity: 0.7;
+}
+
+.container .btn,
+.container input {
+    padding: 10px 15px;
+}
+
+
+.container input {
+    margin: 0 auto -1px;
+    display: block;
+    width: 220px;
+    transition: all 0.3s;
+    border: none;
+    outline: 1px solid skyblue;
+}
+
+input+.span {
+    position: relative;
+
+}
+
+input+.span::before {
+    position: absolute;
+    right: 20px;
+    top: -33px;
+}
+
+input.valid {
+    outline: 1px solid green;
+}
+
+input.invalid {
+    outline: 1px solid red;
+}
+
+input.invalid+.span::before {
+    content: "✘";
+    color: red;
+}
+
+input.valid+.span::before {
+    content: "✔";
+    color: green;
+}
+
+.container-FormIn {
+    overflow: hidden;
+    position: absolute;
+    left: 30px;
+    top: -40px;
+    width: 305px;
+    height: 380px;
+    background-color: #fff;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
+    transition: all 0.5s;
+}
+
+.container-forms {
+    width: 600px;
+}
+
+.container .container-forms .container-Underform .form-info {
+    text-align: center;
+    font-size: 16px;
+    width: 300px;
+    height: 300px;
+    display: inline-block;
+    vertical-align: top;
+    color: #fff;
+    opacity: 1;
+    transition: all 0.3s;
+}
+
+.container .container-forms .container-Underform {
+    text-align: left;
+    font-size: 0;
+    display: flex;
+    position: absolute;
+    width: 600px;
+    height: 300px;
+}
+
+.form-label,
+.form-message {
+    padding-left: 40px;
+}
+
+.container p {
+    font-size: 18px;
+    padding-bottom: 3px;
+}
+
+.form-label {
+    margin-top: 8px;
+    font-size: 14px;
+    padding-bottom: 4px;
+}
+
+.form-group.invalid .form-message {
+    color: #f33a58;
+}
+
+.form-group {
+    display: flex;
+    margin-bottom: 3px;
+    flex-direction: column;
+}
+
+.form-message {
+    position: relative;
+    font-size: 12px;
+    padding: 4px 40px 0;
+}
+
+.container .container-forms .container-Underform .form-info {
+    font-size: 20px;
+}
+
+.container .container-forms .container-Underform .form-info .btn {
+    background-color: transparent;
+    border: 1px solid #fff;
+}
+
+.container .container-forms .container-Underform .form-info .tableformcell {
+    padding-right: 35px;
+}
+
+.container .container-forms .container-Underform .form-info:nth-child(2) .tableformcell {
+    padding-left: 25px;
+    padding-right: 0;
+}
+
+.container .container-FormIn .btn {
+    position: relative;
+    box-shadow: 0 0 10px 1px #ff73b3;
+    margin-top: 3px;
+    margin-left: 110px;
+}
+
+.container .form-item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: all 0.5s;
+}
+
+.container .form-item.regisform.active {
+    position: absolute;
+    opacity: 0;
+    left: -100%;
+    transition: transform all 0.3s, opacity 0.2s;
+}
+
+@keyframes fade {
+    form {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.container .form-item.loginform.active {
+    position: absolute;
+    opacity: 0;
+    right: -100%;
+}
+
+.container-FormIn.regis {
+    left: 270px;
+    transition: all 0.5s, opacity 0.2s;
+}
+
+.container-FormIn.log {
+    left: 30px;
+    transition: all 0.5s, opacity 0.2s;
+}
+.backhome{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    left: 0;
+    top: 0;
+    margin: 2rem;
+}
