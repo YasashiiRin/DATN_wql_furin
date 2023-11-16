@@ -15,7 +15,10 @@ from django.contrib.admin import AdminSite
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.utils.html import format_html
-
+from datetime import datetime
+from django.utils import timezone
+from django.db.models import Q
+import numpy as np
 
 def login_success(request):
     session_key = request.session.session_key
@@ -195,20 +198,26 @@ class ScheduleAdmin(admin.ModelAdmin):
             max_start_dates = Schedules.objects.filter().values('name_schedule').annotate(max_start_date=Max('start_date'))
         else:
             max_start_dates = Schedules.objects.filter(vehicle__driver__carowner = carowner ).values('name_schedule').annotate(max_start_date=Max('start_date'))
-        max_start_schedules = []
+        max_start_schedules1 = []
+        max_start_schedules2 = []
         for item in max_start_dates:
             name_schedule = item['name_schedule']
             max_start_date = item['max_start_date']
 
-            schedule = Schedules.objects.filter(name_schedule=name_schedule, start_date=max_start_date).first()
-            print("list1 ",schedule.id)
-            if schedule:
-                max_start_schedules.append(schedule)
+            schedule1 = Schedules.objects.filter(name_schedule=name_schedule, start_date=max_start_date , label_schedule=1).first()
+            schedule2 = Schedules.objects.filter(name_schedule=name_schedule, start_date=max_start_date , label_schedule=2).first()
+            # print("list1 ",schedule1.id)
+            # print("list2 ",schedule2.id)
+            if schedule1:
+                max_start_schedules1.append(schedule1)
+            if schedule2:
+                max_start_schedules2.append(schedule2)
+        max_start_schedules = np.hstack((max_start_schedules1,max_start_schedules2)) 
         messages_list = []        
         for schedule in max_start_schedules:
-            messages_item = f'<div class="info1">Name Schedule : {schedule.name_schedule} - Driver: {schedule.vehicle.name_driver} - Lịch trình số: {schedule.label_schedule}</div>   <div class="info2">Max start_day : {schedule.start_date}</div>'
+            messages_item = f'<div class="info1">Name Schedule : {schedule.name_schedule} - Driver: {schedule.vehicle.name_driver}</div>   <div class="info2">Lịch trình số: {schedule.label_schedule} - Max start_day : {schedule.start_date}</div>'
             messages_list.append(mark_safe(messages_item))
-            # print(f"Vehicle ID: {schedule.vehicle.email_driver}, Max Start Day: {schedule.start_date}")
+            print(f"Vehicle ID: {schedule.vehicle.email_driver},lable : {schedule.label_schedule}, Max Start Day: {schedule.start_date}")
         for message in messages_list:
             messages.success(request, message)
     filter_schedules_with_max_start_day.short_description = _("Filter Schedules with Max Start Day")
@@ -224,42 +233,24 @@ class ScheduleAdmin(admin.ModelAdmin):
         end_location = form.cleaned_data['end_location']
         start_time = form.cleaned_data['start_time']
         end_time = form.cleaned_data['end_time']
-
+        current_date = timezone.localtime(timezone.now()).date()
+        current_time = timezone.localtime(timezone.now()).time()
         vehicle_info = Vehicle.objects.get(pk=selected_vehicle.pk)
-
-        try:
-            existing_schedule = Schedules.objects.get(id = obj.id)
-            print("existing_schedule :",existing_schedule.id)
-        except Schedules.DoesNotExist:
-            for i in range(number_of_days):
-                new_schedule = Schedules(
-                    vehicle=selected_vehicle,
-                    label_schedule =label_schedule,
-                    name_schedule=name_schedule,
-                    slot_vehicle=vehicle_info.slot_vehicle,
-                    start_location=start_location,
-                    end_location=end_location,
-                    start_time=start_time,
-                    end_time=end_time,
-                    day_schedule=start_date + timedelta(days=i),
-                    start_date=start_date + timedelta(days=i),
-                )
-                new_schedule.save()
-        else:
-            if number_of_days == 0:  
-                existing_schedule.label_schedule = label_schedule    
-                existing_schedule.name_schedule = name_schedule
-                existing_schedule.slot_vehicle = vehicle_info.slot_vehicle
-                existing_schedule.start_location = start_location
-                existing_schedule.end_location = end_location
-                existing_schedule.start_time = start_time
-                existing_schedule.end_time = end_time
-                existing_schedule.save()
-            elif number_of_days >=1 :  
+        count_schedule = Schedules.objects.filter(
+            Q(vehicle=vehicle_info) &
+            (Q(start_date__gt=current_date) |
+            (Q(start_date=current_date) & Q(start_time__gt=current_time)))
+        ).count()
+        print("số lịch trình hiện hành hiện tại......................",count_schedule)
+        if (count_schedule + number_of_days) <= 12 and number_of_days <= 12:
+            try:
+                existing_schedule = Schedules.objects.get(id = obj.id)
+                print("existing_schedule :",existing_schedule.id)
+            except Schedules.DoesNotExist:
                 for i in range(number_of_days):
                     new_schedule = Schedules(
                         vehicle=selected_vehicle,
-                        label_schedule = label_schedule,
+                        label_schedule =label_schedule,
                         name_schedule=name_schedule,
                         slot_vehicle=vehicle_info.slot_vehicle,
                         start_location=start_location,
@@ -269,7 +260,39 @@ class ScheduleAdmin(admin.ModelAdmin):
                         day_schedule=start_date + timedelta(days=i),
                         start_date=start_date + timedelta(days=i),
                     )
-                    new_schedule.save() 
+                    new_schedule.save()
+            else:
+                if number_of_days == 0:  
+                    existing_schedule.label_schedule = label_schedule    
+                    existing_schedule.name_schedule = name_schedule
+                    existing_schedule.slot_vehicle = vehicle_info.slot_vehicle
+                    existing_schedule.start_location = start_location
+                    existing_schedule.end_location = end_location
+                    existing_schedule.start_time = start_time
+                    existing_schedule.end_time = end_time
+                    existing_schedule.save()
+                elif number_of_days >=1 :  
+                    for i in range(number_of_days):
+                        new_schedule = Schedules(
+                            vehicle=selected_vehicle,
+                            label_schedule = label_schedule,
+                            name_schedule=name_schedule,
+                            slot_vehicle=vehicle_info.slot_vehicle,
+                            start_location=start_location,
+                            end_location=end_location,
+                            start_time=start_time,
+                            end_time=end_time,
+                            day_schedule=start_date + timedelta(days=i),
+                            start_date=start_date + timedelta(days=i),
+                        )
+                        new_schedule.save()
+        else:
+            nummax = 12 - count_schedule
+            messages_list = []        
+            messages_item = f'<div class="info1">Số ngày mà bạn muốn gia đã vượt quá giới hạn bạn chỉ có thể thêm : {nummax} Ngày </div>   <div class="info2"></div>'
+            messages_list.append(mark_safe(messages_item))
+            for message in messages_list:
+                messages.success(request, message)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

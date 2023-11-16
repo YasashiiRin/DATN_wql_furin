@@ -651,7 +651,10 @@
 
             // Set tiêu đề đánh dấu thông báo mới nhất
             const len = arrayScroll.length
-            arrayScroll[0].classList.add('title_new_active')
+            if (len > 0){
+                arrayScroll[0].classList.add('title_new_active')
+            }
+            
 
             // chỉnh vị trí scroll về cuối của list order
             {% comment %} const tm_block_scroll = document.querySelector('.tm-block-scroll')
