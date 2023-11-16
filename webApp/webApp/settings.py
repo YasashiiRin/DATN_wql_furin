@@ -131,14 +131,20 @@ WSGI_APPLICATION = 'webApp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'django_furin_travel',  # Tên cơ sở dữ liệu của bạn
+#         'USER': 'root',  # Tên người dùng MySQL của bạn
+#         'PASSWORD':'',  # Mật khẩu của người dùng MySQL của bạn
+#         'HOST': 'localhost',  # Địa chỉ máy chủ MySQL
+#         'PORT': '3306',  # Cổng MySQL (mặc định là 3306)
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_furin_travel',  # Tên cơ sở dữ liệu của bạn
-        'USER': 'root',  # Tên người dùng MySQL của bạn
-        'PASSWORD':'',  # Mật khẩu của người dùng MySQL của bạn
-        'HOST': 'localhost',  # Địa chỉ máy chủ MySQL
-        'PORT': '3306',  # Cổng MySQL (mặc định là 3306)
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 # Password validation

@@ -195,24 +195,30 @@ def handle_book_vehicle_second(request,schedule_id,customer_id,slot):
         slot_t = slot_vehicle - slot + current_slot
         handel_slots = slot
         if check_cm :
-            if slot > check_cm.quantity_slot:
-                if slot_t >= 0:
-                    schedule.slot_vehicle = slot_t
-                    schedule.save()
-                    check_cm.delete()
-                    new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
-                    new_order_update.save()
-                    return JsonResponse({'message': 'Đặt xe thành công'})
-                else:
-                    return JsonResponse({'error': 'không đủ chỗ '})
-            elif slot < check_cm.quantity_slot:
+            if slot_t >= 0:
                 schedule.slot_vehicle = slot_t
+                schedule.save()
                 check_cm.delete()
                 new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
-                schedule.save()
                 new_order_update.save()
                 return JsonResponse({'message': 'Đặt xe thành công'})
-
+            else:
+                return JsonResponse({'error': 'không đủ chỗ '})
+            # elif slot < check_cm.quantity_slot:
+            #     schedule.slot_vehicle = slot_t
+            #     check_cm.delete()
+            #     new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
+            #     schedule.save()
+            #     new_order_update.save()
+            #     return JsonResponse({'message': 'Đặt xe thành công'})
+            # elif slot == check_cm.quantity_slot:
+            #     schedule.slot_vehicle = slot_t
+            #     check_cm.delete()
+            #     new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
+            #     schedule.save()
+            #     new_order_update.save()
+            #     return JsonResponse({'message': 'Đặt xe thành công'})
+        
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500) 
 
@@ -735,7 +741,7 @@ def search_home(request):
              print("novalid")
 
     return render(request, 'HomeApp/home.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules_return,'notifi_search' : 'search_err' })
-
+from django.shortcuts import reverse
 def upload_images(request,customerid):
     my_filter_form = ImageUploadForm()
     img_customer = request.customer.img_customer
@@ -752,15 +758,16 @@ def upload_images(request,customerid):
             c = Customer.objects.get(pk=customerid)
             c.img_customer = uploaded_image
             c.save()
-            return render(request,'HomeApp/edit_profile.html',{
-                'myinfo': my_profile,
-                'customer_id' : id_customer,
-                'form_upload' : my_filter_form,
-                'img_customer' : img_customer,
-            })
+            return redirect(reverse('view_editprofile'))
+            # return render(request,'HomeApp/edit_profile.html',{
+            #     'myinfo': my_profile,
+            #     'customer_id' : id_customer,
+            #     'form_upload' : my_filter_form,
+            #     'img_customer' : img_customer,
+            # })
         else:
             print(form.errors)
-            return JsonResponse({'error': 'không đủ chỗ '})
+            return JsonResponse({'error': 'error '})
     else:
         form = ImageUploadForm()
     return render(request, 'HomeApp/edit_profile.html', {'form_upload': form, 'myinfo' : my_profile})
@@ -793,6 +800,7 @@ import time
 import phonenumbers
 stored_otp_info = {
     'otp':'',
+    'old_otp':'',
     'expiration_time': '',
 }
 def create_otp():
@@ -818,15 +826,20 @@ def send_otp_sms(request):
                 account_sid = 'AC7ad744dfef9935f5ec9c9d645d551639'
                 auth_token = 'deec7f1c394b7bf4e196b009719053c6'
                 client = Client(account_sid, auth_token)
-
-                message = client.messages.create(
-                    from_='+12106257751',
-                    body=f"Furin: OTP của bạn là:{stored_otp_info['otp']}",
-                    to=formatted_phone
-                )
-                print("Gửi mã đã khởi động hàm gửi mã OTP....................")
-                print("Mã OTP ở server hiện tại là :....................",stored_otp_info['otp'])
-                return JsonResponse({'message': 'Gửi OTP thành công'})
+                if stored_otp_info['old_otp'] != stored_otp_info['otp']:
+                    message = client.messages.create(
+                        from_='+12106257751',
+                        body=f"Furin: OTP của bạn là:{stored_otp_info['otp']}",
+                        to=formatted_phone
+                    )
+                    print("Gửi mã đã khởi động hàm gửi mã OTP....................")
+                    print("Mã OTP ở server hiện tại là :....................",stored_otp_info['otp'])
+                    stored_otp_info['old_otp'] = stored_otp_info['otp']
+                    return JsonResponse({'message': 'new'})
+                else:
+                    print("Mã OTP ở server hiện tại là :....................",stored_otp_info['otp'])
+                    print("OTP còn hoạt động , không gửi lại")
+                    return JsonResponse({'message': 'old'})
             else:
                 print("Số điện thoại không hợp lệ")
                 return JsonResponse({'error': 'Số điện thoại không hợp lệ'})
