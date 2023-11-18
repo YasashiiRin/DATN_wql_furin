@@ -261,7 +261,7 @@
 
                 }
                 console.log(objUpdate)
-                fetch('save_edit_info/', {
+                fetch('/save_edit_info/', {
                     method: 'POST',
                     headers: {
                       "X-CSRFToken": "{{ csrf_token }}",
@@ -320,6 +320,11 @@
               })
                 .then(response => response.json())
                 .then(data => {
+                  if(data.message === 'new'){
+                    localStorage.removeItem('s_otp_value')
+                    delete_timeout()
+                    count_time_OTP(100)
+                  }
                   bcover.classList.add('show')
                   section_input_otp.style.display ='block'
                 })
@@ -340,7 +345,7 @@
             function count_time_OTP(s){
               document.getElementById('s_otp').innerText = s.toString();
               if(s > 0){
-                setTimeout(function(){
+                runtimeout=setTimeout(function(){
                   localStorage.setItem('s_otp_value', s);
                   count_time_OTP(s-1)
                 },1000)
@@ -350,9 +355,13 @@
                 localStorage.removeItem('s_otp_value')
               }
             }
+            function delete_timeout(){
+              clearTimeout(runtimeout)
+            }
             var savedSValue = localStorage.getItem('s_otp_value');
             var initialSValue = savedSValue ? parseInt(savedSValue) : 100;
             count_time_OTP(initialSValue)
+
 
 
         });  
