@@ -334,10 +334,6 @@
     text-align: center;
     font-weight: 600;
     color: #353535;
-<<<<<<< HEAD
-    font-family: cursive;
-=======
->>>>>>> developer
   }
   .main__cta__text{
     background: linear-gradient(to left, rgb(255 169 136) 10%, rgba(0, 0, 0, 0) 100%);
