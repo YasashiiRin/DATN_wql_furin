@@ -13,13 +13,10 @@ Django==4.2.5
 django-allauth==0.56.1
 frozenlist==1.4.0
 multidict==6.0.4
-numpy==1.26.1
-oauthlib==3.2.2
+numpy
 phonenumbers==8.13.25
 Pillow==10.0.1
 pycparser==2.21
 PyJWT==2.8.0
-python3-openid==3.2.0
-requests==2.31.0
-requests-oauthlib==1.3.1
+requests
 twilio==8.10.1
