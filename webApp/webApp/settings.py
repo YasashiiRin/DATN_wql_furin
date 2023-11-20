@@ -89,9 +89,14 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+
+    
     'LoginApp.middleware.custom_auth_middleware.CustomAuthMiddleware',
-    # 'DriverApp.middleware.custom_auth_middleware.CustomDriverAuthMiddleware',
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+
+    'LoginApp.middleware.custom_logout_middleware.CustomLogoutMiddleware',
+
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
      # ... 
@@ -106,6 +111,10 @@ CUSTOMER_SESSION_COOKIE_NAME = 'customer_sessionid'
 
 SESSION_ENGINE_DRIVER = "django.contrib.sessions.backends.cache"
 DRIVER_SESSION_COOKIE_NAME = 'driver_sessionid'
+
+SESSION_ENGINE_CAROWNER = "django.contrib.sessions.backends.cache"
+CAROWNER_SESSION_COOKIE_NAME = 'carowner_sessionid'
+
 
 ROOT_URLCONF = 'webApp.urls'
 
@@ -197,5 +206,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 

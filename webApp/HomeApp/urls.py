@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib import admin
 from . import views
-
+from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('', views.homeview, name='home'), 
     path('home_customer_view',views.home_customer_view,name='home_customer_view'),
@@ -24,7 +24,6 @@ urlpatterns = [
     path('view_editprofile',views.view_editprofile,name='view_editprofile'),
     path('upload_images/<int:customerid>/',views.upload_images,name='upload_images'),
     path('save_edit_info/',views.save_edit_info,name='save_edit_info'),
-    path('custom_logout/',views.custom_logout, name='custom_logout'),
 
     path('send_otp_sms/',views.send_otp_sms, name='send_otp_sms'),
     path('handelOTP/',views.handelOTP,name='handelOTP'),

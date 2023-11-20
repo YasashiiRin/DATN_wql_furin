@@ -110,8 +110,9 @@ def handelLogin(request):
         password_user=request.POST['password']
         try :
             user=CarOwner.objects.get(username=username)
+            user = authenticate(request, username=username, password=password_user, backend='LoginApp.backends.custom_auth.CustomerBackend')
             if user.check_password(password_user):
-                login(request,user,backend='django.contrib.auth.backends.ModelBackend')
+                login(request,user,backend='LoginApp.backends.custom_auth.CustomerBackend')
                 admin_url = reverse('admin:index')
                 return HttpResponseRedirect(admin_url)
             else :

@@ -19,10 +19,11 @@ from datetime import datetime
 from django.utils import timezone
 from django.db.models import Q
 import numpy as np
+from django.conf import settings
 
 def login_success(request):
-    session_key = request.session.session_key
-    print(session_key)
+    session_key = request.session[settings.CAROWNER_SESSION_COOKIE_NAM]
+    print(session_key,"-----------------------------------------------")
 
 # -------------Custom Admin site----------
 

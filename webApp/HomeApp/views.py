@@ -23,6 +23,7 @@ from datetime import datetime
 from CarownerApp.models import CustomSession
 from django.contrib.sessions.models import Session
 import numpy as np
+from django.contrib.auth.views import LogoutView
 def homeview(request):
     my_filter_form = YourFilterForm()
     current_date = timezone.localtime(timezone.now()).date()
@@ -92,22 +93,7 @@ def handle_logout(request):
         'schedules' :all_shedules,
         'my_filter_form' : my_filter_form,
     })
-
-def custom_logout(request):
-    # session_key_to_delete = request.session.session_key
-    # Session.objects.filter(session_key=session_key_to_delete).delete() 
-    # if 'customer_sessionid' in request.session:
-    #     print("tồn tại customer")
-    #     request.session[settings.CUSTOMER_SESSION_COOKIE_NAME] = {
-    #             'id_customer': request.customer.id,
-    #     }
-    # if 'driver_sessionid' in request.session:
-    #     print("tồn tại driver")
-    #     request.session[settings.DRIVER_SESSION_COOKIE_NAME] = {
-    #             'id_driver': request.driver.id,
-    #     } 
-    return render(request, 'HomeApp/home.html')
-
+from django.contrib.auth import views as auth_views
 def driver_login_view(request):
     return render(request,'DriverApp/driver_login.html')
 
