@@ -22,8 +22,26 @@ from django.db.models import Q
 from datetime import datetime
 from CarownerApp.models import CustomSession
 from django.contrib.sessions.models import Session
+from django.shortcuts import reverse
 import numpy as np
 def homeview(request):
+    my_filter_form = YourFilterForm()
+    current_date = timezone.localtime(timezone.now()).date()
+    current_time = timezone.localtime(timezone.now()).time()
+    filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
+    all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
+    schedules_lb1 = [schedule for schedule in all_shedules if schedule.label_schedule == 1]
+    schedules_lb2 = [schedule for schedule in all_shedules if schedule.label_schedule == 2]
+    if schedules_lb2:
+        soft_schedules =np.hstack((schedules_lb1,schedules_lb2))
+    else:
+        soft_schedules = schedules_lb1
+    return render(request, 'HomeApp/home.html',{
+        'schedules' :soft_schedules,
+        'my_filter_form' : my_filter_form,
+    })
+
+def back_home(request):
     my_filter_form = YourFilterForm()
     current_date = timezone.localtime(timezone.now()).date()
     current_time = timezone.localtime(timezone.now()).time()
@@ -75,23 +93,26 @@ def handle_logout(request):
     current_time = timezone.localtime(timezone.now()).time()
     filtered_schedules = Schedules.objects.select_related('vehicle__driver__carowner').all()
     all_shedules= [schedule for schedule in filtered_schedules if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
+    schedules_lb1 = [schedule for schedule in all_shedules if schedule.label_schedule == 1]
+    schedules_lb2 = [schedule for schedule in all_shedules if schedule.label_schedule == 2]
+    if schedules_lb2:
+        soft_schedules =np.hstack((schedules_lb1,schedules_lb2))
+    else:
+        soft_schedules = schedules_lb1
     try:
         session_key = request.session.get(settings.CUSTOMER_SESSION_COOKIE_NAME)
         if session_key:
+            del request.session[settings.CUSTOMER_SESSION_COOKIE_NAME]
+            print("delete_Session for customer......")
             try:
                 custom_session = CustomSession.objects.get(session_key=session_key)
                 custom_session.delete()
-                del request.session[settings.CUSTOMER_SESSION_COOKIE_NAME]
-                print("delete_Session for customer......")
             except CustomSession.DoesNotExist:
                 pass
     except:
         print("customer is logout...................")
         pass        
-    return render(request, 'HomeApp/home.html',{
-        'schedules' :all_shedules,
-        'my_filter_form' : my_filter_form,
-    })
+    return redirect(reverse('back_home'))
 
 def custom_logout(request):
     # session_key_to_delete = request.session.session_key
@@ -741,7 +762,7 @@ def search_home(request):
              print("novalid")
 
     return render(request, 'HomeApp/home.html', {'my_filter_form': my_filter_form, 'schedules': all_shedules_return,'notifi_search' : 'search_err' })
-from django.shortcuts import reverse
+
 def upload_images(request,customerid):
     my_filter_form = ImageUploadForm()
     img_customer = request.customer.img_customer

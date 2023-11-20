@@ -444,11 +444,11 @@ def logout_driver(request):
     try:
         session_key = request.session[settings.DRIVER_SESSION_COOKIE_NAME] 
         if session_key:
+            del request.session[settings.DRIVER_SESSION_COOKIE_NAME]
+            print("delete_Session for driver......")
             try:
                 custom_session = CustomSession.objects.get(session_key=session_key)
                 custom_session.delete()
-                del request.session[settings.DRIVER_SESSION_COOKIE_NAME]
-                print("delete_Session for driver......")
             except CustomSession.DoesNotExist:
                 pass
     except:
