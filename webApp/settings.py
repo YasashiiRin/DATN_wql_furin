@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-(44tgux)%tja#__-83!*!i-7wz909qylv60-)66fpiba%b=2h0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -111,10 +111,6 @@ CUSTOMER_SESSION_COOKIE_NAME = 'customer_sessionid'
 
 SESSION_ENGINE_DRIVER = "django.contrib.sessions.backends.cache"
 DRIVER_SESSION_COOKIE_NAME = 'driver_sessionid'
-
-SESSION_ENGINE_CAROWNER = "django.contrib.sessions.backends.cache"
-CAROWNER_SESSION_COOKIE_NAME = 'carowner_sessionid'
-
 
 ROOT_URLCONF = 'webApp.urls'
 
@@ -206,6 +202,5 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 
