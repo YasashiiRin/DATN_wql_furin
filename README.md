@@ -11,14 +11,14 @@ cũng như tài xế và các lịch trình của họ
 #### Project Video: [Watch on Youtube](https://www.youtube.com)
 
 ### Cấu trúc thư mục dự án
-Django-Furin:
-│
-├── CarownerApp
-├── DriverApp
-├── HomeApp
-├── LoginApp
-├── media
-└── webApp
+
+- Django-Furin:
+- ├── CarownerApp
+- ├── DriverApp
+- ├── HomeApp
+- ├── LoginApp
+- ├── media
+- └── webApp
 
 ### Cấu trúc ứng dụng
 Trong dự án website quản lý đặt xe du lịch này đã sắp xếp chức năng thành các ứng dụng riêng biệt để duy trì mô-đun cơ sở mã và có thể duy trì được nhưng vì còn chưa thể xác định cấu trúc từ đầu nên tên mỗi ứng dụng không hoàn toàn đại diện cho toàn bộ chức năng bên trong 🥲
