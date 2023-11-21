@@ -472,7 +472,7 @@ def search_datetime_and_word(request):
                 })    
 
 
-    return render(request, 'HomeApp/home.html', {'schedules': all_shedules_return,  'my_orders' : my_orders, 'notifi_search' : 'search_err' })
+    return render(request, 'HomeApp/home.html', {'schedules': all_shedules_return, 'notifi_search' : 'search_err' })
 
 
 def search_customer(request):
