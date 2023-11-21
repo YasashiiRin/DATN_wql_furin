@@ -311,10 +311,6 @@ def search_datetime_and_word(request):
     
     current_date = timezone.localtime(timezone.now()).date()
     current_time = timezone.localtime(timezone.now()).time()
-
-    id_customer = request.customer.id
-
-    my_orders = Orders.objects.filter(customer = id_customer).all()
     filtered_schedules_return = Schedules.objects.select_related('vehicle__driver__carowner').all()
     all_shedules_return= [schedule for schedule in filtered_schedules_return if schedule.start_date > current_date or (schedule.start_date == current_date and schedule.start_time > current_time)]
     if request.method == 'GET':
@@ -465,14 +461,12 @@ def search_datetime_and_word(request):
                 searchvalue = 'search_success'
             return render(request, 'HomeApp/home.html', {
                     'schedules': all_shedules,
-                    'my_orders' : my_orders,
                     'current_date' : current_date,
                     'notifi_search' : searchvalue
                 })
         except:
                 return render(request, 'HomeApp/home.html', {
                     'schedules': '',
-                    'my_orders' : my_orders,
                     'current_date' : current_date,
                     'notifi_search' : 'search_err'
                 })    

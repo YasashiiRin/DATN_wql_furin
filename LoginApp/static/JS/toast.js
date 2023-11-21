@@ -11,13 +11,6 @@ function toast({
     }
     const delay = (duration / 1000).toFixed(2);
     const icon = icons[typeicon];
-    // var checkicon;
-    // if (typeicon === 'success') {
-    //     checkicon = icons.success;
-    // }
-    // else if (typeicon === 'error') {
-    //     checkicon = icons.error;
-    // }
     if (main) {
         const toast = document.createElement('div');
         toast.classList.add('toast', `toast--${typeicon}`);
