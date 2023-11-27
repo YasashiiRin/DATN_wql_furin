@@ -353,3 +353,63 @@ input.valid+.span::before {
 .container.show::before{
     display: block;
   }
+
+.block_forget_pass{
+    margin: 20px;
+    padding-left: 46%;
+}
+.block_forget_pass span{
+    color: #03afbb;
+}
+.block_forget_pass a{
+   text-decoration: none;
+}
+.forget_pass_send{
+    display: none;
+    width: 600px;
+    height: 177px;
+    background-color: white;
+    position: fixed;
+    top: 200px;
+    right: 361px;
+    border-left: 7px solid #07b5ff;
+    border-radius: 3px;
+    z-index: 100;
+}
+.forget_pass_send_block{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 80px 0 80px;
+}
+.col-sm-3{
+    margin-right: 10px;
+}
+.mb-0{
+    font-size: 18px;
+    color: #6d6d6d;
+}
+.input_item_info{
+    padding-left: 18px;
+    border: 1px solid #00f2cf;
+    border-radius: 8px;
+    height: 30px;
+    width: 268px;
+    outline: 1px solid #00f2cf00;
+}
+.btn-send{
+    width: 65px;
+    height: 30px;
+    margin-left: 10px;
+    border-radius: 6px;
+    border: 1px solid #00f6ff;
+    background-color: #00dbe9;
+    color: #fff;
+    font-weight: 600;
+}
+.forget_title{
+    color: #515151;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 30px 0 30px 80px;
+}

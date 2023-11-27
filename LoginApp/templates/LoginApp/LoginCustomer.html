@@ -65,6 +65,9 @@
                                     <div class="span"></div>
                                     <span class="form-message"></span>
                                 </div>
+                                <div class="block_forget_pass">
+                                    <a href="#"><span class="forget_pass">Quên mật khẩu</span></a>
+                                </div>
                                 <button type="submit" class="btn form-submit">
                                     Log in
                                 </button>
@@ -142,6 +145,22 @@
                 <div class="bt_route">
                     <button class="bt_route--footer"><a href="{% url 'home_customer_view' %}">Trang chủ</a></button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="forget_pass_send">
+        <div class="forget_title">
+            <span>Vui lòng nhập Email đăng nhập của bạn!</span>
+        </div>
+        <div class="forget_pass_send_block">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Email</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">
+                <input type="email" class="form-control input_item_info" >
+            </div>
+            <div class="col-sm-9 text-secondary">
+                <button class="btn-send">Gửi</button>
             </div>
         </div>
     </div>
@@ -238,6 +257,17 @@ else if(notification==='verifisuccess'){
         duration: 8000
 
     }) 
+    
+}
+else if(notification==='notemail'){
+    toast({
+        title: "Email không tồn tại",
+        content: "Không tồn tại tài khoản Email này , vui lòng điền đúng email tài khoản của bạn",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+    
 }
 else if(notification==='sendEmail'){
     console.log("send email success.................")
@@ -255,6 +285,72 @@ dltoast.forEach(element => {
     element.parentElement.remove('toast')
   }
 })   
+const forget_pass = document.querySelector('.forget_pass')
+const block_forget_pass = document.querySelector('.forget_pass_send')
+const input_send_email = document.querySelector('.input_item_info')
+const bt_send = document.querySelector('.btn-send')
+const container = document.querySelector('.container')
+forget_pass.onclick =function(){
+    container.classList.add('show')
+    block_forget_pass.style.display = 'block'
+}
+bt_send.onclick= function(){
+    email = input_send_email.value
+    if (email !== ''){
+        sendEmail(email)
+    }
+}
+function sendEmail(value){
+                
+    const data = {
+        email:value,
+    }
+    fetch('/sendEmail_forgetPass/', {
+        method: 'POST',
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(data => {
+            if(data.message ==='check_true'){
+                const block_forget_pass = document.querySelector('.forget_pass_send')
+                const container = document.querySelector('.container')
+                container.classList.remove('show')
+                block_forget_pass.style.display = 'none'
+              toast({
+                title: "Gửi email thành công",
+                content: "Chúng tôi vừa gửi tới email của bạn một liên kết để đổi mật khẩu mới, vui lòng kiểm tra Email!",
+                typeicon: "success",
+                duration: 8000
+            })  
+            }else if(data.message === 'check_false'){
+                const block_forget_pass = document.querySelector('.forget_pass_send')
+                const container = document.querySelector('.container')
+                container.classList.remove('show')
+                block_forget_pass.style.display = 'none'
+              toast({
+                title: "Lỗi",
+                content:"Email đăng nhập bạn vừa nhập không tồn tại hoặc không chính xác , vui lòng thử lại đúng email đăng nhập của bạn.",
+                typeicon: "error",
+                duration: 8000
+            })   
+            }
+            const dltoast = document.querySelectorAll('.toast-exit');
+            console.log("button_exit: ",dltoast)
+            dltoast.forEach(element => {
+              element.onclick = function(){
+                console.log("is click exits")
+                element.parentElement.remove('toast')
+              }
+            })
+        })
+        .catch(error => {
+          console.error('Đã xảy ra lỗi:', error);
+        });
+}
 
         {% comment %} Handel toast {% endcomment %}
       

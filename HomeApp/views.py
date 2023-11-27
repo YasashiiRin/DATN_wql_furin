@@ -23,6 +23,8 @@ from datetime import datetime
 from CarownerApp.models import CustomSession
 from django.contrib.sessions.models import Session
 from django.shortcuts import reverse
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import make_password
 import numpy as np
 def homeview(request):
     my_filter_form = YourFilterForm()
@@ -333,7 +335,6 @@ def search_datetime_and_word(request):
                     minute = int(search_query_minutes)
                     filtered_schedules = Schedules.objects.filter(
                         Q(vehicle__driver__carowner__username__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
-                       
                         Q(start_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
                         Q(end_location__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute) |
                         Q(vehicle__type_vehicle__icontains=search_query_search_text ,start_date__month = month, start_date__day = day ,start_time__hour =hour, start_time__minute =minute)
@@ -907,3 +908,50 @@ def save_edit_phone(request):
             return JsonResponse({'message': 'Dữ liệu đã được lưu thành công'})
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
+        
+def view_change_pass(request):
+    id_customer = request.customer.id
+    my_filter_form = ImageUploadForm()
+    img_customer = request.customer.img_customer
+    my_profile = Customer.objects.get(pk=id_customer)
+    pass_customer = my_profile.password_customer
+    return render(request,'HomeApp/change_pass.html',{
+        'myinfo': my_profile,
+        'customer_id' : id_customer,
+        'form_upload' : my_filter_form,
+        'img_customer' : img_customer,
+        'pass_customer':pass_customer,
+    })
+def check_pass_customer(request):
+    id_customer = request.customer.id
+    customer = Customer.objects.get(pk=id_customer)
+    current_pass = customer.password_customer
+    print("----------------------khởi chạy check mật khẩu----------------------------")
+    try:
+            data= json.loads(request.body)
+            old_pass = data.get('old_pass')
+            check_pass = check_password(old_pass , current_pass )
+            if check_pass:
+                print("old_pass..............: ", old_pass)
+                return JsonResponse({'message': 'check_true'})
+            else:
+                return JsonResponse({'message': 'check_false'})
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
+def handle_change_pass(request):
+    print("----------------------khởi chạy thay mật khẩu----------------------------")
+    id_customer = request.customer.id
+    customer = Customer.objects.get(pk=id_customer)
+    current_pass = customer.password_customer
+    try:
+        data= json.loads(request.body)
+        new_pass = data.get('new_pass')
+        new_pass = make_password(new_pass)
+        
+        print("old_pass..............: ", current_pass)
+        print("new_pass..............: ", new_pass)
+        customer.password_customer = new_pass
+        customer.save()
+        return JsonResponse({'message': 'check_true'})
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)

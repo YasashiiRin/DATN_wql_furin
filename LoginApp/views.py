@@ -11,6 +11,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 import os
 from .models import CarOwner,Customer
+import json
+from django.http import JsonResponse
 from CarownerApp.models import Driver
 def login_view(request):
     return render(request, 'LoginApp/login.html')
@@ -179,3 +181,34 @@ def handelLogin_customer(request):
             return render(request, 'LoginApp/LoginCustomer.html',{
                 'islogin': 'faild',
             })
+
+
+def sendEmail_forgetPass(request):
+    print("Khởi chạy hàm gửi email quên mật khẩu.........")
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            email_customer = data.get('email')
+            if Customer.objects.filter(email_customer=email_customer).exists():
+                subject = 'Thay đổi mật khẩu'
+                from_email='furin.nvt@gmail.com'
+                message=''
+                contenHTML = render_to_string('LoginApp/form_forgetPass.html', {
+                    'activation_url': 'http://127.0.0.1:8000/activateS/{}'.format(email_customer),
+                })
+                to_email = [email_customer]
+                send_mail(subject,
+                    message,
+                    from_email,
+                    to_email,
+                    html_message=contenHTML,
+                )
+                return JsonResponse({'message': 'check_true'})
+            else:
+                return JsonResponse({'message': 'check_false'})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)   
+    return render(request, 'LoginApp/verifyEmail.html')    
+
+def handle_forgetPass(request,email):
+    return render(request, 'LoginApp/verifyEmail.html') 

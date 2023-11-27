@@ -13,5 +13,8 @@ urlpatterns = [
     path('handelLogin_customer/',views.handelLogin_customer,name='handelLogin_customer'),
     path('loginCustomer_view/', views.loginCustomer_view, name='loginCustomer_view'), 
     path('activateO/<str:uid>/<str:token>/', views.activate_Customer, name='activateO'),
+
+    path('activateS/<str:email>/', views.handle_forgetPass, name='activateS'),
+    path('sendEmail_forgetPass/', views.sendEmail_forgetPass, name='sendEmail_forgetPass'),
     # path('activateD/<str:uid>/<str:token>/',views.activate_driver, name='activateD'),
 ]

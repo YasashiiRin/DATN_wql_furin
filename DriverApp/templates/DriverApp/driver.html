@@ -107,10 +107,7 @@
                 <div class="col-block-margin-right col-xl-6 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block">
                         <h2 class="tm-block-title">Biểu đồ</h2>
-                        
                         <canvas id="barChart"></canvas>
-                        {% comment %} <canvas id="lineChart"></canvas>
-                        <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas> {% endcomment %}
                     </div>
                 </div>
                 {% comment %} Biểu đồ nằm đường thẳng  {% endcomment %}
@@ -296,15 +293,15 @@
                                 </tr>
                             </thead>      
                             <tbody>
-                                {% for order in all_schedules%}
+                                {% for lls in all_schedules%}
                                 <tr>
-                                    <th scope="row"><b>{{order.label_schedule}}</b></th>
-                                    <th scope="row"><b>{{order.name_schedule}}</b></th>
-                                    <td><b>{{order.slot_vehicle}}</b></td>
-                                    <td><b>{{order.start_date}}</b></td>
-                                    <td><b>{{order.start_time}}</b></td>
-                                    <td><b>{{order.start_location}}</b></td>
-                                    <td><b>{{order.end_location}}</b></td>
+                                    <th scope="row"><b>{{lls.label_schedule}}</b></th>
+                                    <th scope="row"><b>{{lls.name_schedule}}</b></th>
+                                    <td><b>{{lls.slot_vehicle}}</b></td>
+                                    <td><b>{{lls.start_date}}</b></td>
+                                    <td><b>{{lls.start_time}}</b></td>
+                                    <td><b>{{lls.start_location}}</b></td>
+                                    <td><b>{{lls.end_location}}</b></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -580,14 +577,14 @@
                                 }
                             ],
                             xAxes: [
-            {
-                ticks: {
-                    maxRotation: 45,
-                    minRotation: 0,
-                },
-                categoryPercentage: 0.3, // Ajust this value to control the margin between bars
-            }
-        ]
+                                {
+                                ticks: {
+                                maxRotation: 45,
+                                minRotation: 0,
+                                },
+                                categoryPercentage: 0.3, // Ajust this value to control the margin between bars
+                                }
+                            ]
                         }
                     };
         

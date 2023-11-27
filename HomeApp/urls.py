@@ -33,4 +33,8 @@ urlpatterns = [
     path('send_otp_sms/',views.send_otp_sms, name='send_otp_sms'),
     path('handelOTP/',views.handelOTP,name='handelOTP'),
     path('save_edit_phone/',views.save_edit_phone,name='save_edit_phone'),
+
+    path('view_change_pass/',views.view_change_pass, name ='view_change_pass'),
+    path('check_pass_customer/',views.check_pass_customer, name ='check_pass_customer'),
+    path('handle_change_pass/',views.handle_change_pass, name ='handle_change_pass'),
 ]
