@@ -148,9 +148,20 @@
             </div>
         </div>
     </div>
+    <div class="form_loading">
+        <div class="block_loading"></div>
+        <div class="word_Loading">
+            <span>Xin vui lòng chờ chút...</span>
+        </div>
+    </div>
     <div class="forget_pass_send">
-        <div class="forget_title">
-            <span>Vui lòng nhập Email đăng nhập của bạn!</span>
+        <div class="forget_title_flex">
+            <div class="forget_title">
+                <span>Vui lòng nhập Email đăng nhập của bạn!</span>
+            </div>
+            <div class="forget_title_exit">
+                <div class="span_exit">✘</div>
+            </div>
         </div>
         <div class="forget_pass_send_block">
             <div class="col-sm-3">
@@ -269,6 +280,16 @@ else if(notification==='notemail'){
     }) 
     
 }
+else if(notification==='error'){
+    toast({
+        title: "Lỗi !",
+        content: "Xãy ra một số lỗi , vui lòng thử lại sau",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+    
+}
 else if(notification==='sendEmail'){
     console.log("send email success.................")
     const blocksendemail = document.querySelector('.notifi_sendemail')
@@ -290,15 +311,24 @@ const block_forget_pass = document.querySelector('.forget_pass_send')
 const input_send_email = document.querySelector('.input_item_info')
 const bt_send = document.querySelector('.btn-send')
 const container = document.querySelector('.container')
+const loading = document.querySelector('.form_loading')
 forget_pass.onclick =function(){
     container.classList.add('show')
     block_forget_pass.style.display = 'block'
+
 }
 bt_send.onclick= function(){
     email = input_send_email.value
     if (email !== ''){
         sendEmail(email)
+        loading.style.display = 'block'
     }
+}
+
+const bt_exit_sendemail = document.querySelector('.span_exit')
+bt_exit_sendemail.onclick = function(){
+    container.classList.remove('show')
+    block_forget_pass.style.display = 'none'
 }
 function sendEmail(value){
                 
@@ -320,6 +350,7 @@ function sendEmail(value){
                 const container = document.querySelector('.container')
                 container.classList.remove('show')
                 block_forget_pass.style.display = 'none'
+                loading.style.display = 'none'
               toast({
                 title: "Gửi email thành công",
                 content: "Chúng tôi vừa gửi tới email của bạn một liên kết để đổi mật khẩu mới, vui lòng kiểm tra Email!",
@@ -331,6 +362,7 @@ function sendEmail(value){
                 const container = document.querySelector('.container')
                 container.classList.remove('show')
                 block_forget_pass.style.display = 'none'
+                loading.style.display = 'none'
               toast({
                 title: "Lỗi",
                 content:"Email đăng nhập bạn vừa nhập không tồn tại hoặc không chính xác , vui lòng thử lại đúng email đăng nhập của bạn.",

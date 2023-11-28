@@ -136,30 +136,35 @@ def driver_login_view(request):
 
 
 def view_profile_customer(request):
-    
-    id_customer = request.customer.id
-    my_filter_form = ImageUploadForm()
-    img_customer = request.customer.img_customer
-    my_profile = Customer.objects.get(pk=id_customer)
-    return render(request,'HomeApp/profile_customer.html',{
-        'myinfo': my_profile,
-        'customer_id' : id_customer,
-        'form_upload' : my_filter_form,
-        'img_customer' : img_customer
-    })
+    if 'customer_sessionid' in request.session:
+        id_customer = request.customer.id
+        my_filter_form = ImageUploadForm()
+        img_customer = request.customer.img_customer
+        my_profile = Customer.objects.get(pk=id_customer)
+        return render(request,'HomeApp/profile_customer.html',{
+            'myinfo': my_profile,
+            'customer_id' : id_customer,
+            'form_upload' : my_filter_form,
+            'img_customer' : img_customer
+        })
+    else:
+        return render(request, 'HomeApp/home.html')
 
 def view_editprofile(request):
-    id_customer = request.customer.id
-    my_filter_form = ImageUploadForm()
-    my_profile = Customer.objects.get(pk=id_customer)
-    img_customer = request.customer.img_customer
-    print("img_customer....................: ", img_customer)
-    return render(request,'HomeApp/edit_profile.html',{
-        'myinfo': my_profile,
-        'customer_id' : id_customer,
-        'form_upload' : my_filter_form,
-        'img_customer' : img_customer,
-    })
+    if 'customer_sessionid' in request.session:
+        id_customer = request.customer.id
+        my_filter_form = ImageUploadForm()
+        my_profile = Customer.objects.get(pk=id_customer)
+        img_customer = request.customer.img_customer
+        print("img_customer....................: ", img_customer)
+        return render(request,'HomeApp/edit_profile.html',{
+            'myinfo': my_profile,
+            'customer_id' : id_customer,
+            'form_upload' : my_filter_form,
+            'img_customer' : img_customer,
+        })
+    else:
+        return render(request, 'HomeApp/home.html')
 
 def checkBeforeBook(request,schedule_id,customer_id,slots):
     try:
@@ -910,18 +915,22 @@ def save_edit_phone(request):
             return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
         
 def view_change_pass(request):
-    id_customer = request.customer.id
-    my_filter_form = ImageUploadForm()
-    img_customer = request.customer.img_customer
-    my_profile = Customer.objects.get(pk=id_customer)
-    pass_customer = my_profile.password_customer
-    return render(request,'HomeApp/change_pass.html',{
-        'myinfo': my_profile,
-        'customer_id' : id_customer,
-        'form_upload' : my_filter_form,
-        'img_customer' : img_customer,
-        'pass_customer':pass_customer,
-    })
+    if 'customer_sessionid' in request.session:
+        id_customer = request.customer.id
+        my_filter_form = ImageUploadForm()
+        img_customer = request.customer.img_customer
+        my_profile = Customer.objects.get(pk=id_customer)
+        pass_customer = my_profile.password_customer
+        return render(request,'HomeApp/change_pass.html',{
+            'myinfo': my_profile,
+            'customer_id' : id_customer,
+            'form_upload' : my_filter_form,
+            'img_customer' : img_customer,
+            'pass_customer':pass_customer,
+        })
+    else:
+        return render(request, 'HomeApp/home.html')
+    
 def check_pass_customer(request):
     id_customer = request.customer.id
     customer = Customer.objects.get(pk=id_customer)

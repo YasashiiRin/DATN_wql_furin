@@ -902,12 +902,12 @@
     font-size: 2.5rem;
   }
   .business-header__text p {
+    font-family: cursive;
     color: #fff;
     padding-left: 581px;
     font-size: 1.1rem;
     font-weight: 600;
     padding-bottom: 1rem;
-    font-family: cursive;
     opacity: 100%;
   }
   .business-header__text.resetcolor{
@@ -930,8 +930,8 @@
   }
   .engagements__section__flex.Titlecolor2 p{
     padding-top: 9px;
-    font-family: cursive;
     color: #ffffff;
+    line-height: 1.3em;
   }
   .engagements__section__flex.Titlecolor1 p{
     padding-top: 9px;
@@ -952,6 +952,9 @@
     margin-left: 80px;
     /* border-left: 2px dotted #191919; */
   }
+  .footer {
+    margin-bottom: 10px;
+}
   /* engagements SECTION */
   
   section#engagements__section {
@@ -966,11 +969,9 @@
     padding-left: 10px;
     /* padding-bottom: 1rem; */
     font-size: 1.8rem;
-    font-family: cursive;
   }
   #engagements__section h4 {
     font-size: 1.3rem;
-    font-family: cursive;
     font-weight: 600;
   }
   
@@ -986,8 +987,8 @@
 }
 .engagements__section__flex.Titlecolor1 p {
   padding-top: 9px;
-  font-family: cursive;
   color: #fff;
+  line-height: 1.3em;
 }
   
   /* INFOS SECTION */

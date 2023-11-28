@@ -16,5 +16,7 @@ urlpatterns = [
 
     path('activateS/<str:email>/', views.handle_forgetPass, name='activateS'),
     path('sendEmail_forgetPass/', views.sendEmail_forgetPass, name='sendEmail_forgetPass'),
+
+    path('handelChangePassForget/',views.handelChangePassForget,name= 'handelChangePassForget'),
     # path('activateD/<str:uid>/<str:token>/',views.activate_driver, name='activateD'),
 ]

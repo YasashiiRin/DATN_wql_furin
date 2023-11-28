@@ -406,10 +406,88 @@ input.valid+.span::before {
     background-color: #00dbe9;
     color: #fff;
     font-weight: 600;
+    cursor: pointer;
 }
 .forget_title{
     color: #515151;
     font-size: 18px;
     font-weight: 600;
     padding: 30px 0 30px 80px;
+}
+.forget_title_exit{
+    color: #ff6e6e;
+    font-size: 24px;
+    font-weight: 600;
+    padding: 0px 0 29px 158px;
+    cursor: pointer;
+}
+.forget_title_flex{
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+/* -------------------------form loading---------------------- */
+.form_loading{
+    height: 121px;
+    position: fixed;
+    top: 36%;
+    right: 40%;
+    display: none;
+    z-index: 999;
+    background-color: #ffff;
+    width: 300px;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px 0 #455c71;
+}
+.block_loading{
+    position: relative;
+}
+.block_loading img{
+    width: 93%;
+    height: 93%;
+    overflow: clip;
+}
+.block_loading::before,
+.block_loading::after{
+    -webkit-animation: clipMe 2s linear infinite;
+    animation: clipMe 2s linear infinite;
+    border: rgb(0 188 255) solid 6px;
+    border-radius: 9999px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    content: ' ';
+    height: 60px;
+    left: 40%;
+    opacity: 0.6;
+    position: absolute;
+    top: 15px;
+    -webkit-transform: scale(0.714);
+    transform: scale(0.714);
+    width: 60px;
+}
+.block_loading::before{
+  animation-delay: -0s;
+}
+@keyframes clipMe {
+  0%, 100% {
+    clip: rect(0px, 220px, 2px, 0px);
+  }
+  25% {
+    clip: rect(0px, 2px, 220px, 0px);
+  }
+  50% {
+    clip: rect(218px, 220px, 220px, 0px);
+  }
+  75% {
+    clip: rect(0px, 220px, 220px, 218px);
+  }
+}
+.word_Loading{
+    padding: 86px 0 0 28%;
+}
+.word_Loading span{
+    color: #00dbe9;
 }

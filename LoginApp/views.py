@@ -190,10 +190,12 @@ def sendEmail_forgetPass(request):
             data = json.loads(request.body)
             email_customer = data.get('email')
             if Customer.objects.filter(email_customer=email_customer).exists():
+                cm_name = Customer.objects.get(email_customer=email_customer).name_customer
                 subject = 'Thay đổi mật khẩu'
                 from_email='furin.nvt@gmail.com'
                 message=''
                 contenHTML = render_to_string('LoginApp/form_forgetPass.html', {
+                    'name_user':cm_name,
                     'activation_url': 'http://127.0.0.1:8000/activateS/{}'.format(email_customer),
                 })
                 to_email = [email_customer]
@@ -207,8 +209,40 @@ def sendEmail_forgetPass(request):
             else:
                 return JsonResponse({'message': 'check_false'})
         except json.JSONDecodeError:
-            return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)   
-    return render(request, 'LoginApp/verifyEmail.html')    
+            return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)    
 
 def handle_forgetPass(request,email):
-    return render(request, 'LoginApp/verifyEmail.html') 
+    try:
+        if Customer.objects.filter(email_customer=email).exists():
+            cm = Customer.objects.get(email_customer = email)
+            img_customer = cm.img_customer
+            print("id :",cm.id ,"img: ", cm.img_customer)
+            return render(request, 'LoginApp/form_forgetPass_change.html',{
+                'myinfo':cm,
+                'email':email,
+                'img_customer' : img_customer,
+            }) 
+    except:
+        return render(request, 'LoginApp/LoginCustomer.html',{
+                'islogin': 'error',
+        })
+    
+
+def handelChangePassForget(request):
+    print("Khởi chạy hàm xử lý thay đổi mật khẩu bị quên...............")
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            email_customer = data.get('email')
+            pass_customer = data.get('new_pass')
+            print("check email: ", email_customer , "checknewpass: ",pass_customer)
+            if Customer.objects.filter(email_customer=email_customer).exists():
+                cm = Customer.objects.get(email_customer=email_customer)
+                hasher_pass = make_password(pass_customer)
+                cm.password_customer = hasher_pass
+                cm.save()
+                return JsonResponse({'message': 'check_true'})
+            else:
+                return JsonResponse({'error': 'check_false'})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Lỗi trong quá trình phân tích chuỗi JSON'}, status=400)
