@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.db.models import Max
 from LoginApp.models import CarOwner,Customer
 from django.contrib.auth.hashers import make_password
-from .models import Driver, Vehicle,Schedules, Orders
+from .models import Driver, Vehicle,Schedules, Orders,Income
 from django import forms
 from django.forms.widgets import HiddenInput
 from datetime import timedelta
@@ -176,7 +176,7 @@ class ScheduleAdminForm(forms.ModelForm):
         else:
             print("chưa thay đổi queryset của vehicle")  
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','label_schedule','name_schedule','slot_vehicle','start_location','end_location','start_time','end_time','start_date')
+    list_display = ('vehicle','label_schedule','name_schedule','slot_vehicle','start_location','end_location','start_time','end_time','start_date','price_schedule')
     form = ScheduleAdminForm
     search_fields = ('start_location','start_date')
     actions = ["filter_schedules_with_max_start_day"]
@@ -233,6 +233,7 @@ class ScheduleAdmin(admin.ModelAdmin):
         end_location = form.cleaned_data['end_location']
         start_time = form.cleaned_data['start_time']
         end_time = form.cleaned_data['end_time']
+        price_schedule = form.cleaned_data['price_schedule']
         current_date = timezone.localtime(timezone.now()).date()
         current_time = timezone.localtime(timezone.now()).time()
         vehicle_info = Vehicle.objects.get(pk=selected_vehicle.pk)
@@ -257,6 +258,7 @@ class ScheduleAdmin(admin.ModelAdmin):
                         end_location=end_location,
                         start_time=start_time,
                         end_time=end_time,
+                        price_schedule = price_schedule,
                         day_schedule=start_date + timedelta(days=i),
                         start_date=start_date + timedelta(days=i),
                     )
@@ -270,6 +272,7 @@ class ScheduleAdmin(admin.ModelAdmin):
                     existing_schedule.end_location = end_location
                     existing_schedule.start_time = start_time
                     existing_schedule.end_time = end_time
+                    existing_schedule.price_schedule = price_schedule
                     existing_schedule.save()
                 elif number_of_days >=1 :  
                     for i in range(number_of_days):
@@ -282,6 +285,7 @@ class ScheduleAdmin(admin.ModelAdmin):
                             end_location=end_location,
                             start_time=start_time,
                             end_time=end_time,
+                            price_schedule = price_schedule,
                             day_schedule=start_date + timedelta(days=i),
                             start_date=start_date + timedelta(days=i),
                         )
@@ -307,7 +311,7 @@ class ScheduleAdmin(admin.ModelAdmin):
         return queryset
     sort_by_start_day_descending.short_description = 'Sort by Start Day'
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','name_customer_order','pickup_daytime','quantity_slot','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','pickup_location','dropoff_location','start_date_time','dropoff_datetime','state_book')
+    list_display = ('vehicle','name_customer_order','pickup_daytime','quantity_slot','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','pickup_location','dropoff_location','start_date_time','dropoff_datetime','total_price','state_book')
     search_fields = ('name_customer_order','name_driver_order','name_schedule_order','quantity_slot')
     class Media:
         css = {
@@ -319,10 +323,18 @@ class OrdersAdmin(admin.ModelAdmin):
             qs = qs.filter(vehicle__driver__carowner=request.user)
         return qs  
 
+class IncomesAdmin(admin.ModelAdmin):
+    list_display = ('driver','name_driver','total_income')
+
+    def get_queryset(self, request):
+        qs = super(IncomesAdmin, self).get_queryset(request)
+        if not request.user.is_superuser:
+            qs = qs.filter(driver__carowner=request.user)
+        return qs  
 admin.site.register(CarOwner, CarOwnerAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(Schedules,ScheduleAdmin)
 admin.site.register(Orders, OrdersAdmin)
-
+admin.site.register(Income,IncomesAdmin)

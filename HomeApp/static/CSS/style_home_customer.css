@@ -478,9 +478,9 @@
     display: none;
     position: fixed;
     width: 500px;
-    height: 500px;
+    height: 536px;
     right: 33%;
-    top:71px;
+    top: 51px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 1px 1px 5px #38437d;
@@ -547,9 +547,10 @@
     color: #5e5e5e;
     border-bottom: 1px solid #f84d2e;
     border-left: 4px solid #f84d2e;
+    align-items: center;
   }
   .invoice_info_book p{
-    font-size: 12px;
+    font-size: 13px;
   }
   .invoice_footer{
   }
@@ -575,6 +576,11 @@
     font-weight: 600;
     border-radius: 3px;
     color: #345967;
+    margin-right: 50px;
+  }
+  .price{
+    font-size: 18px;
+    color: #ff5516;
   }
   .input_book_car{
     position: relative;

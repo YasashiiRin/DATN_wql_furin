@@ -3,7 +3,7 @@ import os
 from django.http import HttpResponseRedirect
 from django.shortcuts import render , redirect
 from django.contrib.auth import logout
-from CarownerApp.models import Driver,Schedules,Vehicle,Orders
+from CarownerApp.models import Driver,Schedules,Vehicle,Orders,Income
 from django.db.models import Prefetch
 
 import shutil
@@ -219,33 +219,31 @@ def handle_book_vehicle_second(request,schedule_id,customer_id,slot):
 
         check_cm = Orders.objects.get(customer=customer_id,schedule=schedule)
         current_slot = check_cm.quantity_slot
+        current_price = check_cm.total_price
         slot_vehicle = schedule.slot_vehicle
         slot_t = slot_vehicle - slot + current_slot
+
+        total_price = slot * schedule.price_schedule
         handel_slots = slot
         if check_cm :
             if slot_t >= 0:
                 schedule.slot_vehicle = slot_t
                 schedule.save()
                 check_cm.delete()
-                new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
+                new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,total_price = total_price ,state_book = 'Đã chỉnh sửa đơn')
                 new_order_update.save()
+                try:
+                    Ic = Income.objects.get(driver = driver)
+                    if Ic:
+                        income = Ic.total_income + total_price - current_price
+                        Ic.total_income = income
+                        Ic.save()
+                except:
+                    Ic = Income(driver = driver , name_driver = driver.name_driver , total_income = total_price)    
+                    Ic.save()
                 return JsonResponse({'message': 'Đặt xe thành công'})
             else:
                 return JsonResponse({'error': 'không đủ chỗ '})
-            # elif slot < check_cm.quantity_slot:
-            #     schedule.slot_vehicle = slot_t
-            #     check_cm.delete()
-            #     new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
-            #     schedule.save()
-            #     new_order_update.save()
-            #     return JsonResponse({'message': 'Đặt xe thành công'})
-            # elif slot == check_cm.quantity_slot:
-            #     schedule.slot_vehicle = slot_t
-            #     check_cm.delete()
-            #     new_order_update = Orders(customer = customer,vehicle = vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime = current_datetime ,state_book = 'Đã chỉnh sửa đơn')
-            #     schedule.save()
-            #     new_order_update.save()
-            #     return JsonResponse({'message': 'Đặt xe thành công'})
         
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500) 
@@ -259,12 +257,13 @@ def handle_book_vehicle(request,schedule_id,customer_id,slot):
         slot = slot
         print("vehicle_id : ", schedule_id)
         print("customer_id_book1 : ", customer_id)
-        schedule = Schedules.objects.get(pk=schedule_id) 
-        start_day = schedule.start_date
-        customer =Customer.objects.get(pk=customer_id)
+        schedule = Schedules.objects.get(pk=schedule_id)
         vehicle =schedule.vehicle
         driver = vehicle.driver
         carowner = driver.carowner
+        start_day = schedule.start_date
+        customer =Customer.objects.get(pk=customer_id)
+
         name_customer_order = customer.name_customer
         name_driver_order = driver.name_driver
      
@@ -276,13 +275,26 @@ def handle_book_vehicle(request,schedule_id,customer_id,slot):
         start_time= schedule.start_time
         end_time=schedule.end_time
         name_schedule_order = schedule.name_schedule
+
+        total_price = slot * schedule.price_schedule
+
         slot_vehicle = schedule.slot_vehicle
         slot_t = slot_vehicle - slot
         if slot_t >= 0:
             schedule.slot_vehicle = slot_t
             schedule.save()
-            od = Orders(customer=customer,vehicle= vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime =current_datetime,state_book = '')
+            od = Orders(customer=customer,vehicle= vehicle,schedule=schedule,name_customer_order=name_customer_order, name_driver_order = name_driver_order,name_schedule_order = name_schedule_order , name_vehicle_order = name_vehicle_order , name_carowner_order = name_carowner_order , carowner_id = carowner_id , quantity_slot = slot , pickup_location = pickup_location , dropoff_location = dropoff_location , start_date_time = start_time , dropoff_datetime = end_time, day_schedule =start_day, pickup_daytime =current_datetime,total_price=total_price,state_book = '')
             od.save()
+            try:
+                Ic = Income.objects.get(driver = driver)
+                if Ic:
+                    Ic.total_income = Ic.total_income + total_price
+                    Ic.save()
+                else:
+                    return JsonResponse({'error': 'Thất bại'})
+            except:
+                Ic = Income(driver = driver , name_driver = driver.name_driver , total_income = total_price)    
+                Ic.save()
             return JsonResponse({'message': 'Đặt xe thành công'})
 
         else:
@@ -297,7 +309,9 @@ def handle_cancel_order(request,idorder):
     try:
         print("id order :", idorder)
         order = Orders.objects.get(pk=idorder)
-        print("")
+        vehicle= order.vehicle
+        driver = vehicle.driver
+        current_price = order.total_price
         schedule = order.schedule
         if schedule:
             slots_order = order.quantity_slot
@@ -306,6 +320,14 @@ def handle_cancel_order(request,idorder):
             order.delete()
             schedule.slot_vehicle = total_slot
             schedule.save()
+            try:
+                Ic = Income.objects.get(driver = driver)
+                if Ic:
+                    Ic.total_income = Ic.total_income - current_price
+                    Ic.save()
+            except:
+                return JsonResponse({'error_Cancel': 'Cancel order failed.......'})
+
             return JsonResponse({'notifiCancel': 'Cancel order Successfull.......'})
         else:
             return JsonResponse({'error_Cancel': 'Cancel order failed.......'})

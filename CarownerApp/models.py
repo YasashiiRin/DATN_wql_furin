@@ -46,6 +46,7 @@ class Schedules(models.Model):
     start_date = models.DateField(null=True)
     number_of_days = models.PositiveIntegerField(default=1) 
     label_schedule = models.IntegerField(default=1)
+    price_schedule = models.IntegerField(null=True)
     class Meta:
         db_table = 'shedules'    
 class Orders(models.Model):
@@ -67,8 +68,13 @@ class Orders(models.Model):
     day_schedule = models.DateField(null=True)
     pickup_daytime = models.DateTimeField(null=True)
     state_book = models.CharField(max_length=255,null=True)
+    total_price = models.IntegerField(null=True)
     class Meta:
         db_table= 'orders'
+class Income(models.Model):
+    driver =models.OneToOneField(Driver, on_delete=models.CASCADE,null=True)
+    name_driver = models.CharField(max_length=255, null=True)
+    total_income = models.IntegerField(null=True)
 
 class CustomSession(models.Model):
     session_key = models.CharField(max_length=40, primary_key=True)

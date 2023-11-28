@@ -228,13 +228,14 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">TÊN_NGƯỜI_ĐẶT</th>
-                                    <th scope="col">TÊN LỊCH TRÌNH</th>
+                                    <th scope="col">Tên_Người_Đặt</th>
+                                    <th scope="col">Tên Lịch Trình</th>
                                     <th scope="col">SỐ_CHỖ</th>
-                                    <th scope="col">ĐỊA ĐIỂM BẮT ĐẦU</th>
-                                    <th scope="col">ĐỊA ĐIỂM CUỐI</th>
+                                    <th scope="col">Địa Điểm Bắt Đầu</th>
+                                    <th scope="col">Địa Điểm Cuối</th>
                                     <th scope="col">THỜI_GIAN_ĐI</th>                      
                                     <th scope="col">NGÀY ĐI</th>
+                                    <th scope="col">Thanh Toán</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -253,6 +254,7 @@
                                     <td><b>{{order.dropoff_location}}</b></td>
                                     <td>{{order.start_date_time}}</td>
                                     <td><b>{{order.day_schedule}}</b></td>
+                                    <td><b class="format_order_price" data-order-price = "{{order.total_price}}"></b></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -665,6 +667,7 @@
                     const data_order_info_c_address = this.getAttribute('data-order-info-address')
                     const data_order_info_c_phone = this.getAttribute('data-order-info-phone')
 
+
                     const container_order_info_customer = document.querySelector('.container_order_info_customer')
                     container_order_info_customer.style.display = 'block'
 
@@ -779,8 +782,19 @@
                     console.error("Đã xảy ra lỗi:", error);
                 });
             })
-
-     });
+        
+            var format_order_price = document.querySelectorAll('.format_order_price')
+            format_order_price.forEach( element => {
+                const dataprice = element.getAttribute('data-order-price')
+                if (dataprice){
+                    var formattedAmount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dataprice);
+                    console.log(formattedAmount)
+                    element.innerText = formattedAmount
+                }else{
+                    element.innerText = '0 đ'
+                }
+            })
+    });
      const notification = "{{notifi_search}}";
      console.log("waiting notifi search ")
      console.log(notification)

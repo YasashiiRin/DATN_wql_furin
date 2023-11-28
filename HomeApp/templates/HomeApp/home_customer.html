@@ -242,6 +242,7 @@
                                      data-endlocation ="{{schedule.end_location}}"
                                      data-quantityslot ="{{schedule.vehicle.slot_vehicle}}"
                                      data-startday ="{{schedule.start_date}}"
+                                     data-price ="{{schedule.price_schedule}}"
                                      > Đặt</button></td>
                               </tr>
                               {% endfor %}
@@ -450,7 +451,11 @@
             <div class="invoice_info_book-title">
               <p>Số lượng chỗ muốn đặt: </p>
             </div>
-            <input  class="input_quantity" type="number" name="quantity" min="1" max="5">
+            <input  class="input_quantity" type="number" name="quantity" min="1" max="5" value="1">
+            <div class="invoice_info_book-title">
+              <p>Giá :</p>
+            </div>
+            <p class="price">150000</p>
           </div>
         </div>
       </div>
@@ -516,6 +521,7 @@
           const phonedriver = document.querySelector('.phone_driver')
           const button_confirm = document.querySelector('.invoice_bt')
           const startday = document.querySelector('.startday')
+          const price = document.querySelector('.price')
 
 
           const showChoiceBook = document.querySelector('.showchoice')
@@ -572,6 +578,7 @@
         
                   const quantityslot = this.getAttribute('data-quantityslot')
                   const startday_get = this.getAttribute('data-startday')
+                  const price_schedule = this.getAttribute('data-price')
                   
                   {% comment %} console.log(scheduleId)
                   console.log(customerId)
@@ -594,6 +601,21 @@
                   input_quantity.max = quantityslot
                   phonecarowner.innerHTML = phone_carowner
                   phonedriver.innerHTML = phone_driver
+
+                  const default_price = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price_schedule);
+                  price.innerHTML = default_price
+                  var total_price = 0;
+                  input_quantity.oninput = function(){
+                    console.log("oninput khởi chạy")
+                    total_price = input_quantity.value * price_schedule
+                    const formattedAmount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total_price);
+                    console.log(formattedAmount);
+                    price.innerHTML = formattedAmount
+                  }
+
+                  
+                  
+
                   container.classList.add("show");
                   invoice.style.display ='block'
 
