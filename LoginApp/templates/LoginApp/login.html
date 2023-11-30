@@ -224,6 +224,15 @@ else if(notification==='verifisuccess'){
 
     }) 
 }
+else if(notification==='verifierror'){
+    toast({
+        title: "Xác thực thất bại",
+        content: "Bạn xác thực thất bại, vui lòng kiểm tra lại email xác thực mới nhất!",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+}
 else if(notification==='sendEmail'){
     console.log("send email success.................")
     const blocksendemail = document.querySelector('.notifi_sendemail')

@@ -106,7 +106,7 @@
                                     <span class="form-message"></span>
                                 </div>
                                 <button type="submit" class="btn form-submit">
-                                    Sign up
+                                    Confirm
                                 </button>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
                     <button class="bt_route--footer"><a href="https://mail.google.com/mail">Your Email</a></button>
                 </div>
                 <div class="bt_route">
-                    <button class="bt_route--footer"><a href="{% url 'home_customer_view' %}">Home</a></button>
+                    <button class="bt_route--footer"><a href="{% url 'back_home' %}">Home</a></button>
                 </div>
             </div>
         </div>
@@ -222,6 +222,15 @@ else if(notification==='verifisuccess'){
         title: "Xác thực tài khoản thành công",
         content: "Bạn đã xác thực tài khoản thành công , có thể thực hiện đăng nhập",
         typeicon: "success",
+        duration: 8000
+
+    }) 
+}
+else if(notification==='verifierror'){
+    toast({
+        title: "Xác thực thất bại",
+        content: "Bạn xác thực thất bại, vui lòng kiểm tra lại email xác thực mới nhất!",
+        typeicon: "error",
         duration: 8000
 
     }) 

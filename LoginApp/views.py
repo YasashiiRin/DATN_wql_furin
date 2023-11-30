@@ -80,7 +80,9 @@ def activate(request,uid,token):
             'islogin':'verifisuccess'
         })
     else:
-        raise Http404
+        return render(request, 'LoginApp/login.html',{
+            'islogin':'verifierror'
+        })
 def activate_Customer(request,uid,token):
     try:
         cm = Customer.objects.get(pk=uid)
@@ -94,7 +96,9 @@ def activate_Customer(request,uid,token):
             'islogin':'verifisuccess'
         })
     else:
-        raise Http404 
+        return render(request, 'LoginApp/LoginCustomer.html',{
+            'islogin':'verifierror'
+        })
 # def activate_driver(request,uid,token):
 #     try:
 #         dr = Driver.objects.get(pk=uid)

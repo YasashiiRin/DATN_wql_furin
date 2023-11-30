@@ -134,7 +134,9 @@ def activate_driver(request,uid,token):
             'islogin':'verifisuccess'
         }) 
     else:
-        raise Http404   
+        return render(request, 'DriverApp/driver_login.html',{
+            'islogin':'verifierror'
+        })   
     
 
 def search_list_schedules(request):

@@ -128,7 +128,7 @@ validator.isRequired = function (selector, message) {
     return {
         selector: selector,
         test: function (value) {
-            return value ? undefined : message || 'Is required'
+            return value ? undefined : message || 'Không để trống ô này'
         }
     }
 }
@@ -137,11 +137,11 @@ validator.isEmail = function (selector) {
         selector: selector,
         test: function (inputText) {
             if (inputText == '') {
-                return inputText.trim() ? undefined : 'Is required';
+                return inputText.trim() ? undefined : 'Không để trống ô này';
 
             } else {
                 var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-                return regex.test(inputText) ? undefined : 'Invalid email';
+                return regex.test(inputText) ? undefined : 'Email không hợp lệ';
             }
 
         }
@@ -151,7 +151,7 @@ validator.minlength = function (selector, min) {
     return {
         selector: selector,
         test: function (inputText) {
-            return inputText.length >= min ? undefined : `Please enter a minimum of ${min} characters `
+            return inputText.length >= min ? undefined : `Vui lòng nhập ít nhất  ${min} ký tự `
         }
     }
 }
@@ -159,7 +159,7 @@ validator.isconfirmvalue = function (selector, callback, message) {
     return {
         selector: selector,
         test: function (value) {
-            return value === callback() ? undefined : message || 'Password incorrect';
+            return value === callback() ? undefined : message || 'Mật khẩu sai';
         }
     }
 }

@@ -110,7 +110,7 @@
                                     <div class="span"></div>
                                     <span class="form-message"></span>
                                 </div>
-                                <button type="submit" class="btn form-submit">
+                                <button type="submit" class="btn submit_signup_loading form-submit">
                                     Sign up
                                 </button>
                             </div>
@@ -143,7 +143,7 @@
                     <button class="bt_route--footer"><a href="https://mail.google.com/mail">Tới Email</a></button>
                 </div>
                 <div class="bt_route">
-                    <button class="bt_route--footer"><a href="{% url 'home_customer_view' %}">Trang chủ</a></button>
+                    <button class="bt_route--footer"><a href="{% url 'back_home' %}">Trang chủ</a></button>
                 </div>
             </div>
         </div>
@@ -190,7 +190,7 @@
             formGroup: '.form-group',
             errSelector: '.form-message',
             rules: [
-                validator.isRequired('#fullname', 'Is required'),
+                validator.isRequired('#fullname', 'Không để trống ô này'),
                 validator.isRequired('#email'),
                 validator.isEmail('#email'),
                 validator.isRequired('#password'),
@@ -270,6 +270,15 @@ else if(notification==='verifisuccess'){
     }) 
     
 }
+else if(notification==='verifierror'){
+    toast({
+        title: "Xác thực thất bại",
+        content: "Bạn xác thực thất bại, vui lòng kiểm tra lại email xác thực mới nhất!",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+}
 else if(notification==='notemail'){
     toast({
         title: "Email không tồn tại",
@@ -291,11 +300,13 @@ else if(notification==='error'){
     
 }
 else if(notification==='sendEmail'){
+    const loading = document.querySelector('.form_loading')
     console.log("send email success.................")
     const blocksendemail = document.querySelector('.notifi_sendemail')
     const container = document.querySelector('.container')
     blocksendemail.style.display = 'block' 
     container.classList.add('show')
+    loading.style.display = 'none'
 }  
   
 const dltoast = document.querySelectorAll('.toast-exit');
@@ -312,7 +323,13 @@ const input_send_email = document.querySelector('.input_item_info')
 const bt_send = document.querySelector('.btn-send')
 const container = document.querySelector('.container')
 const loading = document.querySelector('.form_loading')
+const loading_register = document.querySelector('.submit_signup_loading')
+loading_register.onclick = function(){
+    container.classList.add('show')
+    loading.style.display = 'block'
+}
 forget_pass.onclick =function(){
+    console.log("is click submit")
     container.classList.add('show')
     block_forget_pass.style.display = 'block'
 

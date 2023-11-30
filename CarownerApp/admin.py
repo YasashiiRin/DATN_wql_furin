@@ -311,7 +311,7 @@ class ScheduleAdmin(admin.ModelAdmin):
         return queryset
     sort_by_start_day_descending.short_description = 'Sort by Start Day'
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('vehicle','name_customer_order','pickup_daytime','quantity_slot','name_driver_order','name_schedule_order','name_vehicle_order','name_carowner_order','pickup_location','dropoff_location','start_date_time','dropoff_datetime','total_price','state_book')
+    list_display = ('vehicle','name_customer_order','pickup_daytime','quantity_slot','name_driver_order','name_schedule_order','day_schedule','name_vehicle_order','name_carowner_order','pickup_location','dropoff_location','start_date_time','dropoff_datetime','total_price','state_book')
     search_fields = ('name_customer_order','name_driver_order','name_schedule_order','quantity_slot')
     class Media:
         css = {
