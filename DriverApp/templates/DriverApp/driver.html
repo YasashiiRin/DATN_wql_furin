@@ -789,7 +789,12 @@
                 if (dataprice){
                     var formattedAmount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dataprice);
                     console.log(formattedAmount)
-                    element.innerText = formattedAmount
+                    if (formattedAmount === 'NaN ₫'){
+                        element.innerText = '300.000 ₫'
+                    }else{
+                        element.innerText = formattedAmount
+                    }
+                    
                 }else{
                     element.innerText = '0 đ'
                 }
