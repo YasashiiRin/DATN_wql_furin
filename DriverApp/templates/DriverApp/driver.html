@@ -1,0 +1,873 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+    <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
+    <!-- https://fonts.google.com/specimen/Roboto -->
+    <link rel="stylesheet" href="{% static 'CSS/fontawesome.min.css' %}">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="{% static 'CSS/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/templatemo_driver.css' %}">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/styleDriver.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_driver.css' %}">
+    
+    <link
+        rel="icon"
+        type="image/x-icon"
+        href="{% static 'images/logo5.ico' %}"/>
+    <title>Furin-Driver</title>
+</head>
+
+<body id="reportsPage">
+    <div class="" id="home">
+        <nav class="navbar navbar-expand-xl">
+            <div class="container h-100">
+                <a class="navbar-brand" href="{% url 'driver' %}">
+                    <h1 class="tm-site-title mb-0">Tài Xế</h1>
+                </a>
+                <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars tm-nav-icon"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto h-100">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Bảng điều khiển
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        {% comment %} <li class="nav-item">
+                            <a class="nav-link" href="accounts.html">
+                                <i class="far fa-user"></i>
+                                Profile
+                            </a>
+                        </li> {% endcomment %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <div class="driver_f--state">
+                                    <i class="fas fa-cog"></i>
+                                    <span>
+                                        Settings <i class="fas fa-angle-down"></i>
+                                    </span>
+                                    
+                                </div>
+                            </a>
+                        
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link d-block" href="{% url 'logout_driver' %}">
+                               <b class="char_logout">Đăng Xuất</b>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p class="block_welcome_driver">Chào mừng quay trở lại , Tài xế <b>{{request.driver.name_driver}}</b></p>
+                </div>
+
+            </div>
+            <div class="change-c--state">
+                <ul class="tg-list">
+                    <li class="tg-list-item">
+                            <div>
+                                <span>Thay đổi trạng thái: </span>
+                            </div>
+                            <div>     
+                                <input class="tgl tgl-ios" id="cb2" type="checkbox"/>
+                                <label class="tgl-btn" for="cb2"></label>
+                            </div> 
+                    </li>
+                    <li class="tg-list-item">
+                        <input class="tgl tgl-skewed" id="cb3" type="checkbox"/>
+                        <label class="tgl-btn--skewed" data-tg-off="Đang dừng" data-tg-on="Đang khởi hành" for="cb3"></label>
+                    </li>
+                    </li>
+                  </ul>
+            </div>
+            <!-- row -->
+            <div class="row tm-content-row">
+                <div class="col-block-margin-right col-xl-6 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block">
+                        <h2 class="tm-block-title">Biểu đồ</h2>
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+                {% comment %} Biểu đồ nằm đường thẳng  {% endcomment %}
+                {% comment %} <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block">
+                        <h2 class="tm-block-title">Performance</h2>
+                        <canvas id="barChart"></canvas>
+                    </div>  
+                </div> {% endcomment %}
+                {% comment %} biểu đồ hình tròn {% endcomment %}
+                {% comment %} <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-taller">
+                        <h2 class="tm-block-title"> Số Chỗ còn lại : </h2>
+                        <div id="pieChartContainer">
+                            <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
+                         </div>
+                    </div>
+                </div> {% endcomment %}
+                <div class="col-xl-6 col-block-margin-left tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block-notification tm-block-taller tm-block-overflow">
+                        <h2 class="tm-block-title">Danh Sách Thông Báo</h2>
+                        <div class="tm-notification-items">
+                            {% for order in notifi_orders%}
+                            <div class="media tm-notification-item"
+                                data-order-info-phone = "{{order.customer.phone_customer}}"  
+                                data-order-info-address = "{{order.customer.address_customer}}"  
+                                data-order-info-email = "{{order.customer.email_customer}}" 
+                                data-order-info-name = "{{order.name_customer_order}}" 
+                                data-order-info-img = "{{order.customer.img_customer}}" >
+                                <div class="tab-item-r">
+                                    <div class="avatar">
+                                    {%if order.customer.img_customer == ''%}
+                                        <img src="/media/no_avatar.png" alt="Avatar Image" class="rounded-circle" style="max-width: 100%;">
+                                    {%else%}
+                                        <img src="{{order.customer.img_customer.url}}" alt="Avatar Image" class="rounded-circle" style="max-width: 100%;">
+                                    {%endif%}    
+                                    </div>
+                                </div>
+                                <div class="media-body body_notifi">
+                                    <div>
+                                        <p class="pd-title"><b class="b-title">{{ order.name_customer_order }}</b><span class="world_primakey">{{ order.state_book }}<span><a href="#"
+                                            class="tm-notification-link"></a></p>
+                                        <span class="tm-small tm-text-color-secondary">Số Chỗ : {{order.quantity_slot }} ___ Ngày đi : {{order.day_schedule}}</span>   
+                                    </div>
+                                    <div>
+                                        <span class="tm-small tm-text-color-secondary">Thời gian đặt : {{order.pickup_daytime}}</span>
+                                    </div>
+                                </div>
+                                <div class="title_new">
+                                    <span class="char_new">Mới</span>
+                                </div>
+                            </div>
+                            {%endfor%}
+                        </div>
+                    </div>
+                </div>
+                {% comment %} Cập nhật trạng thái di chuyển {% endcomment %}
+                {% comment %} <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block">
+                        <h2 class="tm-block-title">State</h2>
+                        <canvas id="barChart"></canvas>
+                    </div>  
+                </div>  {% endcomment %}
+                <div class="tm-bg-primary-dark col-12 tm-block-col-height">
+                    <div class="block_title_list_schedules">
+                        <div class="">
+                          <h2 class="tm-block-title_nologin"> Danh sách đơn đặt</h2>
+                        </div>
+                        <div class="block_search_form">
+                            <div class="tm-bg-primary-dark-block_book_car">
+                              {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
+                              <form method="GET" action="{% url 'search_order' %}" class="search-form">
+                                <div class="input_book_car custom-css-class">
+                                  <input type="text" name="search_text"  id="select_search_text" class="mr-5px search_text" placeholder="Tên người đặt , điểm bắt đầu , số lượng chỗ">
+                                  <input type="date" name="input_date" class="mr-5px" id="select_mounth">
+                                  <select size="1" autocomplete="off" id="select_mounth" name="hours">
+                                    <option value="">Giờ</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="00">00</option>
+                                </select>  
+                                <select id="select_year" name="minutes">
+                                    <option value="">Phút</option>
+                                </select>
+                                    <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                                      color: #ff8276;"></i></button>
+                                </div>
+                                <div class="group_button_search_book">
+                                  
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                    </div>  
+                    <div class="tm-bg-primary-dark tm-block-taller tm-block-scroll tm-block-margin-driver">
+  
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên_Người_Đặt</th>
+                                    <th scope="col">Tên Lịch Trình</th>
+                                    <th scope="col">SỐ_CHỖ</th>
+                                    <th scope="col">Địa Điểm Bắt Đầu</th>
+                                    <th scope="col">Địa Điểm Cuối</th>
+                                    <th scope="col">THỜI_GIAN_ĐI</th>                      
+                                    <th scope="col">NGÀY ĐI</th>
+                                    <th scope="col">Thanh Toán</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in driver_orders%}
+                                <tr class="info_list_order"
+                                data-order-info-phone = "{{order.customer.phone_customer}}"  
+                                data-order-info-address = "{{order.customer.address_customer}}"  
+                                data-order-info-email = "{{order.customer.email_customer}}" 
+                                data-order-info-name = "{{order.name_customer_order}}" 
+                                data-order-info-img = "{{order.customer.img_customer}}"
+                                >
+                                    <th scope="row"><b>{{order.name_customer_order}}</b></th>
+                                    <th scope="row"><b>{{order.name_schedule_order}}</b></th>
+                                    <td><b>{{order.quantity_slot}}</b></td>
+                                    <td><b>{{order.pickup_location}}</b></td>
+                                    <td><b>{{order.dropoff_location}}</b></td>
+                                    <td>{{order.start_date_time}}</td>
+                                    <td><b>{{order.day_schedule}}</b></td>
+                                    <td><b class="format_order_price" data-order-price = "{{order.total_price}}"></b></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tm-bg-primary-dark col-12 tm-block-col-height">
+                    <div class="block_title_list_schedules block_title_list_schedules_list_schedules">
+                        <div class="">
+                          <h2 class="tm-block-title_nologin"> Danh sách các lịch trình theo ngày:</h2>
+                        </div>
+                        {% comment %} <div class="block_search_form">
+                            <div class="tm-bg-primary-dark-block_book_car">
+                             
+                              <form method="GET" action="{% url 'search_list_schedules' %}" class="search-form">
+                                <div class="input_book_car">
+                                    {{ my_filter_form.as_p }}
+                                    <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                                      color: #ff8276;"></i></button>
+                                </div>
+                  
+                              </form>
+                            </div>
+                          </div> {% endcomment %}
+                    </div> 
+                    <div class="tm-bg-primary-dark tm-block-margin-driver tm-block-taller tm-block-scroll">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">TUYẾN_LỊCH_TRÌNH</th>
+                                    <th scope="col">TÊN_LỊCH_TRÌNH</th>
+                                    <th scope="col">SỐ_CHỖ</th>
+                                    <th scope="col">NGÀY ĐI</th>
+                                    <th scope="col">THỜI_GIAN_ĐI</th>
+                                    <th scope="col">ĐỊA ĐIỂM BẮT ĐẦU</th>
+                                    <th scope="col">ĐỊA ĐIỂM CUỐI</th>
+                                  
+                                </tr>
+                            </thead>      
+                            <tbody>
+                                {% for lls in all_schedules%}
+                                <tr>
+                                    <th scope="row"><b>{{lls.label_schedule}}</b></th>
+                                    <th scope="row"><b>{{lls.name_schedule}}</b></th>
+                                    <td><b>{{lls.slot_vehicle}}</b></td>
+                                    <td><b>{{lls.start_date}}</b></td>
+                                    <td><b>{{lls.start_time}}</b></td>
+                                    <td><b>{{lls.start_location}}</b></td>
+                                    <td><b>{{lls.end_location}}</b></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="bg-dark">
+            <div class="container">
+              <nav>
+                <div><a href="#" class="logo">Furin</a></div>
+                <div>
+                  <a href="">Sẳn sàng đồng hành cùng bạn trong mọi chuyến đi</a>
+                </div>
+              </nav>
+            </div>
+          </footer>
+    </div>
+    <div class="container_order_info_customer">
+        <div class="container_order_info_exits">
+            <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size:30px"></i></a>
+        </div>
+        <div class="container_items">
+        <div class="main-body">
+              <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex flex-column align-items-center text-center">
+                        <div class="avatar_order_info">
+                          <img  src="" alt="Admin" class=" p-1 info_img" width="110">
+                        </div>
+                        <div class="mt-3">
+                          <h4 class="info_fullname"></h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card mt-3">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github mr-2 icon-inline"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>Github</h6>
+                        <span class="text-secondary">--------------------------</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
+                        <span class="text-secondary">--------------------------</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
+                        <span class="text-secondary">--------------------------</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
+                        <span class="text-secondary">--------------------------</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Email</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <span class="info_email"></span>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Số điện thoại</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <span class="info_phone"></span>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Địa chỉ </h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <span class="info_address">{{request.customer.address_customer}} </span>
+                        </div>
+                      </div>
+                      <hr>
+                      <hr>
+                    </div>
+                  </div>
+    
+                  <div class="row gutters-sm">
+
+                  </div>
+    
+                </div>
+              </div>
+    
+            </div>
+        </div>
+    </div>
+    <div id="tagtoast">
+    </div>
+    <script src="{% static 'JS/jquery-3.3.1.min.js' %}"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="{%static 'JS/moment.min.js' %}"></script>
+    <!-- https://momentjs.com/ -->
+    <script src="{% static 'JS/Chart.min.js' %}"></script>
+    <!-- http://www.chartjs.org/docs/latest/ -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- https://getbootstrap.com/ -->
+    <script src="{% static 'JS/toast_driver_form.js' %}"></script>
+    <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        var check_list_order = "{{order}}"
+        var list_orders = [
+            {% for order in  driver_orders%}
+                    "{{ order.quantity_slot}}",
+            {% endfor %}
+        ]
+        console.log("array_list_order: ",list_orders)
+
+        const width_threshold = 480;
+        var schedule_lable1 = [
+            {% for schedule in all_schedules %}
+                {%if schedule.label_schedule == 1%}
+                "{{ schedule.start_date}}-{{schedule.name_schedule}}",
+                {%endif%}
+            {% endfor %}
+        ]
+        var schedule_lable2 =  [
+            {% for schedule in all_schedules %}
+                {%if schedule.label_schedule == 2%}
+                    "{{ schedule.start_date}}-{{schedule.name_schedule}}",
+                {%endif%}
+            {% endfor %}
+        ]
+        var combindarray_schedule_startday = schedule_lable1;
+        if(schedule_lable2){
+            console.log("is exists schedule lable 2")
+            combindarray_schedule_startday = schedule_lable1.concat(schedule_lable2);
+        }
+        console.log("schedule_lable1: ", schedule_lable1)
+        console.log("schedule_lable2: ", schedule_lable2)
+        console.log("combindarray_schedule_startday: ", combindarray_schedule_startday)
+
+        var location;
+            
+        {% comment %} lấy vị trí các lịch trình hiển thị {% endcomment %}
+            var foundDuplicate = false;
+            var len_schedule_day = combindarray_schedule_startday.length;
+            for(i= 0 ; i < len_schedule_day ; i++){
+                 for(j= i+1 ; j< len_schedule_day ;j++){
+                    var tmp_i = combindarray_schedule_startday[i].split('-');
+                    var tmp_j = combindarray_schedule_startday[j].split('-');
+                    if(tmp_i[0]==tmp_j[0]){
+                        foundDuplicate = true;
+                        location = j;
+                        console.log("location: ",location)
+                        break;
+                    }    
+                }
+                if(foundDuplicate==true){
+                    break;
+                }
+            }
+        combindarray_schedule_startday.splice(location,0,' ')
+        console.log("len_schedule_day: ",len_schedule_day)
+        var listday = combindarray_schedule_startday;
+        console.log("List days: ",listday);
+
+        var schedule_lable1_slots = [
+            {% for schedule in all_schedules %}
+                {%if schedule.label_schedule == 1%}
+                    "{{ schedule.slot_vehicle}}",
+                {%endif%}
+            {% endfor %}
+        ]
+        var schedule_lable2_slots =  [
+            {% for schedule in all_schedules %}
+                {%if schedule.label_schedule == 2%}
+                    "{{ schedule.slot_vehicle}}",
+                {%endif%}
+            {% endfor %}
+        ]
+        var combindarray_slots = schedule_lable1_slots;
+        if(schedule_lable2_slots){
+            console.log("is exists schedule lable 2")
+            combindarray_slots = schedule_lable1_slots.concat(schedule_lable2_slots);
+        }
+        var listslots = combindarray_slots;
+        console.log("listslots: ",listslots);
+        var schedule_slots_int = listslots.map(function (slot_str) {
+            return parseInt(slot_str);
+          });
+        Chart.defaults.global.defaultFontColor = 'white';
+        schedule_slots_int.splice(location,0,0);
+        schedule_slots_int.push(0);
+        var days = listday;
+        var hits = schedule_slots_int;
+        var testhits =schedule_slots_int;
+            console.log(hits);
+            console.log(testhits);
+            let
+            ctxBar,
+            optionsBar,
+            configBar,
+            barChart;
+            function calculateChartHeight() {
+                const numberOfBars = hits.length;
+                console.log("length numberOfBars: ",numberOfBars)
+                console.log("typeof numberOfBars: ",typeof(numberOfBars))
+                var maxBarHeight = 20;
+                var marginBottom = 20;
+                if(numberOfBars <= 7 ){
+                    console.log("his array <= 5")
+                    maxBarHeight = 15;
+                    marginBottom = 15;
+                }else if(numberOfBars > 7 && numberOfBars <=12){
+                    console.log("his array > 5 && <= 10 ")
+                    maxBarHeight = 15;
+                    marginBottom = 15;
+                }else if(numberOfBars >12 && numberOfBars <=17){
+                    console.log("his array > 10 && <= 15 ")
+                    maxBarHeight = 12;
+                    marginBottom = 12;
+                }
+                else if(numberOfBars >17 && numberOfBars <=22){
+                    console.log("his array > 15 && <= 20 ")
+                    maxBarHeight = 10;
+                    marginBottom = 10;
+                }
+                console.log("maxBarHeight: ",maxBarHeight)
+                const chartHeight = (numberOfBars * maxBarHeight) + marginBottom;
+            
+                return chartHeight;
+            }
+            $(function () {
+                drawBarChart();
+                $(window).resize(function () {
+                    updateBarChart();
+                });
+            });
+        
+            function drawBarChart() {
+                if ($("#barChart").length) {
+                    {% comment %} const chartWidth = 400; {% endcomment %}
+                    ctxBar = document.getElementById("barChart").getContext("2d");
+                    const chartHeight = calculateChartHeight();
+                    document.getElementById("barChart").height = chartHeight;
+                    {% comment %} document.getElementById("barChart").width = chartWidth; {% endcomment %}
+                    optionsBar = {
+                        responsive: true,
+                        scales: {
+                            yAxes: [
+                                {
+                
+                                    ticks: {
+                                        beginAtZero: false,
+                                        precision: 0,
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: "Schedules - days"
+                                    },
+                                
+                                }
+                            ],
+                            xAxes: [
+                                {
+                                ticks: {
+                                maxRotation: 45,
+                                minRotation: 0,
+                                },
+                                categoryPercentage: 0.3, // Ajust this value to control the margin between bars
+                                }
+                            ]
+                        }
+                    };
+        
+                    optionsBar.maintainAspectRatio =
+                        $(window).width() < width_threshold ? false : true;
+        
+                    configBar = {
+                        type: "horizontalBar",
+                        data: {
+                            labels: days,
+                            datasets: [
+                                {
+                                    label: "Sơ đồ số lượng chỗ của lịch trình theo ngày",
+                                    data: hits,
+                                    backgroundColor: [
+                                        "#F7604D",
+                                        "#4ED6B8",
+                                        "#A8D582",
+                                        "#D7D768",
+                                        "#9D66CC",
+                                        "#DB9C3F",
+                                        "#3889FC",
+                                        '#FF6699',
+                                        '#66CC00',
+                                        '#CC99FF',
+
+                                        "#FFCC99",
+                                        "#FF6699",
+                                        "#66CC99",
+                                        "#00CCCC",
+                                        "#CC99FF",
+                                        "#FF3399",
+                                        "#CC00CC",
+                                        '#FF6699',
+                                        '#66CC00',
+                                        '#CC99FF',
+                                        '#CC99FF',
+                                    ],
+                                    borderWidth: 0
+                                }
+                            ]
+                        },
+                        options: optionsBar
+                    };
+        
+                    barChart = new Chart(ctxBar, configBar);
+                }
+            }
+            function updateBarChart() {
+                if (barChart) {
+                  barChart.options = optionsBar;
+                  barChart.update();
+                }
+              }
+            const blockScroll = document.querySelector('.tm-notification-items')
+            const arrayScroll = document.querySelectorAll('.tm-notification-item')
+
+            // Chỉnh sroll về cuối cho list thông báo
+            //console.log(arrayScroll)
+            //blockScroll.scrollTop = blockScroll.scrollHeight;
+
+            // Set tiêu đề đánh dấu thông báo mới nhất
+            const len = arrayScroll.length
+            if (len > 0){
+                arrayScroll[0].classList.add('title_new_active')
+            }
+            // chỉnh vị trí scroll về cuối của list order
+            {% comment %} const tm_block_scroll = document.querySelector('.tm-block-scroll')
+            tm_block_scroll.scrollTop = tm_block_scroll.scrollHeight; {% endcomment %}
+
+            // Hiển thị thông tin người đặt từ Danh sách thông báo
+            const array_info_customer_order = document.querySelectorAll('.info_list_order')
+            array_info_customer_order.forEach(customer => {
+                customer.addEventListener("click", function(){
+                    const data_order_info_c_name = this.getAttribute('data-order-info-name')
+                    const data_order_info_c_img = this.getAttribute('data-order-info-img')
+                    const data_order_info_c_email = this.getAttribute('data-order-info-email')
+                    const data_order_info_c_address = this.getAttribute('data-order-info-address')
+                    const data_order_info_c_phone = this.getAttribute('data-order-info-phone')
+
+
+                    const container_order_info_customer = document.querySelector('.container_order_info_customer')
+                    container_order_info_customer.style.display = 'block'
+
+                    
+                    const info_email = document.querySelector('.info_email').innerHTML=data_order_info_c_email;
+                    const info_phone = document.querySelector('.info_phone').innerHTML=data_order_info_c_phone;
+                    const info_address = document.querySelector('.info_address').innerHTML=data_order_info_c_address;
+                    const info_img = document.querySelector('.info_img');
+                    const info_fullname = document.querySelector('.info_fullname').innerHTML=data_order_info_c_name;
+                    if(data_order_info_c_img){
+                        info_img.src = '/media/'+data_order_info_c_img;
+                    }
+                    else{
+                        info_img.src = '/media/no_avatar.png'
+                    }
+                    console.log(data_order_info_c_name)
+                    console.log(data_order_info_c_img)
+                    console.log(data_order_info_c_email)
+                    console.log(data_order_info_c_address)
+                    console.log(data_order_info_c_phone)
+                    const container_order_info_exits = document.querySelector('.container_order_info_exits')
+                    container_order_info_exits.onclick=function(){
+                        container_order_info_customer.style.display = 'none';
+                    }
+                })
+            })
+
+            // Hiển thị thông tin người đặt từ Danh sách thông báo
+
+            arrayScroll.forEach(customer => {
+                customer.addEventListener("click", function(){
+                    
+
+                    const data_order_info_c_name = this.getAttribute('data-order-info-name')
+                    const data_order_info_c_img = this.getAttribute('data-order-info-img')
+                    const data_order_info_c_email = this.getAttribute('data-order-info-email')
+                    const data_order_info_c_address = this.getAttribute('data-order-info-address')
+                    const data_order_info_c_phone = this.getAttribute('data-order-info-phone')
+
+                    const container_order_info_customer = document.querySelector('.container_order_info_customer')
+                    container_order_info_customer.style.display = 'block'
+                    const info_email = document.querySelector('.info_email').innerHTML=data_order_info_c_email;
+                    const info_phone = document.querySelector('.info_phone').innerHTML=data_order_info_c_phone;
+                    const info_address = document.querySelector('.info_address').innerHTML=data_order_info_c_address;
+                    const info_img = document.querySelector('.info_img');
+                    const info_fullname = document.querySelector('.info_fullname').innerHTML=data_order_info_c_name;
+                    if(data_order_info_c_img){
+                        info_img.src = '/media/'+data_order_info_c_img;
+                    }
+                    else{
+                        info_img.src = '/media/no_avatar.png'
+                    }
+                    console.log(data_order_info_c_name)
+                    console.log(data_order_info_c_img)
+                    console.log(data_order_info_c_email)
+                    console.log(data_order_info_c_address)
+                    console.log(data_order_info_c_phone)
+                    const container_order_info_exits = document.querySelector('.container_order_info_exits')
+                    container_order_info_exits.onclick=function(){
+                        container_order_info_customer.style.display = 'none';
+                    }
+                })
+            })
+
+
+            {% comment %} -------------------thay đổi trạng thái ------------------ {% endcomment %}
+
+            const driver_id = "{{driver_id}}"
+            const state = "{{state}}"
+            console.log("driver_id: ", driver_id)
+            console.log("state: ", state)
+            const toggleBt = document.querySelector('.tgl-ios')
+            const skewedBt = document.querySelector('.tgl-skewed')
+            const initialState = toggleBt.checked;
+
+            if(state === 'Đang khởi hành'){
+                toggleBt.checked = true
+                skewedBt.checked = true;
+            }else if(state === 'Đang dừng'){
+                toggleBt.checked = false
+                skewedBt.checked = false;
+            }
+
+            toggleBt.addEventListener('change', function(){
+                const newState = toggleBt.checked;
+                var checkstate = 0;
+                if(newState){
+                    console.log("đang bật")
+                    skewedBt.checked = true;
+                    checkstate = 1;
+
+                }else{
+                    console.log("đang tắt")
+                    skewedBt.checked = false;
+                    checkstate = 0;
+                }
+                fetch(`/change_state/${driver_id}/${checkstate}/`,{
+                    method: "POST",
+                    headers : {
+                        "X-CSRFToken": "{{ csrf_token }}", 
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.message){
+                        console.log(data.message)
+                    }else if (data.error){
+                        console.log(data.error)
+                    }
+                })
+                .catch(error => {
+                    console.error("Đã xảy ra lỗi:", error);
+                });
+            })
+        
+            var format_order_price = document.querySelectorAll('.format_order_price')
+            format_order_price.forEach( element => {
+                const dataprice = element.getAttribute('data-order-price')
+                if (dataprice){
+                    var formattedAmount = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dataprice);
+                    console.log(formattedAmount)
+                    if (formattedAmount === 'NaN ₫'){
+                        element.innerText = '300.000 ₫'
+                    }else{
+                        element.innerText = formattedAmount
+                    }
+                    
+                }else{
+                    element.innerText = '0 đ'
+                }
+            })
+    });
+     const notification = "{{notifi_search}}";
+     console.log("waiting notifi search ")
+     console.log(notification)
+             if(notification==='search_success'){
+               toast({
+                   title: "Tìm thấy các kết quả",
+                   content: "Đã tìm thấy các kết quả phù hợp với từ khóa tìm kiếm của bạn",
+                   typeicon: "success",
+                   duration: 8000
+           
+                 })
+                 const targetElement = document.querySelector('.block_title_list_schedules');
+                 if (targetElement) {
+                   targetElement.scrollIntoView();
+                   window.scrollBy(0, -50);
+                 }
+             }
+             else if (notification==='search_err'){
+               toast({
+                   title: "Không tìm thấy",
+                   content: "Từ khóa bạn nhập không tồn tại hoặc không hợp lệ",
+                   typeicon: "error",
+                   duration: 8000
+           
+               })
+               const targetElement = document.querySelector('.block_title_list_schedules');
+               if (targetElement) {
+                 targetElement.scrollIntoView();
+                 window.scrollBy(0,-30);
+               }  
+           }
+           else if (notification==='search_err_schedules'){
+            toast({
+                title: "Không tìm thấy",
+                content: "Từ khóa bạn nhập không tồn tại hoặc không hợp lệ,bạn có thể nhấp vào dấu ? cạnh ô tìm kiếm để hiểu rõ hơn",
+                typeicon: "error",
+                duration: 8000
+        
+            })
+            const targetElement = document.querySelector('.block_title_list_schedules_list_schedules');
+            if (targetElement) {
+              targetElement.scrollIntoView();
+              window.scrollBy(0, -30);
+            }  
+        }
+        else if (notification==='search_success_schedules'){
+            toast({
+                title: "Tìm thấy các kết quả",
+                content: "Đã tìm thấy các kết quả phù hợp với từ khóa tìm kiếm của bạn",
+                typeicon: "success",
+                duration: 8000
+        
+              })
+            const targetElement = document.querySelector('.block_title_list_schedules_list_schedules');
+            if (targetElement) {
+              targetElement.scrollIntoView();
+              window.scrollBy(0, -68);
+            }  
+        }
+           const dltoast = document.querySelectorAll('.toast-exit');
+           console.log("button_exit: ",dltoast)
+           dltoast.forEach(element => {
+             element.onclick = function(){
+               console.log("is click exits")
+               element.parentElement.remove('toast')
+             }
+           })     
+    </script>
+</body>
+
+</html>

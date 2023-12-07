@@ -1,0 +1,409 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/Login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast.css' %}">
+    <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
+    <link
+    rel="icon"
+    type="image/x-icon"
+    href="{% static 'images/logo5.ico' %}"
+  />
+    <title>Furin</title>
+</head>
+
+<body>
+    <div class="gird container">
+        <div class="container-forms">
+            <div class="container-Underform">
+                <div class="form-info">
+                    <div class="tableform">
+                        <div class="tableformcell">
+                            <p>have an account?</p>
+                            <div class="btn">
+                                Log in
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-info">
+                    <div class="tableform">
+                        <div class="tableformcell">
+                            <p>don't have an account?</p>
+                            <div class="btn signup">
+                                SignUp
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-FormIn">
+
+                <div class="form-item loginform">
+                    <form action="{% url 'handelLogin_customer' %}" method="POST" class="form" id="form2">
+                        {% csrf_token %}
+                        <div class="tableform">
+                            <div class="tableformcell">
+                                <div class="form-group">
+                                    <label for="email1" class="form-label">Email</label>
+                                    <input id="email1" name="email" type="email" placeholder="VD: 123/abc@gmail.com"
+                                        class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password1" class="form-label">Mật khẩu</label>
+                                    <input id="password1" name="password" type="password" placeholder="Nhập mật khẩu"
+                                        class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="block_forget_pass">
+                                    <a href="#"><span class="forget_pass">Quên mật khẩu</span></a>
+                                </div>
+                                <button type="submit" class="btn form-submit">
+                                    Log in
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-item regisform active">
+                    <form action="{% url 'handleRegis_customer' %}" method="POST" class="form" id="form1">
+                        {% csrf_token %}
+                        <div class="tableform">
+                            <div class="tableformcell">
+                                <div class="form-group">
+                                    <label for="fullname" class="form-label">Tên đầy đủ</label>
+                                    <input id="fullname" name="fullname" type="text" placeholder="VD:Nguyen Tuan "
+                                        class="">
+                                    <div class="span"></div>
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input id="email" name="email" type="text" placeholder="VD: 123/abc@gmail.com"
+                                        class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="form-label">Mật khẩu</label>
+                                    <input id="password" name="password" type="password" placeholder="Nhập mật khẩu"
+                                        class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password_confirmation" class="form-label">Nhập lại mật khẩu </label>
+                                    <input id="password_confirmation" name="password_confirmation"
+                                        placeholder="Nhập lại mật khẩu" type="password" class="">
+                                    <div class="span"></div>
+                                    <span class="form-message"></span>
+                                </div>
+                                <button type="submit" class="btn submit_signup_loading form-submit">
+                                    Sign up
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+    <div class="notifi_sendemail">
+        <div class="nav_sendemail">
+            <div class="title_sendemail">
+                <p>Email xác thực đã được gửi</p>
+            </div>
+            <div class="icon_sendemail">
+                <div class="icon_success_sendemail"><img src="{%static 'images/icon_ss.png' %}"></div>
+            </div>
+        </div>
+        <div class="body_sendemail">
+            <div class="body_sendemail_title">
+                <span> Email xác thực đã được gửi tới email của bạn<span>
+            </div>
+            <div class="body_sendemail_content">
+                <span>Chúng tôi đã gửi một Email xác thực tới email mà bạn vừa dùng để đăng ký. Vui lòng kiểm tra email của bạn và xác thực<span>
+            </div>
+            <div class="bt_sendemail">
+                <div class="bt_route">
+                    <button class="bt_route--footer"><a href="https://mail.google.com/mail">Tới Email</a></button>
+                </div>
+                <div class="bt_route">
+                    <button class="bt_route--footer"><a href="{% url 'back_home' %}">Trang chủ</a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form_loading">
+        <div class="block_loading"></div>
+        <div class="word_Loading">
+            <span>Xin vui lòng chờ chút...</span>
+        </div>
+    </div>
+    <div class="forget_pass_send">
+        <div class="forget_title_flex">
+            <div class="forget_title">
+                <span>Vui lòng nhập Email đăng nhập của bạn!</span>
+            </div>
+            <div class="forget_title_exit">
+                <div class="span_exit">✘</div>
+            </div>
+        </div>
+        <div class="forget_pass_send_block">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Email</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">
+                <input type="email" class="form-control input_item_info" >
+            </div>
+            <div class="col-sm-9 text-secondary">
+                <button class="btn-send">Gửi</button>
+            </div>
+        </div>
+    </div>
+    <div id="tagtoast">
+    </div>
+    <div class="backhome">
+        <a href="{% url 'back_home' %}"><i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size:30px"></i></a>
+    </div>
+    <script src="{% static 'JS/style.js' %}"></script>
+    <script src="{% static 'JS/toast.js' %}"></script>
+    <script src="{% static 'JS/validator.js' %}"></script>
+    <script>
+        console.log(checkform)
+        validator({
+            form: '#form1',
+            formGroup: '.form-group',
+            errSelector: '.form-message',
+            rules: [
+                validator.isRequired('#fullname', 'Không để trống ô này'),
+                validator.isRequired('#email'),
+                validator.isEmail('#email'),
+                validator.isRequired('#password'),
+                validator.minlength('#password', 6),
+                validator.isRequired('#password_confirmation'),
+                validator.isconfirmvalue('#password_confirmation', function () {
+                    return document.querySelector('#form1 #password').value;
+                }, 'Password incorrect')
+
+            ],
+            {% comment %} onsubmit: function (data) {
+                console.log(data);
+            } {% endcomment %}
+
+        })
+        validator({
+            form: '#form2',
+            formGroup: '.form-group',
+            errSelector: '.form-message',
+            rules: [
+                validator.isRequired('#email1'),
+                validator.isEmail('#email1'),
+                validator.minlength('#password1', 6),
+                validator.isRequired('#password1'),
+            ],
+            {% comment %} onsubmit: function (data) {
+                console.log(data);
+            } {% endcomment %}
+
+        })
+        //------------event---------------
+const notification = "{{islogin}}";
+console.log("notification"+notification);
+console.log(typeof notification)
+if(notification==='faild'){
+    toast({
+        title: "Đăng nhập thất bại",
+        content: "Tài khoản hoặc mật khẩu bạn vừa nhập không chính xác, vui lòng thử lại!",
+        typeicon: "error",
+        duration: 8000
+
+    })}
+else if (notification==='signup'){
+    toast({
+        title: "Đăng ký thất bại",
+        content: "Email bạn vừa dùng để đăng ký đã tồn tại",
+        typeicon: "error",
+        duration: 8000
+
+    })  
+}  
+else if(notification==='noverifi'){
+    toast({
+        title: "Đăng nhập thất bại",
+        content: "Tài khoản bạn vừa đăng nhập chưa được xác thực , vui lòng xác thực và thử lại !",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+}
+else if(notification==='faildpass'){
+    toast({
+        title: "Đăng Nhập thất bại ",
+        content: "Mật khẩu không chính xác",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+}
+else if(notification==='verifisuccess'){
+    toast({
+        title: "Xác thực thành công",
+        content: "Bạn vừa xác thực tài khoản thành công, hay đăng nhập ngay với tài khoản của mình",
+        typeicon: "success",
+        duration: 8000
+
+    }) 
+    
+}
+else if(notification==='verifierror'){
+    toast({
+        title: "Xác thực thất bại",
+        content: "Bạn xác thực thất bại, vui lòng kiểm tra lại email xác thực mới nhất!",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+}
+else if(notification==='notemail'){
+    toast({
+        title: "Email không tồn tại",
+        content: "Không tồn tại tài khoản Email này , vui lòng điền đúng email tài khoản của bạn",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+    
+}
+else if(notification==='error'){
+    toast({
+        title: "Lỗi !",
+        content: "Xãy ra một số lỗi , vui lòng thử lại sau",
+        typeicon: "error",
+        duration: 8000
+
+    }) 
+    
+}
+else if(notification==='sendEmail'){
+    const loading = document.querySelector('.form_loading')
+    console.log("send email success.................")
+    const blocksendemail = document.querySelector('.notifi_sendemail')
+    const container = document.querySelector('.container')
+    blocksendemail.style.display = 'block' 
+    container.classList.add('show')
+    loading.style.display = 'none'
+}  
+  
+const dltoast = document.querySelectorAll('.toast-exit');
+console.log("button_exit: ",dltoast)
+dltoast.forEach(element => {
+  element.onclick = function(){
+    console.log("is click exits")
+    element.parentElement.remove('toast')
+  }
+})   
+const forget_pass = document.querySelector('.forget_pass')
+const block_forget_pass = document.querySelector('.forget_pass_send')
+const input_send_email = document.querySelector('.input_item_info')
+const bt_send = document.querySelector('.btn-send')
+const container = document.querySelector('.container')
+const loading = document.querySelector('.form_loading')
+const loading_register = document.querySelector('.submit_signup_loading')
+loading_register.onclick = function(){
+    container.classList.add('show')
+    loading.style.display = 'block'
+}
+forget_pass.onclick =function(){
+    console.log("is click submit")
+    container.classList.add('show')
+    block_forget_pass.style.display = 'block'
+
+}
+bt_send.onclick= function(){
+    email = input_send_email.value
+    if (email !== ''){
+        sendEmail(email)
+        loading.style.display = 'block'
+    }
+}
+
+const bt_exit_sendemail = document.querySelector('.span_exit')
+bt_exit_sendemail.onclick = function(){
+    container.classList.remove('show')
+    block_forget_pass.style.display = 'none'
+}
+function sendEmail(value){
+                
+    const data = {
+        email:value,
+    }
+    fetch('/sendEmail_forgetPass/', {
+        method: 'POST',
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(data => {
+            if(data.message ==='check_true'){
+                const block_forget_pass = document.querySelector('.forget_pass_send')
+                const container = document.querySelector('.container')
+                container.classList.remove('show')
+                block_forget_pass.style.display = 'none'
+                loading.style.display = 'none'
+              toast({
+                title: "Gửi email thành công",
+                content: "Chúng tôi vừa gửi tới email của bạn một liên kết để đổi mật khẩu mới, vui lòng kiểm tra Email!",
+                typeicon: "success",
+                duration: 8000
+            })  
+            }else if(data.message === 'check_false'){
+                const block_forget_pass = document.querySelector('.forget_pass_send')
+                const container = document.querySelector('.container')
+                container.classList.remove('show')
+                block_forget_pass.style.display = 'none'
+                loading.style.display = 'none'
+              toast({
+                title: "Lỗi",
+                content:"Email đăng nhập bạn vừa nhập không tồn tại hoặc không chính xác , vui lòng thử lại đúng email đăng nhập của bạn.",
+                typeicon: "error",
+                duration: 8000
+            })   
+            }
+            const dltoast = document.querySelectorAll('.toast-exit');
+            console.log("button_exit: ",dltoast)
+            dltoast.forEach(element => {
+              element.onclick = function(){
+                console.log("is click exits")
+                element.parentElement.remove('toast')
+              }
+            })
+        })
+        .catch(error => {
+          console.error('Đã xảy ra lỗi:', error);
+        });
+}
+
+        {% comment %} Handel toast {% endcomment %}
+      
+    </script>
+</body>
+
+</html>

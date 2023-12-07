@@ -1,0 +1,394 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Tải jQuery từ Google CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet"> {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/profile.css' %}">
+    {% comment %} <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> {% endcomment %}
+    <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'CSS/fontawesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_profile_customer.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/bootstrap_editpf.css' %}">
+    
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/logo5.ico' %}"
+    />
+    <title>Furin</title>
+    <style type="text/css">
+    	body{
+    background: #f7f7ff;
+    margin-top:20px;
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid transparent;
+    border-radius: .25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+}
+.me-2 {
+    margin-right: .5rem!important;
+}
+.avatar{
+    width: 153px;
+    height: 153px;
+    position: relative;
+}
+.avatar img{
+    width: 93%;
+    height: 93%;
+    overflow: clip;
+}
+.avatar::before,
+.avatar::after{
+    -webkit-animation: clipMe 10s linear infinite;
+    animation: clipMe 8s linear infinite;
+    border: rgb(0 188 255) solid 8px;
+    border-radius: 9999px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    content: ' ';
+    height: 220px;
+    left: -34px;
+    opacity: 0.6;
+    position: absolute;
+    top: -39px;
+    -webkit-transform: scale(0.714);
+    transform: scale(0.714);
+    width: 220px;
+}
+.avatar::before{
+  animation-delay: -5s;
+}
+@keyframes clipMe {
+  0%, 100% {
+    clip: rect(0px, 220px, 2px, 0px);
+  }
+  25% {
+    clip: rect(0px, 2px, 220px, 0px);
+  }
+  50% {
+    clip: rect(218px, 220px, 220px, 0px);
+  }
+  75% {
+    clip: rect(0px, 220px, 220px, 218px);
+  }
+}
+
+    </style>
+  </head>
+  <body>
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" style="margin-left:109px;" class="main-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home_customer_view' %}"> Giao Diện Chính </a></li>
+            <li class="breadcrumb-item"><a href="{% url 'view_profile_customer' %}"> Hồ Sơ Cá Nhân </a></li>
+            <li class="breadcrumb-item active" aria-current="page">Thay đổi mật khẩu</li>
+          </ol>
+        </nav>
+    <div class="container">
+		<div class="main-body">
+			<div class="row">
+				<div class="col-lg-4">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex flex-column align-items-center text-center">
+								<div class="avatar">
+                  {%if not img_customer%}
+                    <img src="/media/no_avatar.jpg" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+                  {%else%}
+                    <img src="{{myinfo.img_customer.url}}" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+                  {%endif%}
+                </div>
+								<div class="mt-3">
+									<h4>{{myinfo.name_customer}}</h4>
+								</div>
+							</div>
+							<hr class="my-4">
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+									
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8">
+					<div class="card">
+						<div class="card-body">
+							<div class="row mb-3">
+								<div class="col-sm-3">
+									<h6 class="mb-0">Mật khẩu cũ</h6>
+								</div>
+								<div class="col-sm-9 text-secondary">
+									<input type="password" class="form-control input_item_info" >
+                                    <div id="passOld"></div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col-sm-3">
+									<h6 class="mb-0">Mật khẩu mới</h6>
+								</div>
+								<div class="col-sm-9 text-secondary">
+									<input type="password" class="form-control input_item_info" >
+                                    <div id="passNew"></div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col-sm-3">
+									<h6 class="mb-0">Nhập lại mật khẩu mới</h6>
+								</div>
+								<div class="col-sm-9 text-secondary">
+									<input type="password" class="form-control input_item_info">
+                                    <div id="passConfirm"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3"></div>
+								<div class="col-sm-9 text-secondary">
+									<input type="button" class="btn-save_edit bt_primary px-4" value="Save Changes">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="card">
+						
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  <section class="section_input_otp">
+    <form action="javascript: void(0)" class="otp-form" name="otp-form">
+      <div class="title_otp">
+        <div class="title_otp-item">
+          <span>ENTER OTP</span>
+        </div>
+        <div class="invoice_conten_right">
+          <div class="span_iconoutbook">✘</div>
+        </div>
+      </div>
+      <div class="otp-input-fields">
+        <input type="number" class="otp__digit otp__field__1">
+        <input type="number" class="otp__digit otp__field__2">
+        <input type="number" class="otp__digit otp__field__3">
+        <input type="number" class="otp__digit otp__field__4">
+        <input type="number" class="otp__digit otp__field__5">
+        <input type="number" class="otp__digit otp__field__6">
+      </div>
+      <div class="bt-send">
+        <button type="submit" class="bt_pk_v2 bt_send--otp">Gửi</button>
+        <span class="bt-send_count_s" id="s_otp">Giây</span>
+      </div>
+      <div class="word_notifi--sendotp">
+        <span class="word_show"></span>
+      </div>
+    </form>
+  </section>
+    <div id="tagtoast">
+    </div>
+    <script src="{% static 'JS/toast_profile_customer.js' %}"></script>
+    <script> 
+        document.addEventListener("DOMContentLoaded", function () {
+            const pass_customer = "{{pass_customer}}"
+            const listinput_info = document.querySelectorAll('.input_item_info')
+            console.log(listinput_info)
+            {% comment %} listinput_info.forEach(item =>{
+                item.addEventListener("blur",function(){
+                    console.log("value: ", item.value)
+                    const inputValue = item.value.trim()
+                    const messageDivId = item.id.replace('input','Message')
+                    const messageDiv = document.getElementById(messageDivId);
+                })
+            }) {% endcomment %}
+            listinput_info[0].addEventListener("blur",function(){
+                validatePass(listinput_info[0].value,listinput_info[0])
+            })
+            listinput_info[1].addEventListener("blur",function(){
+                new_pass = listinput_info[1].value;
+                if(new_pass ===''){
+                    toast({
+                        title: "Không hợp lệ",
+                        content: "Vui lòng không để trống ô này",
+                        typeicon: "error",
+                        duration: 8000
+                    })  
+                }else if (new_pass.length < 8){
+                    listinput_info[1].value = ''
+                    toast({
+                        title: "Mật khẩu quá ngắn",
+                        content: "Mật khẩu bạn nhập nhỏ hơn 8 ký tự vui lòng nhập mật khẩu mạnh hơn!",
+                        typeicon: "error",
+                        duration: 8000
+                    })  
+                }
+                const dltoast = document.querySelectorAll('.toast-exit');
+                console.log("button_exit: ",dltoast)
+                dltoast.forEach(element => {
+                  element.onclick = function(){
+                    console.log("is click exits")
+                    element.parentElement.remove('toast')
+                  }
+                })
+            })
+            listinput_info[2].addEventListener("blur",function(){
+                console.log("onblur")
+                new_pass = listinput_info[1].value;
+                confirm_pass = listinput_info[2].value;
+                if(confirm_pass === ''){
+                    toast({
+                        title: "Không hợp lệ",
+                        content: "Vui lòng không để trống ô này",
+                        typeicon: "error",
+                        duration: 8000
+                    })  
+                }else if(new_pass !== confirm_pass){
+                    listinput_info[2].value = ''
+                    toast({
+                        title: "Mật khẩu không chính xác",
+                        content: "Mật khẩu nhập lại của bạn không chính xác",
+                        typeicon: "error",
+                        duration: 8000
+                    })  
+                }
+                const dltoast = document.querySelectorAll('.toast-exit');
+                console.log("button_exit: ",dltoast)
+                dltoast.forEach(element => {
+                  element.onclick = function(){
+                    console.log("is click exits")
+                    element.parentElement.remove('toast')
+                  }
+                })
+            })
+            const bt_save = document.querySelector('.btn-save_edit')
+            bt_save.onclick = function(){
+                old_pass = listinput_info[0].value;
+                new_pass = listinput_info[1].value;
+                confirm_pass = listinput_info[2].value;
+                if(old_pass!=='' && new_pass!=='' && confirm_pass!== ''){
+                    change_pass(confirm_pass)
+                    listinput_info[0].value = ''
+                    listinput_info[1].value = ''
+                    listinput_info[2].value = ''
+                }else{
+                    toast({
+                        title: "Vui lòng điền đẩy đủ thông tin",
+                        content: "Vui lòng nhập đầy đủ thông tin để lưu lại thay đổi",
+                        typeicon: "error",
+                        duration: 8000
+                    })  
+                }
+                const dltoast = document.querySelectorAll('.toast-exit');
+                console.log("button_exit: ",dltoast)
+                dltoast.forEach(element => {
+                  element.onclick = function(){
+                    console.log("is click exits")
+                    element.parentElement.remove('toast')
+                  }
+                })
+            }
+            function validatePass(value,element){
+                
+                const data = {
+                    old_pass:value,
+                }
+                fetch('/check_pass_customer/', {
+                    method: 'POST',
+                    headers: {
+                      "X-CSRFToken": "{{ csrf_token }}",
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                  })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.message ==='check_true'){
+                          toast({
+                            title: "Mật khẩu cũ chính xác",
+                            content: "Mật khẩu bạn vừa nhập chính xác",
+                            typeicon: "success",
+                            duration: 8000
+                        })  
+                        }else if(data.message === 'check_false'){
+                            element.value = ''
+                          toast({
+                            title: "Mật khẩu cũ không đúng",
+                            content:"Mậu khẩu bạn vừa nhập không chính xác, vui lòng thử lại",
+                            typeicon: "error",
+                            duration: 8000
+                        })   
+                        }
+                        const dltoast = document.querySelectorAll('.toast-exit');
+                        console.log("button_exit: ",dltoast)
+                        dltoast.forEach(element => {
+                          element.onclick = function(){
+                            console.log("is click exits")
+                            element.parentElement.remove('toast')
+                          }
+                        })
+                    })
+                    .catch(error => {
+                      console.error('Đã xảy ra lỗi:', error);
+                    });
+            }
+            function change_pass(value){
+                
+                const data = {
+                    new_pass:value,
+                }
+                fetch('/handle_change_pass/', {
+                    method: 'POST',
+                    headers: {
+                      "X-CSRFToken": "{{ csrf_token }}",
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                  })
+                    .then(response => response.json())
+                    .then(data => {
+                        toast({
+                            title: "Thay mật khẩu thành công",
+                            content: "Bạn vừa thay đổi mật khẩu thành công",
+                            typeicon: "success",
+                            duration: 8000
+                        })  
+                        const dltoast = document.querySelectorAll('.toast-exit');
+                        console.log("button_exit: ",dltoast)
+                        dltoast.forEach(element => {
+                          element.onclick = function(){
+                            console.log("is click exits")
+                            element.parentElement.remove('toast')
+                          }
+                        })
+                    })
+                    .catch(error => {
+                      console.error('Đã xảy ra lỗi:', error);
+                    });
+            }
+
+
+        });
+  
+    </script>
+  </body>
+</html>

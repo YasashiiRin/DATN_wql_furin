@@ -1,0 +1,627 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/UI_customer.css' %}">
+    {% comment %} <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> {% endcomment %}
+    <script src="https://kit.fontawesome.com/0284d1fcc6.js" crossorigin="anonymous"></script>
+    <script src="{% static 'JS/style.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'CSS/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/templatemo-style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/toast_home.css' %}">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/logo5.ico' %}"
+    />
+    <title>Furin</title>
+  </head>
+  <body>
+    <header class="bg-dark">
+      <div class="container">
+        <nav>
+          <div>
+            <img class="logo_img" style="width:50px; height:50px;" src="{% static 'images/logo_light.png' %}"></img>
+            <a href="{% url 'back_home' %}"  class="logo">Furin</a>
+            <ul class="nav-links">
+              <li><a class="nav__hover show_policy_page">Chính sách</a></li>
+            </ul>
+          </div>
+          <div>
+            <ul id="nav-links" class="nav-links">
+              <li><a class="nav__hover" href="https://www.facebook.com/ran432001/">Facebook</a></li>
+              <li><a class="nav__hover" href="{% url 'controller_redirect_regisCustomer'%}">Đăng Nhập</a></li> 
+              <li><a class="nav__noLogin" href="{% url 'controller_redirect_regisCustomer'%}" class="nav__cta">Đăng ký</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <section id="main__cta">
+      <div class="container">
+        <div class="split">
+          <div class="main__cta__rectangle bg-light">
+            <div class="split main__cta__options">
+              <div class="main__cta__card tab-item active">
+                <div class="main__cta__icon">
+                  <i class="fa-solid fa-bus" style="font-size:26px; color:#ffa319;"></i>
+                </div>
+                Đặt xe
+              </div>
+              <div class="main__cta__card tab-item">
+                <i class="fa-regular fa-user" style="font-size:26px; color:#ffa319;"></i>
+                Tài xế
+              </div>
+              <div class="main__cta__card tab-item">
+                <i class="fa-solid fa-user" style="font-size:26px;color:#ffa319;"></i>
+                Nhà xe
+              </div>
+              <div class="line"></div>
+            </div>
+            <div class="main__cta__text active">
+              <h1> Đăng nhập Nhà xe </h1>
+              <p class="sous-titre">
+                Sẵn sàng để vào giao diện quản lý của bạn chưa 
+              </p>
+              <a href="{% url 'redirectRegister' %}" class="btn">Đăng Nhập</a>
+            </div>
+            <div class="main__cta__text active">
+              <h1>Đăng nhập Tài xế </h1>
+              <p class="sous-titre">
+                Sẵn sàng để vào giao diện của bạn chưa và bắt đầu với các chuyến đi thú vị
+              </p>
+              <a href="{% url 'driver_login_view' %}" class="btn">Đăng Nhập</a>
+            </div>
+            <div class="main__cta__text ">
+              <h1>Bạn đã có tài khoản?</h1>
+              <p class="sous-titre">
+                Hãy đăng nhập vào tài khoản của bạn để bắt đầu chuyến đi cùng chúng tôi
+              </p>
+              <a href="{% url 'controller_redirect_regisCustomer' %}" class="btn">Đăng Nhập</a>
+            </div>
+          </div>
+          {% comment %} ----------------------------- {% endcomment %}
+        </div>
+      </div>
+    </section>
+    <section class="list_schedule_notlogin">
+      <div class="block_title_list_schedules">
+        <div class="">
+          <h2 class="tm-block-title_nologin"> Danh sách chuyến đi</h2>
+        </div>
+        <div>
+          
+        </div>
+        <div class="block_search_form">
+          <div class="tm-bg-primary-dark-block_book_car">
+            {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
+            <form method="GET" action="{% url 'search_home' %}" class="search-form">
+              <div class="input_book_car">
+                  {{ my_filter_form.as_p }}
+                  <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                    color: #ff8276;"></i></button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="question_mark">
+          <img src="{%static '/images/ico1.png' %}" class="question_mark--icon">
+        </div>
+        <div class="block_search_form-datetime">
+          <div class="tm-bg-primary-dark-block_book_car">
+            {% comment %} <h2 class="tm-block-title">Search</h2> {% endcomment %}
+            
+            <form method="GET" action="{% url 'search_datetime_and_word' %}" class="search-form">
+              <div class="input_book_car custom-css-class">
+                <input type="text" name="search_text"  id="select_search_text" class="mr-5px search_text" placeholder="Điểm bắt đầu..điểm kết thúc..tên tài xế..loại phương tiện">
+                <input type="date" name="input_date" class="mr-5px" id="select_mounth">
+                <select size="1" autocomplete="off" id="select_mounth" name="hours">
+                  <option value="">Giờ</option>
+                  <option value="01">01</option>
+                  <option value="02">02</option>
+                  <option value="03">03</option>
+                  <option value="04">04</option>
+                  <option value="05">05</option>
+                  <option value="06">06</option>
+                  <option value="07">07</option>
+                  <option value="08">08</option>
+                  <option value="09">09</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="00">00</option>
+              </select>  
+              <select id="select_year" name="minutes">
+                  <option value="">Phút</option>
+              </select>
+                  {% comment %} <input class="custom-css-class--picker" type="datetime-local" id="birthdaytime" name="birthdaytime"> {% endcomment %}
+                  <button type="submit" class="bt_search"><i class="fa fa-search" style="font-size: 20px;
+                    color: #ff8276;"></i></button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 tm-block-col block_info_schedules_nologin">
+        <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+            <table class="table">
+                <thead>
+                    <tr>
+  
+                        <th scope="col">Trạng_Thái</th>
+                        <th scope="col">Loại_Phương_Tiện </th>
+                        <th scope="col">Số_chỗ</th>
+                        <th scope="col">Hình Ảnh</th>
+                        <th scope="col">Điểm_Xuất_Phát</th>
+                        <th scope="col">Điểm_Đến</th>
+                        <th scope="col">Giờ_Xuất_Phát</th>
+                        <th scope="col">Ngày_Xuất_Phát</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for schedule in schedules %}
+                    <tr>
+                    
+                        <td>
+                          {%if schedule.slot_vehicle == 0 %}
+                            <div class="tm-status-circle isfull">
+                            </div>Hết
+                          {%else%}
+                            <div class="tm-status-circle notfull">
+                            </div>Còn
+                          {%endif%}  
+                        </td>
+                        <td><b>{{schedule.vehicle.type_vehicle}}</b></td>
+                        <td><b>{{schedule.slot_vehicle}}</b></td>
+                        <td><img style="border-radius:3px;" class="list_img_vehicle" data-img-vehilce="{{ schedule.vehicle.img_vehicle.url }}" src="{{schedule.vehicle.img_vehicle.url}}"></td>
+                        <td><b>{{schedule.start_location}}</b></td>
+                        <td><b>{{schedule.end_location}}</b></td>
+                        <td>{{schedule.start_time}}</td>
+                        <td>{{schedule.start_date}}</td>
+                        {%if request.customer%}
+                        <td><button class="bt_book_car"><a href="{% url 'home_customer_view' %}"> Đặt</a></button></td>
+                        {%else%}
+                        <td><button class="bt_book_car"><a href="{% url 'controller_redirect_regisCustomer' %}"> Đặt</a></button></td>
+                        {%endif%}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </section>
+    <section id="business-header">
+      <div class="container">
+        <div class="business-header__text resetcolor">
+          <h3>Furin bên bạn trong những chuyến đi</h3>
+          <p>
+           Tôi tìm thấy mình trong những chuyến đi,
+           cảm giác đó không thể nào thay thế được bởi những thứ khác.
+           Lý do chính kéo tôi vào cuộc hành trình , chỉ đơn giản là những
+           khung hình trong đôi mắt mình thay đổi khi những con đường lướt qua
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section data-aos="zoom-in" id="engagements__section" class="bg-light">
+      <div class="container">
+        <div class="nav_container_title text-cta">
+          <img class="text-cta" width="64" height="64" src="https://img.icons8.com/nolan/64/1A6DFF/C822FF/beach-umbrella--v1.png" alt="beach-umbrella--v1"/>
+            <h3> Tập trung vào sự an toàn mọi lúc mọi nơi</h3>
+        </div>
+        <div class="split home__conten">
+          
+          <div class="engagements__section__flex Titlecolor1 text-cta">
+            <img
+              src="{%static 'images/bg27.jpg'%}"
+              alt=""
+            />
+            <h4>Cam kết của chúng tôi đối với sự an toàn của bạn</h4>
+            <p class="sous-titre__home__conten">
+              Yên thảo như bích ty,
+              Tần tang đê lục chi.
+              Đương quân hoài quy nhật,
+              Thị thiếp đoạn trường thì.
+              Xuân phong bất tương thức,
+              Hà sự nhập la vi?
+            </p>
+            <div class="Home__conten__footer">
+              <a href="#" class=" home__conten"
+              ><i class="fa-solid fa-book-open"></i> Khám phá điều lệ </a
+            >
+            <a href="#" class=" footer"
+              ><i class="fa-solid fa-angles-right"></i> xem thêm tính năng bảo mật</a
+            >
+            </div>
+          </div>
+          <div class="engagements__section__flex Titlecolor2 text-cta">
+            <img
+               src="{%static 'images/bg19.jpg'%}"
+              alt=""
+            />
+            <h4>Tầm phủ rộng trong khắp mọi thành phố</h4>
+            <p class="sous-titre__home__conten">
+              Yên Chi hoàng diệp lạc,
+              Thiếp vọng tự đăng đài.
+              Hải thượng bích vân đoạn,
+              Thiền Vu thu sắc lai.
+              Hồ binh sa tái hợp,
+              Hán sứ Ngọc Quan hồi.
+              Chinh khách vô quy nhật,
+              Không bi huệ thảo tồi.
+            </p>
+            <div class="Home__conten__footer">
+              <a href="#" class="style_margin_bottom"><i class="fa-solid fa-book-open"></i> Khám phá điều lệ </a>
+            <a href="#" class="footer"
+              ><i class="fa-solid fa-angles-right "></i> xem thêm tính năng bảo mật</a
+            >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-aos="fade-up" id="infos__section" class="bg-light">
+      <div class="container">
+        <div class="split">
+          <div class="infos__section__card">
+            <img
+              src="https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,w_24,h_24/v1542256135/assets/dd/c53d7b-8921-4dc7-93f4-45fb59f4ffb9/original/person-multiple-outlined.svg"
+              alt=""
+            />
+            <p class="titre">ý tưởng của chúng tôi </p>
+            <p class="sous-titre">
+              tôi sẻ cho bạn biết nguồn động lực và ý tưởng để chúng tôi làm ra website này. 
+
+            </p>
+            <p class="text-cta">Tìm hiểu thêm</p>
+          </div>
+          <div class="infos__section__card">
+            <img
+              src="https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,w_24,h_24/v1542254244/assets/eb/68c631-5041-4eeb-9114-80048a326782/original/document-outlined.svg"
+              alt=""
+            />
+            <p class="titre">Trang xã hội của chúng tôi </p>
+            <p class="sous-titre">
+              Nơi chúng tôi chia sẻ những thông tin những câu chuyện về những chuyến đi của chúng tôi
+            </p>
+            <p class="text-cta">Tìm hiểu thêm</p>
+          </div>
+          <div class="infos__section__card">
+            <img
+              src="https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,w_24,h_24/v1542255370/assets/64/58118a-0ece-4f80-93ee-8041b53593d5/original/home-outlined.svg"
+              alt=""
+            />
+            <p class="titre">Ý tưởng phát triển </p>
+            <p class="sous-titre">
+              Chúng tôi sẻ cho bạn biết dự định của bản thân ý tưởng phát triển trong tương lai.
+            </p>
+            <a class="text-cta">Tìm hiểu thêm</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-dark">
+      <div class="container">
+        <nav>
+          <div><a class="logo">Furin</a></div>
+          <div>
+            <p>Sẳn sàng đồng hành cùng bạn trong mọi chuyến đi</p>
+          </div>
+        </nav>
+      </div>
+    </footer>
+    <div class ="display_img_click">
+      <img class="display_img_item">
+      <span class="display_img_button_exit">✘</span>
+    </div>
+    <div class="policy_page">
+      <section class="u-clearfix u-container-align-center u-grey-5 u-section-1" id="carousel_f5c5">
+        <div class="block_policy_page">
+          <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+          <div class="data-layout-selected u-clearfix u-layout-wrap u-layout-wrap-1">
+            <div class="u-layout">
+              <div class="u-layout-row">
+                <div class="u-container-align-center-sm u-container-align-center-xs u-container-align-right-lg u-container-align-right-md u-container-align-right-xl u-container-style u-layout-cell u-size-30 u-white u-layout-cell-1">
+                  <div class="u-container-layout u-valign-bottom-lg u-valign-bottom-md u-valign-bottom-xl u-valign-middle-sm u-valign-middle-xs u-container-layout-1">
+                    <div class="u-image u-image-circle u-image-1" alt="" data-image-width="1500" data-image-height="1000"></div>
+                  </div>
+                </div>
+                <div class="u-container-align-center u-container-style u-layout-cell u-size-30 u-white u-layout-cell-2">
+                  <div class="u-container-layout u-container-layout-2">
+                    <h5 class="u-align-center u-custom-font u-font-montserrat u-text u-text-default u-text-1">Furin</h5>
+                    <p class="u-align-center u-text u-text-default u-text-2">Chúng tôi luôn sẳn sàng đồng hành cùng bạn!</p>
+                    <div class="u-social-icons u-spacing-18 u-social-icons-1">
+                      <a class="u-social-url" title="facebook" target="_blank" href=""><span class="u-icon u-social-facebook u-social-icon u-text-palette-2-base u-icon-1"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 112 112" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-aecd"></use></svg><svg class="u-svg-content" viewBox="0 0 112 112" x="0" y="0" id="svg-aecd"><path fill="currentColor" d="M75.5,28.8H65.4c-1.5,0-4,0.9-4,4.3v9.4h13.9l-1.5,15.8H61.4v45.1H42.8V58.3h-8.8V42.4h8.8V32.2
+                          c0-7.4,3.4-18.8,18.8-18.8h13.8v15.4H75.5z"></path></svg></span>
+                      </a>
+                      <a class="u-social-url" title="twitter" target="_blank" href=""><span class="u-icon u-social-icon u-social-twitter u-text-palette-2-base u-icon-2"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 112 112" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-6add"></use></svg><svg class="u-svg-content" viewBox="0 0 112 112" x="0" y="0" id="svg-6add"><path fill="currentColor" d="M92.2,38.2c0,0.8,0,1.6,0,2.3c0,24.3-18.6,52.4-52.6,52.4c-10.6,0.1-20.2-2.9-28.5-8.2
+                        c1.4,0.2,2.9,0.2,4.4,0.2c8.7,0,16.7-2.9,23-7.9c-8.1-0.2-14.9-5.5-17.3-12.8c1.1,0.2,2.4,0.2,3.4,0.2c1.6,0,3.3-0.2,4.8-0.7
+                        c-8.4-1.6-14.9-9.2-14.9-18c0-0.2,0-0.2,0-0.2c2.5,1.4,5.4,2.2,8.4,2.3c-5-3.3-8.3-8.9-8.3-15.4c0-3.4,1-6.5,2.5-9.2
+                        c9.1,11.1,22.7,18.5,38,19.2c-0.2-1.4-0.4-2.8-0.4-4.3c0.1-10,8.3-18.2,18.5-18.2c5.4,0,10.1,2.2,13.5,5.7c4.3-0.8,8.1-2.3,11.7-4.5
+                        c-1.4,4.3-4.3,7.9-8.1,10.1c3.7-0.4,7.3-1.4,10.6-2.9C98.9,32.3,95.7,35.5,92.2,38.2z"></path></svg></span>
+                      </a>
+                      <a class="u-social-url" title="instagram" target="_blank" href=""><span class="u-icon u-social-icon u-social-instagram u-text-palette-2-base u-icon-3"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 112 112" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-4efe"></use></svg><svg class="u-svg-content" viewBox="0 0 112 112" x="0" y="0" id="svg-4efe"><path fill="currentColor" d="M55.9,32.9c-12.8,0-23.2,10.4-23.2,23.2s10.4,23.2,23.2,23.2s23.2-10.4,23.2-23.2S68.7,32.9,55.9,32.9z
+                        M55.9,69.4c-7.4,0-13.3-6-13.3-13.3c-0.1-7.4,6-13.3,13.3-13.3s13.3,6,13.3,13.3C69.3,63.5,63.3,69.4,55.9,69.4z"></path><path fill="#FFFFFF" d="M79.7,26.8c-3,0-5.4,2.5-5.4,5.4s2.5,5.4,5.4,5.4c3,0,5.4-2.5,5.4-5.4S82.7,26.8,79.7,26.8z"></path><path fill="currentColor" d="M78.2,11H33.5C21,11,10.8,21.3,10.8,33.7v44.7c0,12.6,10.2,22.8,22.7,22.8h44.7c12.6,0,22.7-10.2,22.7-22.7
+                        V33.7C100.8,21.1,90.6,11,78.2,11z M91,78.4c0,7.1-5.8,12.8-12.8,12.8H33.5c-7.1,0-12.8-5.8-12.8-12.8V33.7
+                        c0-7.1,5.8-12.8,12.8-12.8h44.7c7.1,0,12.8,5.8,12.8,12.8V78.4z"></path></svg></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h6 class="u-align-center u-custom-font u-font-montserrat u-text u-text-palette-2-base u-text-3">Chính sách</h6>
+          <p class="u-align-center u-text u-text-4">Cảm ơn vì các bạn đã ở đây , chúng tôi sẻ cung cấp cho các bạn một số thông tin về chính sách của chúng tôi 
+            và các bạn cần biết điều này để có thể dễ dàng sử dụng dịch vụ của chúng tôi và tránh xãy ra các hiểu nhầm với các hành động và yêu cầu của chúng tôi.Sau đây là một số chính sách của chúng tôi, 
+            vui lòng xem kỹ và nếu có thắc mắc nào hãy liên hệ với chúng tôi.
+            <a class="u-active-none u-border-none u-btn u-button-link u-button-style u-hover-none u-none u-text-palette-2-base u-btn-1">Furin</a>
+            <br>
+          </p>
+          </div>
+          <div class="block_policy_page-right">
+            <div class="container_policy">
+              <ul>
+                <li>
+                  <div class="body_policy">
+                    <div class="title_policy">
+                      <span>Chính sách bảo mật</span>
+                    </div>
+                    <div class="content_policy">
+                      <span>Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn.
+                         Chúng tôi có thể thu thập thông tin cá nhân khi bạn sử dụng dịch vụ của chúng tôi.
+                          Để biết thêm chi tiết về cách chúng tôi thu thập, lưu trữ và bảo vệ thông tin cá nhân,
+                         xin vui lòng xem <span class="world_primakey"> Chính sách Bảo mật của chúng tôi.</span></span>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="body_policy">
+                    <div class="title_policy">
+                      <span>Chính sách hủy xe</span>
+                    </div>
+                    <div class="content_policy">
+                      <span>Chúng tôi biết rằng có thể xảy ra tình huống bạn muốn hủy xe .Bạn có thể 
+                        thực hiện điều đó trước giờ xuất phát của chuyến xe bạn đã đặt là <span class="world_primakey">ba giờ</span>
+                        để chúng tôi có thời gian sắp xếp và người khác sẳn sàng thay thế chỗ của bạn.
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="body_policy">
+                    <div class="title_policy">
+                      <span>Chính sách về sử dụng dịch vụ</span>
+                    </div>
+                    <div class="content_policy">
+                      <span>Chúng tôi cung cấp dịch vụ đặt xe cho người đủ tuổi theo quy định của pháp luật
+                        .</span>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="body_policy">
+                    <div class="title_policy">
+                      <span>Liên hệ và hỗ trợ khách hàng</span>
+                    </div>
+                    <div class="content_policy">
+                      <span>Nếu bạn cần liên hệ hoặc cần sự hỗ trợ từ chúng tôi, vui lòng sử dụng thông tin sau:
+                        <br>
+                        <span class="world_primakey">Địa chỉ email: furin.nvt@gmail.com <br>Điện thoại: 088-628-7961</span
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+      </div>
+      </section>
+    </div>
+    <div class="search_policy">
+      <img src="{%static '/images/search_policy.png'%}"  class="img_search_policy">
+    </div>
+    <div id="tagtoast">
+    </div>
+    <script src="{% static 'JS/book.js' %}"></script>
+    <script src="{% static 'JS/toast_customer_form.js' %}"></script>
+    <script>
+
+      document.addEventListener("DOMContentLoaded", function () {
+
+
+        var select_search_text = document.getElementById("select_search_text");
+    select_search_text.addEventListener('mouseover', function() {
+        var tooltip = document.createElement('div');
+        tooltip.className = 'input-tooltip';
+        tooltip.textContent = select_search_text.placeholder;
+        select_search_text.parentElement.classList.add('input-with-tooltip');
+        select_search_text.parentElement.appendChild(tooltip);
+    });
+
+    select_search_text.addEventListener('mouseout', function() {
+        var tooltip = select_search_text.parentElement.querySelector('.input-tooltip');
+        if (tooltip) {
+            select_search_text.parentElement.classList.remove('input-with-tooltip');
+            select_search_text.parentElement.removeChild(tooltip);
+        }
+    });
+
+
+
+
+
+
+        const select_year= document.getElementById('select_year')
+        for(var i =0 ;i<=60 ;i++){
+          var option = document.createElement("option");
+          if(i<10){
+            option.value = '0'+i;
+            option.text = '0'+i;
+            select_year.appendChild(option);
+          }else{
+          option.value = i;
+          option.text = i;
+          select_year.appendChild(option);
+          }
+          
+        }
+
+        const container = document.querySelector('.container')
+        const img_search_policy= document.querySelector('.img_search_policy')
+
+
+
+
+        {% comment %} -----------------------show Policy page---------------------- {% endcomment %}
+        
+        const p_policy = document.querySelector('.policy_page');
+        const show_policy_page = document.querySelector('.show_policy_page')
+        show_policy_page.onclick= function(){
+          p_policy.style.display = 'block'
+          container.classList.add("show");
+          p_policy.onclick= function(){
+            p_policy.style.display = 'none'
+            container.classList.remove("show");
+          }
+        }
+
+        {% comment %} ----------Show question mark------------ {% endcomment %}
+
+
+        const qm = document.querySelector('.question_mark--icon');
+        const block_qm_policy = document.querySelector('.search_policy')
+
+        qm.addEventListener("click", function () {
+          console.log("is click question mark")
+          block_qm_policy.style.display='block';
+          container.classList.add("show");
+          const containershow = document.querySelector('.container.show')
+          console.log("containershow:", containershow)
+          console.log("img_search_policy:",img_search_policy)
+          const check = containershow.classList.contains('show')
+          console.log("check:", check)
+          img_search_policy.onclick = function(event){
+              block_qm_policy.style.display='none';
+              container.classList.remove("show");
+          }
+
+          {% comment %} if(check===true){
+            img_search_policy.onclick = function(event){
+              console.log("test click:", event.target)
+              if(img_search_policy.contains(event.target)){
+                block_qm_policy.style.display='block';
+                container.classList.add("show");
+              }else{
+                block_qm_policy.style.display= 'none'
+                container.classList.remove("show");
+              }
+            }
+          } {% endcomment %}
+
+        })
+
+
+
+
+        
+
+        list_img_vehicle = document.querySelectorAll('.list_img_vehicle')
+        console.log("list img",list_img_vehicle)
+        list_img_vehicle.forEach(imglist => {
+          imglist.addEventListener("click", function () {
+            const display_img_click = document.querySelector('.display_img_click')
+            const img_get = this.getAttribute('data-img-vehilce')
+            const img_item = document.querySelector('.display_img_item')
+            const img_bt_exit = document.querySelector('.display_img_button_exit')
+            console.log("get_img :",img_get)
+            display_img_click.style.display = 'block'
+            img_item.src = img_get;
+            console.log("background black: ",container)
+            container.classList.add("show");
+            img_bt_exit.onclick= function(){
+              display_img_click.style.display = 'none'
+              container.classList.remove("show");
+            }
+            
+          })
+        })
+
+      })
+      const notification = "{{notifi_search}}";
+          console.log("waiting notifi search ")
+          console.log(notification)
+                  if(notification==='search_success'){
+                    toast({
+                        title: "Tìm thấy các kết quả",
+                        content: "Đã tìm thấy các kết quả phù hợp với từ khóa tìm kiếm của bạn",
+                        typeicon: "success",
+                        duration: 8000
+                
+                      })
+                      const targetElement = document.querySelector('.list_schedule_notlogin');
+                      if (targetElement) {
+                        targetElement.scrollIntoView();
+                        window.scrollBy(0, -68);
+                      }
+                  }
+                  else if (notification==='search_err'){
+                    toast({
+                        title: "Không tìm thấy",
+                        content: "Thông tin bạn nhập không tìm thấy , bạn có thể đổi thông tin chính xác hơn và thử lại.",
+                        typeicon: "error",
+                        duration: 8000
+                
+                    })
+                    const targetElement = document.querySelector('.list_schedule_notlogin');
+                    if (targetElement) {
+                      targetElement.scrollIntoView();
+                      window.scrollBy(0, -68);
+                    }  
+                }
+                else if (notification==='sessionfail'){
+                  toast({
+                      title: "Session Failed",
+                      content: "waiting or refresh page",
+                      typeicon: "error",
+                      duration: 8000
+              
+                  })  
+              }
+                const dltoast = document.querySelectorAll('.toast-exit');
+                console.log("button_exit: ",dltoast)
+                dltoast.forEach(element => {
+                  element.onclick = function(){
+                    console.log("is click exits")
+                    element.parentElement.remove('toast')
+                  }
+                })        
+
+    </script>
+  </body>
+</html>

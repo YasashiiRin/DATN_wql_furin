@@ -1,0 +1,8 @@
+charset-normalizer
+Django==4.2.5
+django-allauth
+numpy
+phonenumbers
+Pillow
+requests
+twilio
