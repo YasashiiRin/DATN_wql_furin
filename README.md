@@ -8,7 +8,7 @@ tới việc tối ưu khả năng quản lý của chủ nhà xe , đối với
 cũng như tài xế và các lịch trình của họ
 
 Ứng dụng được xây dựng và phát triển trên trung Django
-#### Project Video: [Watch on Youtube](https://www.youtube.com)
+#### Project Video: [Watch on Youtube](https://youtu.be/Tiwn_4vXWe4)
 
 ### Cấu trúc thư mục dự án
 
