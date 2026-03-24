@@ -1,6 +1,6 @@
 ![icon_logo](https://dim.mcusercontent.com/cs/83e448ffef2b662c110cebf77/images/4040f7dc-d924-76d6-700c-5cb1664c61bd.jpg?w=564&dpr=2)
 
-# FURIN: ĐỒ ÁN TỐT NGHIỆP WEBSITE QUẢN  LÝ ĐẶT XE DU LỊCH.
+# FURIN
 
 Website quản lý đặt xe du lịch là một website được thiết kế để tối ưu hóa
 quy trình đặt xe của những người  muốn di chuyến qua những địa điểm , và nhắm 
@@ -8,7 +8,7 @@ tới việc tối ưu khả năng quản lý của chủ nhà xe , đối với
 cũng như tài xế và các lịch trình của họ
 
 Ứng dụng được xây dựng và phát triển trên trung Django
-#### Project Video: [Watch on Youtube](https://youtu.be/Tiwn_4vXWe4)
+#### Project Video:
 
 ### Cấu trúc thư mục dự án
 
@@ -67,5 +67,3 @@ Người đặt xe , cũng có thông tin hồ sơ của mình , bạn có thể
 Tài xế sẻ nhận tài khoản của mình từ chủ nhà xe, tài khoản này chủ nhà xe có thể xác thực cho họ , hoặc họ phải tự mình xác thực để đảm bảo email của họ còn hoạt động
 Tài xế có thể xem các thông tin về các chuyến đi của họ , cũng như thông tin các đơn đặt tới họ , và thông tin liên hệ tới người đã đặt những đơn ấy
 Tìm kiếm , tài xế dễ dàng tìm kiếm thông tin các người đặt tới họ bằng form tìm kiếm
-
-##### ----------------------------------Chúc bạn một ngày tốt lành---------------------------------------
